@@ -1,0 +1,1178 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:," />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>Naxxramas Speedrun Report</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg:#eef0f2; --panel:#ffffff; --panel-2:#f7f8f9; --panel-3:#e7eaed;
+      --text:#17191c; --muted:#59616a; --faint:#76808a; --line:#d1d6db;
+      --accent:#b66509; --accent-soft:#f4dfc4; --accent-ink:#6e3800;
+      --good:#18794e; --good-soft:#d9f0e4; --bad:#b42318; --bad-soft:#fbe0dd;
+      --warn:#996900; --warn-soft:#f6e9b9; --warrior:#9b6f44; --rogue:#a87700;
+      --blue:#2667a7; --blue-soft:#daeaf8; --shadow:0 10px 28px rgba(21,25,29,.08);
+      --radius:10px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:#101214; --panel:#181b1f; --panel-2:#1f2328; --panel-3:#282d33;
+        --text:#f0f2f4; --muted:#aeb5bd; --faint:#838b94; --line:#333941;
+        --accent:#e38a29; --accent-soft:#402c18; --accent-ink:#ffd3a2;
+        --good:#54c990; --good-soft:#173a2b; --bad:#ff7168; --bad-soft:#43211f;
+        --warn:#e6bd54; --warn-soft:#3b3119; --warrior:#c79c6e; --rogue:#fff468;
+        --blue:#62a6df; --blue-soft:#172f44; --shadow:0 12px 30px rgba(0,0,0,.28);
+      }
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:"IBM Plex Sans",sans-serif;font-size:14px;line-height:1.45}
+    button,input,select{font:inherit;color:inherit}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    button{border:0}
+    .app{min-height:100vh;display:grid;grid-template-columns:238px minmax(0,1fr)}
+    .sidebar{position:sticky;top:0;height:100vh;padding:18px 14px;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;gap:16px;overflow:auto}
+    .run-stamp{padding:2px 8px 14px;border-bottom:1px solid var(--line)}
+    .run-stamp strong{font-family:"Barlow Condensed",sans-serif;font-size:25px;letter-spacing:.01em;display:block;line-height:1.05}
+    .run-stamp span{display:block;color:var(--muted);font-size:12px;margin-top:5px}
+    .nav{display:grid;gap:3px}
+    .nav button{background:transparent;text-align:left;padding:10px 12px;border-radius:7px;color:var(--muted);font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+    .nav button:hover{background:var(--panel-2);color:var(--text)}
+    .nav button.active{background:var(--accent-soft);color:var(--accent-ink)}
+    .nav .count{font:500 10px/1 "IBM Plex Mono",monospace;padding:4px 6px;border-radius:10px;background:var(--panel-3);color:var(--faint)}
+    .nav button.active .count{background:var(--panel);color:var(--accent)}
+    .sidebar-foot{margin-top:auto;border-top:1px solid var(--line);padding:12px 8px 2px;color:var(--faint);font-size:11px}
+    .sidebar-foot a{display:block;margin-top:7px}
+    .main{min-width:0;padding:22px clamp(18px,3vw,42px) 72px}
+    .mobile-nav{display:none}
+    .section{display:none;max-width:1220px;margin:0 auto}
+    .section.active{display:block}
+    .report-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin:0 0 20px}
+    .report-head h1,.report-head h2{font:700 clamp(31px,4vw,50px)/.98 "Barlow Condensed",sans-serif;margin:0;letter-spacing:-.02em}
+    .report-head h2{font-size:clamp(29px,3.5vw,42px)}
+    .report-head p{margin:8px 0 0;color:var(--muted);max-width:720px}
+    .head-meta{text-align:right;color:var(--faint);font:500 11px/1.6 "IBM Plex Mono",monospace;white-space:nowrap}
+    .pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--panel);padding:5px 8px;border-radius:999px;font-size:11px;font-weight:600;color:var(--muted)}
+    .dot{width:7px;height:7px;border-radius:50%;background:var(--good)}
+    .grid{display:grid;gap:12px}
+    .metrics{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:12px}
+    .metric{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px 17px;box-shadow:var(--shadow)}
+    .metric .label{color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+    .metric .value{font:700 31px/1.05 "Barlow Condensed",sans-serif;margin:4px 0 2px;font-variant-numeric:tabular-nums}
+    .metric .note{color:var(--faint);font-size:11px}
+    .metric.negative .value{color:var(--bad)} .metric.positive .value{color:var(--good)}
+    .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+    .panel-head{padding:15px 17px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .panel-head h3{font:700 20px/1 "Barlow Condensed",sans-serif;margin:0;letter-spacing:.01em}
+    .panel-head span{font-size:11px;color:var(--faint)}
+    .panel-body{padding:17px}
+    .two-col{grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr)}
+    .stacked{height:34px;border-radius:6px;overflow:hidden;display:flex;background:var(--panel-3);margin:5px 0 14px}
+    .stacked span{height:100%;display:flex;align-items:center;justify-content:center;font:700 11px "IBM Plex Mono",monospace;color:white;min-width:0}
+    .stacked .boss{width:37%;background:#8c5f37}.stacked .trash{width:39%;background:#c27723}.stacked .idle{width:23%;background:#596570}
+    .legend{display:flex;gap:15px;flex-wrap:wrap;color:var(--muted);font-size:12px}
+    .legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:0;background:var(--c)}
+    .takeaway{margin-top:14px;padding:12px 14px;background:var(--accent-soft);border-radius:7px;color:var(--accent-ink);font-weight:600}
+    .wing-list{display:grid;gap:12px}
+    .wing-row{display:grid;grid-template-columns:92px 1fr 48px;gap:10px;align-items:center}
+    .wing-row strong{font-size:12px}
+    .dualbar{display:flex;height:10px;background:var(--panel-3);border-radius:3px;overflow:hidden}
+    .dualbar i{height:100%}.dualbar .wboss{background:var(--warrior)}.dualbar .wtrash{background:var(--accent)}
+    .wing-row em{font:500 10px "IBM Plex Mono",monospace;color:var(--faint);font-style:normal;text-align:right}
+    .action-list{margin:0;padding:0;list-style:none;display:grid}
+    .action-list li{display:grid;grid-template-columns:31px 1fr;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}
+    .action-list li:last-child{border:0;padding-bottom:0}
+    .action-list b.num{font:700 21px/1 "Barlow Condensed",sans-serif;color:var(--accent)}
+    .action-list strong{display:block;margin-bottom:2px}.action-list small{color:var(--muted)}
+    .section-note{margin:0 0 16px;color:var(--muted);max-width:900px}
+    .table-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .search{background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:8px 10px;min-width:190px;outline:none}
+    .search:focus{border-color:var(--accent)}
+    .segmented{display:flex;gap:3px;background:var(--panel-3);padding:3px;border-radius:7px}
+    .segmented button{cursor:pointer;background:transparent;padding:6px 10px;border-radius:5px;color:var(--muted);font-size:12px;font-weight:600}
+    .segmented button.active{background:var(--panel);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.12)}
+    .table-wrap{overflow:visible}
+    table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+    th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+    th{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--faint);background:var(--panel-2);position:sticky;top:0;z-index:1;cursor:pointer}
+    th.has-tooltip{text-decoration:underline dotted color-mix(in srgb,var(--faint) 70%,transparent);text-underline-offset:3px;outline:none}
+    th.has-tooltip::after{content:attr(data-tooltip);position:absolute;top:calc(100% + 8px);left:50%;z-index:30;width:280px;max-width:calc(100vw - 32px);padding:10px 11px;border:1px solid #444b53;border-radius:7px;background:#15181b;color:#f4f6f8;box-shadow:0 10px 26px rgba(0,0,0,.34);font:500 12px/1.42 "IBM Plex Sans",sans-serif;letter-spacing:0;text-align:left;text-transform:none;white-space:normal;opacity:0;visibility:hidden;transform:translate(-50%,-3px);transition:opacity .14s ease,transform .14s ease,visibility .14s}
+    th.has-tooltip::before{content:"";position:absolute;top:100%;left:50%;z-index:31;border:5px solid transparent;border-bottom-color:#444b53;opacity:0;visibility:hidden;transform:translateX(-50%)}
+    th.has-tooltip:hover,th.has-tooltip:focus,th.has-tooltip.tip-open{z-index:25;color:var(--text)}
+    th.has-tooltip:hover::after,th.has-tooltip:focus::after,th.has-tooltip.tip-open::after,th.has-tooltip:hover::before,th.has-tooltip:focus::before,th.has-tooltip.tip-open::before{opacity:1;visibility:visible;transform:translate(-50%,0)}
+    th.has-tooltip:first-child::after{left:8px;transform:translateY(-3px)}
+    th.has-tooltip:first-child:hover::after,th.has-tooltip:first-child:focus::after,th.has-tooltip:first-child.tip-open::after{transform:translateY(0)}
+    th.has-tooltip:first-child::before{left:20px;transform:none}
+    th.has-tooltip:last-child::after{right:8px;left:auto;transform:translateY(-3px)}
+    th.has-tooltip:last-child:hover::after,th.has-tooltip:last-child:focus::after,th.has-tooltip:last-child.tip-open::after{transform:translateY(0)}
+    th.has-tooltip:last-child::before{right:20px;left:auto;transform:none}
+    .mobile-col-tip{display:none;position:relative;align-items:center;align-self:flex-start;padding:0 13px 0 0;border:0;background:transparent;color:var(--faint);font-size:10px;font-weight:600;letter-spacing:.05em;line-height:1.4;text-align:left;text-transform:uppercase;text-decoration:underline dotted;text-underline-offset:3px;cursor:pointer}
+    .mobile-col-tip::after{content:attr(data-tooltip);position:absolute;top:calc(100% + 6px);left:0;z-index:40;width:260px;max-width:calc(100vw - 54px);padding:10px 11px;border:1px solid #444b53;border-radius:7px;background:#15181b;color:#f4f6f8;box-shadow:0 10px 26px rgba(0,0,0,.34);font:500 12px/1.42 "IBM Plex Sans",sans-serif;letter-spacing:0;text-align:left;text-transform:none;white-space:normal;opacity:0;visibility:hidden;transform:translateY(-3px);transition:opacity .14s ease,transform .14s ease,visibility .14s}
+    .mobile-col-tip::before{content:"";position:absolute;top:100%;left:10px;z-index:41;border:5px solid transparent;border-bottom-color:#444b53;opacity:0;visibility:hidden}
+    .mobile-col-tip:hover::after,.mobile-col-tip:focus::after,.mobile-col-tip.tip-open::after,.mobile-col-tip:hover::before,.mobile-col-tip:focus::before,.mobile-col-tip.tip-open::before{opacity:1;visibility:visible;transform:translateY(0)}
+    td:has(.mobile-col-tip:hover),td:has(.mobile-col-tip:focus),td:has(.mobile-col-tip.tip-open){position:relative;z-index:20}
+    th:first-child,td:first-child{text-align:left}
+    tbody tr:hover{background:var(--panel-2)}
+    tbody tr:last-child td{border-bottom:0}
+    td.name{font-weight:600}.you td{background:var(--accent-soft)}.you td.name:after{content:"YOU";font:700 9px "IBM Plex Mono",monospace;color:var(--accent-ink);margin-left:7px;border:1px solid currentColor;border-radius:3px;padding:2px 4px}
+    .rank{color:var(--faint);font:500 11px "IBM Plex Mono",monospace;margin-right:9px}
+    .bar-cell{min-width:180px}.bar-track{height:7px;border-radius:3px;background:var(--panel-3);overflow:hidden;margin-top:4px}.bar-fill{display:block;height:100%;background:var(--accent)}
+    td.wrap-cell{white-space:normal;text-align:left;min-width:190px}
+    #arrivalTable th,#arrivalTable td{padding-left:8px;padding-right:8px;font-size:11px}
+    .delta.good{color:var(--good);font-weight:700}.delta.bad{color:var(--bad);font-weight:700}.delta.neutral{color:var(--faint)}
+    .boss-cards{display:none}
+    .death-summary{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:12px}
+    .death-bucket{padding:16px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius)}
+    .death-bucket .n{font:700 29px/1 "Barlow Condensed",sans-serif}.death-bucket .where{font-weight:700;margin-top:3px}.death-bucket p{color:var(--muted);font-size:12px;margin:7px 0 0}
+    .timeline{display:grid;gap:0}
+    .event{display:grid;grid-template-columns:94px 18px 1fr;gap:10px;min-height:57px}
+    .event .time{font:500 11px "IBM Plex Mono",monospace;color:var(--faint);text-align:right;padding-top:2px}
+    .event .rail{position:relative}.event .rail:before{content:"";position:absolute;top:9px;bottom:-9px;left:8px;width:2px;background:var(--line)}.event:last-child .rail:before{display:none}.event .rail:after{content:"";position:absolute;top:4px;left:4px;width:8px;height:8px;border-radius:50%;background:var(--bad);border:2px solid var(--panel)}
+    .event strong{font-size:13px}.event p{margin:2px 0 0;color:var(--muted);font-size:12px}
+    .callout{padding:14px 16px;border-radius:8px;background:var(--blue-soft);color:var(--text);margin:0 0 12px}.callout strong{color:var(--blue)}
+    .split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .mini-stat{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}.mini-stat:last-child{border:0}.mini-stat span{color:var(--muted)}.mini-stat strong{font:700 20px "Barlow Condensed",sans-serif}
+    .hstack{height:26px;display:flex;border-radius:5px;overflow:hidden;background:var(--panel-3)}.hstack span{display:flex;align-items:center;justify-content:center;color:#fff;font:700 10px "IBM Plex Mono",monospace}.sunder-c{background:#9a6b3f}.bt-c{background:#b84437}.ww-c{background:#3479a7}.other-c{background:#646d77}
+    .hero-number{font:700 58px/.9 "Barlow Condensed",sans-serif;color:var(--bad);letter-spacing:-.02em}
+    .hero-label{font-weight:700;margin-top:8px}.hero-copy{color:var(--muted);margin:5px 0 0}
+    .handoff{display:grid;grid-template-columns:130px 1fr 1fr;gap:0;align-items:stretch;margin:5px 0 16px}
+    .handoff > div{padding:13px;border:1px solid var(--line);background:var(--panel-2)}
+    .handoff > div+div{border-left:0}.handoff strong{display:block;font-family:"Barlow Condensed",sans-serif;font-size:20px}.handoff small{color:var(--muted)}
+    .tag{font:600 10px "IBM Plex Mono",monospace;padding:3px 6px;border-radius:4px;background:var(--panel-3);color:var(--muted)}
+    .role-tag{display:inline-block;min-width:34px;text-align:center;font:700 9px "IBM Plex Mono",monospace;padding:3px 6px;border-radius:4px;border:1px solid var(--line);background:var(--panel-2);color:var(--muted)}
+    .role-tag.mt{background:var(--bad-soft);color:var(--bad);border-color:color-mix(in srgb,var(--bad) 35%,var(--line))}.role-tag.ot{background:var(--blue-soft);color:var(--blue);border-color:color-mix(in srgb,var(--blue) 35%,var(--line))}.role-tag.dps{background:var(--good-soft);color:var(--good);border-color:color-mix(in srgb,var(--good) 35%,var(--line))}
+    .reference-row td{color:var(--muted)}
+    .formula{font:600 clamp(17px,2.2vw,24px)/1.35 "IBM Plex Mono",monospace;padding:18px;background:var(--panel-2);border-radius:7px;text-align:center;color:var(--accent-ink)}
+    .bucket-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}.bucket-grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}.bucket{padding:13px;border-radius:7px;background:var(--panel-2);border-top:4px solid var(--c)}.bucket strong{display:block;font:700 24px/1 "Barlow Condensed",sans-serif}.bucket span{display:block;color:var(--muted);font-size:11px;margin-top:5px}.bucket.blend{--c:var(--blue)}.bucket.marginal{--c:var(--warn)}.bucket.worthy{--c:var(--good)}
+    .mob-list{margin:0;padding:0;list-style:none}.mob-list li{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--line)}.mob-list li:last-child{border:0}.mob-list strong{font-weight:600}.mob-list span{font:500 11px "IBM Plex Mono",monospace;color:var(--faint);white-space:nowrap}
+    .source-list{display:grid;gap:10px}.source{display:flex;justify-content:space-between;gap:20px;padding:12px 0;border-bottom:1px solid var(--line)}.source:last-child{border:0}.source strong{display:block}.source small{color:var(--muted)}
+    .method-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.method-card{background:var(--panel);border:1px solid var(--line);padding:17px;border-radius:var(--radius)}.method-card h3{font:700 19px "Barlow Condensed",sans-serif;margin:0 0 7px}.method-card p{margin:0;color:var(--muted);font-size:12px}
+    .empty{padding:24px;color:var(--muted);text-align:center}
+    footer{max-width:1220px;margin:28px auto 0;color:var(--faint);font-size:11px;border-top:1px solid var(--line);padding-top:14px}
+    @media(max-width:900px){
+      .app{display:block}.sidebar{display:none}.main{padding:14px 12px 56px}.mobile-nav{display:block;position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 92%,transparent);padding:8px 0 12px}.mobile-nav select{width:100%;border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:10px 12px;font-weight:700}
+      .metrics,.death-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.two-col,.split,.method-grid{grid-template-columns:1fr}.head-meta{display:none}.report-head{margin-top:8px}.panel-head{align-items:flex-start;flex-direction:column}.table-tools{width:100%}.search{width:100%}
+    }
+    @media(max-width:900px) and (min-width:641px){
+      #arrivalTable,#arrivalTable thead,#arrivalTable tbody,#arrivalTable th,#arrivalTable td,#arrivalTable tr{display:block}#arrivalTable thead{display:none}#arrivalTable tbody{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:9px}#arrivalTable tr{border:1px solid var(--line);border-radius:7px;background:var(--panel-2);padding:8px 10px}#arrivalTable td{display:flex;justify-content:space-between;gap:14px;white-space:normal;border-bottom:1px dashed var(--line);padding:6px 2px;text-align:right}#arrivalTable td:last-child{border:0}#arrivalTable td:first-child{text-align:right}#arrivalTable td:before{content:attr(data-label);color:var(--faint);font-size:10px;text-transform:uppercase;letter-spacing:.05em;text-align:left}#arrivalTable td.name{justify-content:flex-end;font-size:15px}#arrivalTable td.name:before{content:none}#arrivalTable .mobile-col-tip{display:inline-flex}
+    }
+    @media(max-width:640px){
+      body{font-size:13px}.report-head h1{font-size:37px}.metrics{gap:8px}.metric{padding:13px}.metric .value{font-size:27px}.death-summary{grid-template-columns:1fr 1fr}.panel-body{padding:14px}
+      .table-wrap table,.table-wrap thead,.table-wrap tbody,.table-wrap th,.table-wrap td,.table-wrap tr{display:block}.table-wrap thead{display:none}.table-wrap tbody{display:grid;gap:8px;padding:9px}.table-wrap tr{border:1px solid var(--line);border-radius:7px;background:var(--panel-2);padding:8px 10px}.table-wrap td{display:flex;justify-content:space-between;gap:14px;white-space:normal;border-bottom:1px dashed var(--line);padding:6px 2px;text-align:right}.table-wrap td:last-child{border:0}.table-wrap td:first-child{text-align:right}.table-wrap td:before{content:none}.table-wrap td.name{justify-content:flex-end;font-size:15px}.table-wrap .mobile-col-tip{display:inline-flex}.bar-cell{min-width:0}.bar-track{width:110px}
+      .wing-row{grid-template-columns:72px 1fr 42px}.handoff{grid-template-columns:1fr}.handoff>div+div{border-left:1px solid var(--line);border-top:0}.segmented{width:100%;display:grid;grid-template-columns:repeat(2,1fr)}.segmented button{padding:8px 5px}.source{display:block}.source .tag{display:inline-block;margin-top:6px}.bucket-grid,.bucket-grid.four{grid-template-columns:1fr}.formula{text-align:left}
+    }
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}th.has-tooltip::after,.mobile-col-tip::after{transition:none}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" aria-label="Report sections">
+    <div class="run-stamp"><strong>9/29 NAXX</strong><span>Pugs not drugs · Pagle US<br>15/15 · 52:09 · no wipes</span></div>
+    <nav class="nav" id="sideNav">
+      <button class="active" data-section="overview">Overview <span class="count">01</span></button>
+      <button data-section="timealloc">Time Allocation <span class="count">02</span></button>
+      <button data-section="trashpulls">Trash Pulls <span class="count">03</span></button>
+      <button data-section="bosses">Bosses vs PB <span class="count">04</span></button>
+      <button data-section="deaths">Deaths <span class="count">05</span></button>
+      <button data-section="sunder">Sunder + Expose <span class="count">06</span></button>
+      <button data-section="engineering">Engineering <span class="count">07</span></button>
+      <button data-section="utility">Interrupts + Utility <span class="count">08</span></button>
+      <button data-section="rotation">Warrior Rotation <span class="count">09</span></button>
+      <button data-section="blender">5 Second Blender <span class="count">10</span></button>
+      <button data-section="blender35">3.5 Second Blender <span class="count">11</span></button>
+      <button data-section="wwpacks">Whirlwind Packs <span class="count">12</span></button>
+      <button data-section="ivscore">IV Score <span class="count">13</span></button>
+      <button data-section="arrival">Arrival Report Card <span class="count">14</span></button>
+      <button data-section="methods">Methods <span class="count">15</span></button>
+    </nav>
+    <div class="sidebar-foot">Raw combat log: Ellaria POV<br>465,683 parsed events<a href="https://vanilla.warcraftlogs.com/reports/a9pMA3fqRdD8c1XT" target="_blank" rel="noopener">Open Sep 29 report ↗</a></div>
+  </aside>
+
+  <main class="main">
+    <div class="mobile-nav"><label for="mobileSelect" class="sr-only">Report section</label><select id="mobileSelect"><option value="overview">Overview</option><option value="timealloc">Time Allocation</option><option value="trashpulls">Trash Pulls</option><option value="bosses">Bosses vs PB</option><option value="deaths">Deaths</option><option value="sunder">Sunder + Expose</option><option value="engineering">Engineering</option><option value="utility">Interrupts + Utility</option><option value="rotation">Warrior Rotation</option><option value="blender">5 Second Blender</option><option value="blender35">3.5 Second Blender</option><option value="wwpacks">Whirlwind Packs</option><option value="ivscore">IV Score</option><option value="arrival">Arrival Report Card</option><option value="methods">Methods</option></select></div>
+
+    <section class="section active" id="overview">
+      <header class="report-head"><div><h1>9/29 Naxxramas</h1><p>Where the 52:09 went, how it compared with the 47:45 PB, and the few changes most likely to move the timer.</p></div><div class="head-meta">2026.09.29<br>ELLARIA POV</div></header>
+      <div class="grid metrics">
+        <div class="metric"><div class="label">Clear time</div><div class="value">52:09</div><div class="note">15/15 · zero full wipes</div></div>
+        <div class="metric"><div class="label">Guild PB</div><div class="value">47:45</div><div class="note">Sep 22 · 15/15</div></div>
+        <div class="metric negative"><div class="label">Gap to PB</div><div class="value">+4:24</div><div class="note">Only 0:34 in bosses</div></div>
+        <div class="metric positive"><div class="label">Boss execution</div><div class="value">19:35</div><div class="note">vs 19:01 on PB · WCL</div></div>
+      </div>
+      <div class="grid two-col">
+        <article class="panel"><div class="panel-head"><h3>Time allocation</h3><span>WCL fight entries · total reconciles to 52:09</span></div><div class="panel-body">
+          <div class="stacked" aria-label="37% boss combat, 39% trash combat, 23% idle"><span class="boss">19:35</span><span class="trash">20:29</span><span class="idle">12:05</span></div>
+          <div class="legend"><span><i style="--c:#8c5f37"></i>Boss 37%</span><span><i style="--c:#c27723"></i>Trash 39%</span><span><i style="--c:#596570"></i>Idle 23%</span></div>
+          <div class="takeaway">3:50 of the 4:24 gap to PB lives outside boss combat—in trash and transitions.</div>
+        </div></article>
+        <article class="panel"><div class="panel-head"><h3>Wing workload</h3><span>boss / trash</span></div><div class="panel-body"><div class="wing-list" id="wingBars"></div></div></article>
+      </div>
+      <div class="grid two-col" style="margin-top:12px">
+        <article class="panel"><div class="panel-head"><h3>Priority queue</h3><span>highest leverage first</span></div><div class="panel-body"><ol class="action-list">
+          <li><b class="num">1</b><div><strong>Route the 3:50 outside bosses</strong><small>Review trash speed and transition holds first; the bosses are already nearly at PB pace.</small></div></li>
+          <li><b class="num">2</b><div><strong>Make the first GCD non-selfish</strong><small>Only 37.9% of first attacking GCDs at pull starts were Sunder. Targeted per-mob choices were much closer to even: 47.9% Sunder.</small></div></li>
+          <li><b class="num">3</b><div><strong>Separate debuff work from leaderboard credit</strong><small>~134 redundant boss Sunders came from the race to bank “effective” casts before Expose landed.</small></div></li>
+          <li><b class="num">4</b><div><strong>Clean up preventable death clusters</strong><small>4HM, Gluth, and KT account for 12 of 24 real deaths; all seven trash deaths were isolated and played through.</small></div></li>
+        </ol></div></article>
+        <article class="panel"><div class="panel-head"><h3>Raid-level signals</h3><span>raw log</span></div><div class="panel-body">
+          <div class="mini-stat"><span>Real player deaths</span><strong>24</strong></div>
+          <div class="mini-stat"><span>Engineering damage</span><strong>2.12M</strong></div>
+          <div class="mini-stat"><span>Effective Sunders</span><strong>1,270</strong></div>
+          <div class="mini-stat"><span>Sunders at 5 stacks</span><strong>603</strong></div>
+          <div class="mini-stat"><span>Multi-mob pulls analyzed</span><strong>37</strong></div>
+        </div></article>
+      </div>
+    </section>
+
+    <section class="section" id="timealloc">
+      <header class="report-head"><div><h2>Time Allocation</h2><p>Where the 52:09 went when boss time is measured as full encounter windows: boss, trash pull activity, and everything else.</p></div><span class="pill">Run window 18:29:27 → 19:21:36</span></header>
+      <div class="grid metrics">
+        <div class="metric"><div class="label">Boss</div><div class="value">23:32</div><div class="note">45.1% · 15 encounter windows</div></div>
+        <div class="metric"><div class="label">Trash</div><div class="value">12:13</div><div class="note">23.4% · pull activity, union</div></div>
+        <div class="metric negative"><div class="label">Idle</div><div class="value">16:25</div><div class="note">31.5% · no boss, no pull active</div></div>
+        <div class="metric"><div class="label">Clear</div><div class="value">52:09</div><div class="note">first combat to Kel'Thuzad kill</div></div>
+      </div>
+      <div class="grid two-col">
+        <article class="panel"><div class="panel-head"><h3>Encounter-window split</h3><span>boss / trash / idle</span></div><div class="panel-body">
+          <div class="stacked" aria-label="45.1% boss, 23.4% trash, 31.5% idle"><span class="boss" style="width:45.1%">23:32</span><span class="trash" style="width:23.4%">12:13</span><span class="idle" style="width:31.5%">16:25</span></div>
+          <div class="legend"><span><i style="--c:#8c5f37"></i>Boss 45.1%</span><span><i style="--c:#c27723"></i>Trash 23.4%</span><span><i style="--c:#596570"></i>Idle 31.5%</span></div>
+          <div class="callout" style="margin:14px 0 0"><strong>Definitions:</strong> boss time here = full ENCOUNTER windows, including Gothik and Kel'Thuzad's add/RP phases, so it differs from the Overview tab's activity-based split (19:35 boss / 20:29 trash / 12:05 idle) — the two tabs measure boss time differently on purpose.</div>
+          <div class="takeaway">Gothik (4:58) and Kel'Thuzad (5:32) are mostly add/RP phases, so true boss-DPS time is closer to ~18:30; the wing-end bosses plus Sapphiron/KT account for over half of all boss time.</div>
+        </div></article>
+        <article class="panel"><div class="panel-head"><h3>Idle by primary context</h3><span>one context per gap</span></div><div class="panel-body">
+          <div class="mini-stat"><span>Death recovery</span><strong>6:09</strong></div>
+          <div class="mini-stat"><span>Pre-boss setup</span><strong>3:23</strong></div>
+          <div class="mini-stat"><span>Pre-first-pull (setup / false start)</span><strong>2:42</strong></div>
+          <div class="mini-stat"><span>Between trash pulls</span><strong>1:55</strong></div>
+          <div class="mini-stat"><span>Post-boss (loot / buff / travel)</span><strong>1:09</strong></div>
+          <div class="mini-stat"><span>Post-wing-end transition</span><strong>0:06</strong></div>
+          <p class="section-note" style="margin:13px 0 0">43 gaps ≥ 5s total 15:25; a further 1:00 is spread across sub-5s micro-gaps. Counted with overlapping tags instead, 7:02 of idle sits immediately before a boss pull, 6:09 within ~90s after a player death, 4:54 immediately after a boss kill, 3:58 between trash pulls, and only 1:00 directly after a wing-end boss. <strong>Wing transitions are not the leak</strong> — the raid chains them well. The leaks are deaths and pre-boss setup.</p>
+        </div></article>
+      </div>
+      <article class="panel" style="margin-top:12px"><div class="panel-head"><h3>Per-wing allocation</h3><span>encounter windows / pull activity / idle</span></div><div class="table-wrap"><table id="taWingTable"><thead><tr><th>Wing</th><th>Total</th><th>Boss</th><th>Trash</th><th>Idle</th></tr></thead><tbody>
+        <tr><td class="name" data-label="Wing">Spider Wing</td><td data-label="Total">9:34</td><td data-label="Boss">1:48</td><td data-label="Trash">3:06</td><td data-label="Idle">4:41</td></tr>
+        <tr><td class="name" data-label="Wing">Plague Wing</td><td data-label="Total">7:19</td><td data-label="Boss">3:01</td><td data-label="Trash">2:19</td><td data-label="Idle">1:59</td></tr>
+        <tr><td class="name" data-label="Wing">Military Wing</td><td data-label="Total">14:09</td><td data-label="Boss">7:10</td><td data-label="Trash">3:21</td><td data-label="Idle">3:37</td></tr>
+        <tr><td class="name" data-label="Wing">Construct Wing</td><td data-label="Total">13:39</td><td data-label="Boss">5:39</td><td data-label="Trash">3:27</td><td data-label="Idle">4:34</td></tr>
+        <tr><td class="name" data-label="Wing">Frostwyrm Lair</td><td data-label="Total">7:28</td><td data-label="Boss">5:53</td><td data-label="Trash">0:00</td><td data-label="Idle">1:35</td></tr>
+      </tbody></table></div><div class="panel-body" style="border-top:1px solid var(--line)">
+        <p class="section-note" style="margin:0">Spider idle (4:41) is mostly the 2:42 false start before the first pull. Construct idle (4:34) is the post-Horsemen death cascade plus a slow Patchwerk approach. Military idle (3:37) concentrates around Gothik/4HM setup; Frostwyrm's 1:35 is the two post-boss regroups (Thaddius → Sapphiron → KT).</p>
+      </div></article>
+      <article class="panel" style="margin-top:12px"><div class="panel-head"><h3>Top 10 idle gaps</h3><span>longest first</span></div><div class="table-wrap"><table id="taGapsTable"><thead><tr><th>#</th><th>Clock</th><th>Dur</th><th>Between</th><th>What happened</th></tr></thead><tbody>
+        <tr><td data-label="#">1</td><td data-label="Clock">18:29:27–18:32:09</td><td data-label="Dur">2:42</td><td class="wrap-cell" data-label="Between">run start (first combat) → trash: pull 1 (Spider)</td><td class="wrap-cell" data-label="What happened">Combat starts 18:29:27 (skitterers on Nuu) but the raid's first real damage is 18:32:09; Nuu dies 18:30:03. Zone-in/buff/false-start — the timer runs while the raid isn't fighting.</td></tr>
+        <tr><td data-label="#">2</td><td data-label="Clock">19:10:38–19:11:52</td><td data-label="Dur">1:14</td><td class="wrap-cell" data-label="Between">boss: Gluth → boss: Thaddius</td><td class="wrap-cell" data-label="What happened">5 deaths around Gluth (Waamb, Nuu, Ejaxtwo, Sempai, Holyhaze): rez, rebuff, reposition before Thaddius.</td></tr>
+        <tr><td data-label="#">3</td><td data-label="Clock">19:14:55–19:16:04</td><td data-label="Dur">1:09</td><td class="wrap-cell" data-label="Between">boss: Sapphiron → boss: Kel'Thuzad</td><td class="wrap-cell" data-label="What happened">3 deaths at Sapphiron (Velisse, Sgtboolaid, Pinaclex): slow regroup before Kel'Thuzad.</td></tr>
+        <tr><td data-label="#">4</td><td data-label="Clock">18:43:43–18:44:40</td><td data-label="Dur">0:57</td><td class="wrap-cell" data-label="Between">boss: Heigan the Unclean → boss: Loatheb</td><td class="wrap-cell" data-label="What happened">No deaths — pure pre-boss setup/positioning before Loatheb. Longest no-death pre-boss pause in the run.</td></tr>
+        <tr><td data-label="#">5</td><td data-label="Clock">19:00:56–19:01:34</td><td data-label="Dur">0:38</td><td class="wrap-cell" data-label="Between">trash: pull 42 (Maggot) → trash: pull 43 (Bile Retcher)</td><td class="wrap-cell" data-label="What happened">Same 7-man Four Horsemen death bill, second half: rezzes trickling in before the Construct quarter opens.</td></tr>
+        <tr><td data-label="#">6</td><td data-label="Clock">18:57:20–18:57:57</td><td data-label="Dur">0:37</td><td class="wrap-cell" data-label="Between">boss: Gothik the Harvester → trash: pull 40 (Necropolis Acolyte, Plagued Ghoul, Spirit of Naxxramas)</td><td class="wrap-cell" data-label="What happened">Post-Gothik loot/drink before the run to Four Horsemen. No deaths nearby.</td></tr>
+        <tr><td data-label="#">7</td><td data-label="Clock">18:58:30–18:59:02</td><td data-label="Dur">0:31</td><td class="wrap-cell" data-label="Between">trash: pull 41 (Plagued Ghoul) → boss: The Four Horsemen</td><td class="wrap-cell" data-label="What happened">Bootythweat died on the last trash pull; his rez plus 4HM setup stack into one pause.</td></tr>
+        <tr><td data-label="#">8</td><td data-label="Clock">19:05:05–19:05:34</td><td data-label="Dur">0:29</td><td class="wrap-cell" data-label="Between">trash: pull 53 (Bile Retcher, Lightning Totem, Living Monstrosity) → boss: Patchwerk</td><td class="wrap-cell" data-label="What happened">Pre-Patchwerk setup after a chained trash pull — no deaths, pure staging.</td></tr>
+        <tr><td data-label="#">9</td><td data-label="Clock">19:00:29–19:00:56</td><td data-label="Dur">0:27</td><td class="wrap-cell" data-label="Between">boss: The Four Horsemen → trash: pull 42 (Maggot)</td><td class="wrap-cell" data-label="What happened">First half of the 4HM death recovery (7 deaths): immediate post-boss scatter to rez.</td></tr>
+        <tr><td data-label="#">10</td><td data-label="Clock">18:40:58–18:41:24</td><td data-label="Dur">0:26</td><td class="wrap-cell" data-label="Between">trash: pull 20 (Stoneskin Gargoyle) → boss: Noth the Plaguebringer</td><td class="wrap-cell" data-label="What happened">Pre-boss setup before Noth; no deaths nearby. Pure staging pause.</td></tr>
+      </tbody></table></div></article>
+      <article class="panel" style="margin-top:12px"><div class="panel-head"><h3>Recommendations</h3><span>execution only — no roster/strat changes</span></div><div class="panel-body"><ol class="action-list">
+        <li><b class="num">1</b><div><strong>Death recovery is the #1 lever (6:09 across 24 deaths)</strong><small>Every death costs twice — the rez itself, then the raid waiting at partial strength. Combat-rez priority to the highest-DPS warrior first; rebuff on the move (drive-by greater blessings/renews) instead of a full stop; pre-assign 'if you die on this boss, X rezzes you' before the pull. Targets: 4HM exit (0:27 + 0:38) and Gluth exit (1:14) alone are ~1:50; under 0:20 recovery after a bloody boss saves ~1:30 by itself.</small></div></li>
+        <li><b class="num">2</b><div><strong>Pre-boss setup: 3:23 of dead time across 15 boss pulls</strong><small>7:02 counting gaps that also follow deaths. The 0:57 before Loatheb had zero deaths — pure staging. Lock assignments (spore groups, marks, positions) before the last trash pack dies and pull on a fixed countdown. Tanks take boss positions while the last pack is in execute range, not after it dies.</small></div></li>
+        <li><b class="num">3</b><div><strong>Kill the 2:42 false start</strong><small>The WCL timer starts at first combat, not first damage. Nobody touches anything until the raid is buffed, in position, and ready — and nobody scouts ahead of the group (Nuu, 18:30). This one is 2:42 of the 4:24 PB gap, available for free.</small></div></li>
+        <li><b class="num">4</b><div><strong>Transitions: 1:55 in ≥5s gaps plus 1:00 of micro-gaps</strong><small>27 of 47 pulls started after a ≥5s gap (7.8s average). Move during the last ~10% of each pack: melee peel toward the next pack as mobs hit execute range, ranged/healers pre-position, drink while walking. Halving the average transition saves ~1:45 over a run.</small></div></li>
+        <li><b class="num">5</b><div><strong>Within-pull trash pace</strong><small>Raid DPS swings from 8.7k (Spider Pull 8, a 1:41 trickle) to 49k on clean packs. On any pack that will live past ~15s, the next pack should already be arriving — chain-pull instead of watching the tail die.</small></div></li>
+        <li><b class="num">6</b><div><strong>Boss time is near ceiling except the add phases</strong><small>Gothik 4:58 and KT 5:32 are add throughput, not boss DPS: apply the blender rules (no sunders on &lt;5s adds, execute the add that gates the phase). Idle is 31.5% of the run and the PB gap is only 4:24 — this is where the next PB lives.</small></div></li>
+      </ol></div></article>
+    </section>
+
+    <section class="section" id="trashpulls">
+      <header class="report-head"><div><h2>Trash Pulls</h2><p>Every trash pull in the run, singled out: mob count, total mob HP, duration, raid DPS, and the idle gap before it. Pulls are labelled by wing in pull order.</p></div><span class="pill">47 counted pulls</span></header>
+      <div class="grid metrics">
+        <div class="metric"><div class="label">Counted pulls</div><div class="value">47</div><div class="note">6s inflow segmentation</div></div>
+        <div class="metric"><div class="label">Mobs</div><div class="value">387</div><div class="note">died or took ≥25% of HP</div></div>
+        <div class="metric"><div class="label">Mob HP</div><div class="value">20.27M</div><div class="note">summed max HP from the log</div></div>
+        <div class="metric"><div class="label">Pull time</div><div class="value">13:24</div><div class="note">12:13 union · chained pulls overlap</div></div>
+      </div>
+      <div class="callout"><strong>How pulls are segmented:</strong> the same 6s inflow rule as the other tabs — a new pull starts when no new mob has taken first damage for 6s. Mobs count toward a pull if they died or took ≥25% of their HP from the raid; 13 stray clusters (tagged-and-skipped mobs, e.g. the Faerlina-room cultist pack the raid CC'd and pulled the boss over) are excluded. Pull durations sum to 13:24 against 12:13 of union trash time. Per-player damage includes attributed pet damage.</div>
+      <article class="panel"><div class="panel-head"><h3>Wing summary</h3><span>47 pulls</span></div><div class="table-wrap"><table id="tpWingTable"><thead><tr><th>Wing</th><th>Pulls</th><th>Mobs</th><th>Total mob HP</th><th>Pull time</th><th>Raid DPS</th><th>Idle before</th></tr></thead><tbody>
+        <tr><td class="name" data-label="Wing">Spider Wing</td><td data-label="Pulls">12</td><td data-label="Mobs">107</td><td data-label="Total mob HP">4,142,396</td><td data-label="Pull time">3:24</td><td data-label="Raid DPS">25,358</td><td data-label="Idle before">73s</td></tr>
+        <tr><td class="name" data-label="Wing">Plague Wing</td><td data-label="Pulls">8</td><td data-label="Mobs">76</td><td data-label="Total mob HP">4,409,916</td><td data-label="Pull time">2:31</td><td data-label="Raid DPS">37,106</td><td data-label="Idle before">32s</td></tr>
+        <tr><td class="name" data-label="Wing">Military Wing</td><td data-label="Pulls">17</td><td data-label="Mobs">106</td><td data-label="Total mob HP">6,806,414</td><td data-label="Pull time">3:25</td><td data-label="Raid DPS">41,734</td><td data-label="Idle before">135s</td></tr>
+        <tr><td class="name" data-label="Wing">Construct Wing</td><td data-label="Pulls">10</td><td data-label="Mobs">98</td><td data-label="Total mob HP">4,909,108</td><td data-label="Pull time">3:43</td><td data-label="Raid DPS">27,466</td><td data-label="Idle before">161s</td></tr>
+      </tbody></table></div><div class="panel-body" style="border-top:1px solid var(--line)">
+        <p class="section-note" style="margin:0">Military runs the tightest trash (41.7k weighted raid DPS, small gaps). Construct has the most pre-pull idle (161s) — most of it one 65s post-Horsemen recovery and the 53s Patchwerk → Grobbulus run. Spider's raid DPS is dragged down by one pull (see the calls below).</p>
+      </div></article>
+      <article class="panel" style="margin-top:12px"><div class="panel-head"><h3>Every pull</h3><div class="table-tools"><input class="search" id="tpPullSearch" type="search" placeholder="Filter pull or mob…" aria-label="Filter pull table"><span>Click a header to sort</span></div></div><div class="table-wrap"><table id="tpPullTable"><thead><tr><th>Pull</th><th>Start</th><th>Mobs</th><th>Mob HP</th><th>Dur</th><th>Raid DPS</th><th>Gap before</th><th>Composition</th></tr></thead><tbody>
+        <tr><td class="name" data-label="Pull">Spider Wing Pull 1</td><td data-label="Start">18:33:14</td><td data-label="Mobs">11</td><td data-label="Mob HP">204,360</td><td data-label="Dur">0:05</td><td data-label="Raid DPS">41,714</td><td data-label="Gap before">11s</td><td class="wrap-cell" data-label="Composition">10× Infectious Skitterer, 1× Dread Creeper</td></tr>
+        <tr><td class="name" data-label="Pull">Spider Wing Pull 2</td><td data-label="Start">18:33:36</td><td data-label="Mobs">10</td><td data-label="Mob HP">157,200</td><td data-label="Dur">0:07</td><td data-label="Raid DPS">27,403</td><td data-label="Gap before">17s</td><td class="wrap-cell" data-label="Composition">10× Infectious Skitterer</td></tr>
+        <tr><td class="name" data-label="Pull">Spider Wing Pull 3</td><td data-label="Start">18:33:48</td><td data-label="Mobs">6</td><td data-label="Mob HP">424,440</td><td data-label="Dur">0:13</td><td data-label="Raid DPS">42,705</td><td data-label="Gap before">6s</td><td class="wrap-cell" data-label="Composition">5× Carrion Spinner, 1× Crypt Reaver</td></tr>
+        <tr><td class="name" data-label="Pull">Spider Wing Pull 4</td><td data-label="Start">18:34:09</td><td data-label="Mobs">22</td><td data-label="Mob HP">477,888</td><td data-label="Dur">0:13</td><td data-label="Raid DPS">44,382</td><td data-label="Gap before">8s</td><td class="wrap-cell" data-label="Composition">20× Infectious Skitterer, 2× Necro Stalker</td></tr>
+        <tr><td class="name" data-label="Pull">Spider Wing Pull 5</td><td data-label="Start">18:34:30</td><td data-label="Mobs">20</td><td data-label="Mob HP">314,400</td><td data-label="Dur">0:08</td><td data-label="Raid DPS">44,223</td><td data-label="Gap before">8s</td><td class="wrap-cell" data-label="Composition">20× Infectious Skitterer</td></tr>
+        <tr><td class="name" data-label="Pull">Spider Wing Pull 6</td><td data-label="Start">18:35:41</td><td data-label="Mobs">2</td><td data-label="Mob HP">163,488</td><td data-label="Dur">0:06</td><td data-label="Raid DPS">38,666</td><td data-label="Gap before">3s</td><td class="wrap-cell" data-label="Composition">2× Necro Stalker</td></tr>
+        <tr><td class="name" data-label="Pull">Spider Wing Pull 7</td><td data-label="Start">18:36:01</td><td data-label="Mobs">15</td><td data-label="Mob HP">455,880</td><td data-label="Dur">0:12</td><td data-label="Raid DPS">47,642</td><td data-label="Gap before">14s</td><td class="wrap-cell" data-label="Composition">10× Infectious Skitterer, 4× Dread Creeper, 1× Tomb Horror</td></tr>
+        <tr><td class="name" data-label="Pull">Spider Wing Pull 8</td><td data-label="Start">18:36:14</td><td data-label="Mobs">9</td><td data-label="Mob HP">675,960</td><td data-label="Dur">1:41</td><td data-label="Raid DPS">8,658</td><td data-label="Gap before">2s</td><td class="wrap-cell" data-label="Composition">4× Plagued Ghoul, 4× Dread Creeper, 1× Tomb Horror</td></tr>
+        <tr><td class="name" data-label="Pull">Spider Wing Pull 9</td><td data-label="Start">18:36:43</td><td data-label="Mobs">4</td><td data-label="Mob HP">377,280</td><td data-label="Dur">0:11</td><td data-label="Raid DPS">44,684</td><td data-label="Gap before">0s</td><td class="wrap-cell" data-label="Composition">4× Plagued Ghoul</td></tr>
+        <tr><td class="name" data-label="Pull">Spider Wing Pull 10</td><td data-label="Start">18:37:01</td><td data-label="Mobs">2</td><td data-label="Mob HP">129,500</td><td data-label="Dur">0:08</td><td data-label="Raid DPS">22,895</td><td data-label="Gap before">0s</td><td class="wrap-cell" data-label="Composition">2× Necropolis Acolyte</td></tr>
+        <tr><td class="name" data-label="Pull">Spider Wing Pull 11</td><td data-label="Start">18:37:22</td><td data-label="Mobs">4</td><td data-label="Mob HP">632,500</td><td data-label="Dur">0:16</td><td data-label="Raid DPS">49,293</td><td data-label="Gap before">0s</td><td class="wrap-cell" data-label="Composition">2× Plagued Gargoyle, 2× Necropolis Acolyte</td></tr>
+        <tr><td class="name" data-label="Pull">Spider Wing Pull 12</td><td data-label="Start">18:38:00</td><td data-label="Mobs">2</td><td data-label="Mob HP">129,500</td><td data-label="Dur">0:05</td><td data-label="Raid DPS">30,975</td><td data-label="Gap before">4s</td><td class="wrap-cell" data-label="Composition">2× Necropolis Acolyte</td></tr>
+        <tr><td class="name" data-label="Pull">Plague Wing Pull 1</td><td data-label="Start">18:39:07</td><td data-label="Mobs">4</td><td data-label="Mob HP">352,128</td><td data-label="Dur">0:18</td><td data-label="Raid DPS">24,271</td><td data-label="Gap before">6s</td><td class="wrap-cell" data-label="Composition">4× Patchwork Golem</td></tr>
+        <tr><td class="name" data-label="Pull">Plague Wing Pull 2</td><td data-label="Start">18:39:30</td><td data-label="Mobs">9</td><td data-label="Mob HP">990,360</td><td data-label="Dur">0:34</td><td data-label="Raid DPS">37,176</td><td data-label="Gap before">5s</td><td class="wrap-cell" data-label="Composition">6× Infectious Ghoul, 3× Plague Slime</td></tr>
+        <tr><td class="name" data-label="Pull">Plague Wing Pull 3</td><td data-label="Start">18:39:52</td><td data-label="Mobs">2</td><td data-label="Mob HP">405,555</td><td data-label="Dur">0:15</td><td data-label="Raid DPS">36,210</td><td data-label="Gap before">0s</td><td class="wrap-cell" data-label="Composition">1× Plague Slime, 1× Stoneskin Gargoyle</td></tr>
+        <tr><td class="name" data-label="Pull">Plague Wing Pull 4</td><td data-label="Start">18:40:13</td><td data-label="Mobs">3</td><td data-label="Mob HP">792,225</td><td data-label="Dur">0:16</td><td data-label="Raid DPS">62,225</td><td data-label="Gap before">6s</td><td class="wrap-cell" data-label="Composition">3× Stoneskin Gargoyle</td></tr>
+        <tr><td class="name" data-label="Pull">Plague Wing Pull 5</td><td data-label="Start">18:40:33</td><td data-label="Mobs">2</td><td data-label="Mob HP">528,150</td><td data-label="Dur">0:11</td><td data-label="Raid DPS">61,079</td><td data-label="Gap before">4s</td><td class="wrap-cell" data-label="Composition">2× Stoneskin Gargoyle</td></tr>
+        <tr><td class="name" data-label="Pull">Plague Wing Pull 6</td><td data-label="Start">18:40:48</td><td data-label="Mobs">2</td><td data-label="Mob HP">528,150</td><td data-label="Dur">0:10</td><td data-label="Raid DPS">68,776</td><td data-label="Gap before">4s</td><td class="wrap-cell" data-label="Composition">2× Stoneskin Gargoyle</td></tr>
+        <tr><td class="name" data-label="Pull">Plague Wing Pull 7</td><td data-label="Start">18:42:04</td><td data-label="Mobs">45</td><td data-label="Mob HP">642,360</td><td data-label="Dur">0:39</td><td data-label="Raid DPS">21,283</td><td data-label="Gap before">5s</td><td class="wrap-cell" data-label="Composition">19× Frenzied Bat, 17× Plagued Bat, 8× Mutated Grub, 1× Plague Beast</td></tr>
+        <tr><td class="name" data-label="Pull">Plague Wing Pull 8</td><td data-label="Start">18:42:46</td><td data-label="Mobs">9</td><td data-label="Mob HP">170,988</td><td data-label="Dur">0:09</td><td data-label="Raid DPS">26,026</td><td data-label="Gap before">2s</td><td class="wrap-cell" data-label="Composition">4× Frenzied Bat, 2× Mutated Grub, 2× Plagued Bat, 1× Plague Beast</td></tr>
+        <tr><td class="name" data-label="Pull">Military Wing Pull 1</td><td data-label="Start">18:46:39</td><td data-label="Mobs">13</td><td data-label="Mob HP">594,852</td><td data-label="Dur">0:15</td><td data-label="Raid DPS">47,182</td><td data-label="Gap before">19s</td><td class="wrap-cell" data-label="Composition">4× Risen Deathknight, 2× Necro Knight, 2× Deathknight, 2× Deathknight Capta…</td></tr>
+        <tr><td class="name" data-label="Pull">Military Wing Pull 2</td><td data-label="Start">18:47:02</td><td data-label="Mobs">5</td><td data-label="Mob HP">270,384</td><td data-label="Dur">0:08</td><td data-label="Raid DPS">44,893</td><td data-label="Gap before">8s</td><td class="wrap-cell" data-label="Composition">1× Dark Touched Warrior, 1× Deathknight, 1× Death Touched Warrior, 1× Skele…</td></tr>
+        <tr><td class="name" data-label="Pull">Military Wing Pull 3</td><td data-label="Start">18:47:11</td><td data-label="Mobs">4</td><td data-label="Mob HP">207,504</td><td data-label="Dur">0:07</td><td data-label="Raid DPS">40,503</td><td data-label="Gap before">1s</td><td class="wrap-cell" data-label="Composition">3× Skeletal Smith, 1× Shade of Naxxramas</td></tr>
+        <tr><td class="name" data-label="Pull">Military Wing Pull 4</td><td data-label="Start">18:47:24</td><td data-label="Mobs">4</td><td data-label="Mob HP">339,552</td><td data-label="Dur">0:08</td><td data-label="Raid DPS">55,457</td><td data-label="Gap before">6s</td><td class="wrap-cell" data-label="Composition">2× Deathknight, 2× Deathknight Captain</td></tr>
+        <tr><td class="name" data-label="Pull">Military Wing Pull 5</td><td data-label="Start">18:47:38</td><td data-label="Mobs">15</td><td data-label="Mob HP">855,168</td><td data-label="Dur">0:27</td><td data-label="Raid DPS">41,039</td><td data-label="Gap before">6s</td><td class="wrap-cell" data-label="Composition">6× Deathknight, 3× Deathknight Captain, 2× Death Touched Warrior, 2× Deathc…</td></tr>
+        <tr><td class="name" data-label="Pull">Military Wing Pull 6</td><td data-label="Start">18:48:09</td><td data-label="Mobs">3</td><td data-label="Mob HP">245,232</td><td data-label="Dur">0:08</td><td data-label="Raid DPS">42,941</td><td data-label="Gap before">4s</td><td class="wrap-cell" data-label="Composition">2× Deathknight, 1× Deathknight Captain</td></tr>
+        <tr><td class="name" data-label="Pull">Military Wing Pull 7</td><td data-label="Start">18:48:17</td><td data-label="Mobs">4</td><td data-label="Mob HP">220,080</td><td data-label="Dur">0:09</td><td data-label="Raid DPS">34,385</td><td data-label="Gap before">1s</td><td class="wrap-cell" data-label="Composition">1× Death Touched Warrior, 1× Deathknight, 1× Deathknight Captain, 1× Doom T…</td></tr>
+        <tr><td class="name" data-label="Pull">Military Wing Pull 8</td><td data-label="Start">18:48:37</td><td data-label="Mobs">8</td><td data-label="Mob HP">377,262</td><td data-label="Dur">0:13</td><td data-label="Raid DPS">36,654</td><td data-label="Gap before">11s</td><td class="wrap-cell" data-label="Composition">3× Death Touched Warrior, 3× Doom Touched Warrior, 2× Deathknight Cavalier</td></tr>
+        <tr><td class="name" data-label="Pull">Military Wing Pull 9</td><td data-label="Start">18:48:51</td><td data-label="Mobs">6</td><td data-label="Mob HP">414,981</td><td data-label="Dur">0:17</td><td data-label="Raid DPS">32,177</td><td data-label="Gap before">0s</td><td class="wrap-cell" data-label="Composition">3× Deathknight Cavalier, 3× Risen Deathknight</td></tr>
+        <tr><td class="name" data-label="Pull">Military Wing Pull 10</td><td data-label="Start">18:49:12</td><td data-label="Mobs">15</td><td data-label="Mob HP">792,261</td><td data-label="Dur">0:12</td><td data-label="Raid DPS">70,541</td><td data-label="Gap before">4s</td><td class="wrap-cell" data-label="Composition">8× Skeletal Steed, 4× Risen Deathknight, 2× Deathknight Cavalier, 1× Death …</td></tr>
+        <tr><td class="name" data-label="Pull">Military Wing Pull 11</td><td data-label="Start">18:50:34</td><td data-label="Mobs">1</td><td data-label="Mob HP">91,560</td><td data-label="Dur">0:01</td><td data-label="Raid DPS">106,537</td><td data-label="Gap before">0s</td><td class="wrap-cell" data-label="Composition">1× Deathknight Understudy</td></tr>
+        <tr><td class="name" data-label="Pull">Military Wing Pull 12</td><td data-label="Start">18:50:46</td><td data-label="Mobs">2</td><td data-label="Mob HP">226,368</td><td data-label="Dur">0:07</td><td data-label="Raid DPS">42,200</td><td data-label="Gap before">12s</td><td class="wrap-cell" data-label="Composition">2× Unholy Axe</td></tr>
+        <tr><td class="name" data-label="Pull">Military Wing Pull 13</td><td data-label="Start">18:50:55</td><td data-label="Mobs">2</td><td data-label="Mob HP">176,064</td><td data-label="Dur">0:06</td><td data-label="Raid DPS">37,651</td><td data-label="Gap before">1s</td><td class="wrap-cell" data-label="Composition">2× Unholy Staff</td></tr>
+        <tr><td class="name" data-label="Pull">Military Wing Pull 14</td><td data-label="Start">18:51:13</td><td data-label="Mobs">4</td><td data-label="Mob HP">370,992</td><td data-label="Dur">0:10</td><td data-label="Raid DPS">45,571</td><td data-label="Gap before">12s</td><td class="wrap-cell" data-label="Composition">3× Unholy Swords, 1× Unholy Staff</td></tr>
+        <tr><td class="name" data-label="Pull">Military Wing Pull 15</td><td data-label="Start">18:51:32</td><td data-label="Mobs">9</td><td data-label="Mob HP">630,054</td><td data-label="Dur">0:27</td><td data-label="Raid DPS">29,728</td><td data-label="Gap before">8s</td><td class="wrap-cell" data-label="Composition">4× Necro Knight, 2× Deathknight Cavalier, 2× Deathknight Captain, 1× Shade …</td></tr>
+        <tr><td class="name" data-label="Pull">Military Wing Pull 16</td><td data-label="Start">18:57:57</td><td data-label="Mobs">7</td><td data-label="Mob HP">616,820</td><td data-label="Dur">0:19</td><td data-label="Raid DPS">42,440</td><td data-label="Gap before">37s</td><td class="wrap-cell" data-label="Composition">4× Plagued Ghoul, 2× Necropolis Acolyte, 1× Spirit of Naxxramas</td></tr>
+        <tr><td class="name" data-label="Pull">Military Wing Pull 17</td><td data-label="Start">18:58:18</td><td data-label="Mobs">4</td><td data-label="Mob HP">377,280</td><td data-label="Dur">0:12</td><td data-label="Raid DPS">40,274</td><td data-label="Gap before">2s</td><td class="wrap-cell" data-label="Composition">4× Plagued Ghoul</td></tr>
+        <tr><td class="name" data-label="Pull">Construct Wing Pull 1</td><td data-label="Start">19:01:34</td><td data-label="Mobs">2</td><td data-label="Mob HP">213,792</td><td data-label="Dur">0:09</td><td data-label="Raid DPS">32,685</td><td data-label="Gap before">65s</td><td class="wrap-cell" data-label="Composition">2× Bile Retcher</td></tr>
+        <tr><td class="name" data-label="Pull">Construct Wing Pull 2</td><td data-label="Start">19:01:49</td><td data-label="Mobs">8</td><td data-label="Mob HP">831,396</td><td data-label="Dur">0:24</td><td data-label="Raid DPS">44,445</td><td data-label="Gap before">6s</td><td class="wrap-cell" data-label="Composition">3× Sewage Slime, 2× Patchwork Golem, 1× Bile Retcher, 1× Sludge Belcher, 1×…</td></tr>
+        <tr><td class="name" data-label="Pull">Construct Wing Pull 3</td><td data-label="Start">19:02:27</td><td data-label="Mobs">3</td><td data-label="Mob HP">36,624</td><td data-label="Dur">0:45</td><td data-label="Raid DPS">833</td><td data-label="Gap before">14s</td><td class="wrap-cell" data-label="Composition">3× Embalming Slime</td></tr>
+        <tr><td class="name" data-label="Pull">Construct Wing Pull 4</td><td data-label="Start">19:02:39</td><td data-label="Mobs">33</td><td data-label="Mob HP">939,618</td><td data-label="Dur">0:44</td><td data-label="Raid DPS">24,797</td><td data-label="Gap before">0s</td><td class="wrap-cell" data-label="Composition">17× Embalming Slime, 5× Surgical Assistant, 4× Mad Scientist, 3× Sludge Bel…</td></tr>
+        <tr><td class="name" data-label="Pull">Construct Wing Pull 5</td><td data-label="Start">19:03:12</td><td data-label="Mobs">10</td><td data-label="Mob HP">460,174</td><td data-label="Dur">0:15</td><td data-label="Raid DPS">38,930</td><td data-label="Gap before">0s</td><td class="wrap-cell" data-label="Composition">5× Surgical Assistant, 4× Mad Scientist, 1× Living Monstrosity</td></tr>
+        <tr><td class="name" data-label="Pull">Construct Wing Pull 6</td><td data-label="Start">19:03:32</td><td data-label="Mobs">7</td><td data-label="Mob HP">549,660</td><td data-label="Dur">0:20</td><td data-label="Raid DPS">35,625</td><td data-label="Gap before">5s</td><td class="wrap-cell" data-label="Composition">4× Patchwork Golem, 1× Sludge Belcher, 1× Bile Retcher, 1× Bile Sludge</td></tr>
+        <tr><td class="name" data-label="Pull">Construct Wing Pull 7</td><td data-label="Start">19:03:58</td><td data-label="Mobs">10</td><td data-label="Mob HP">460,174</td><td data-label="Dur">0:13</td><td data-label="Raid DPS">42,217</td><td data-label="Gap before">6s</td><td class="wrap-cell" data-label="Composition">5× Surgical Assistant, 4× Mad Scientist, 1× Living Monstrosity</td></tr>
+        <tr><td class="name" data-label="Pull">Construct Wing Pull 8</td><td data-label="Start">19:04:17</td><td data-label="Mobs">12</td><td data-label="Mob HP">550,810</td><td data-label="Dur">0:18</td><td data-label="Raid DPS">38,144</td><td data-label="Gap before">6s</td><td class="wrap-cell" data-label="Composition">5× Surgical Assistant, 4× Mad Scientist, 1× Sludge Belcher, 1× Living Monst…</td></tr>
+        <tr><td class="name" data-label="Pull">Construct Wing Pull 9</td><td data-label="Start">19:04:40</td><td data-label="Mobs">11</td><td data-label="Mob HP">567,070</td><td data-label="Dur">0:25</td><td data-label="Raid DPS">29,155</td><td data-label="Gap before">6s</td><td class="wrap-cell" data-label="Composition">5× Surgical Assistant, 4× Mad Scientist, 1× Living Monstrosity, 1× Bile Ret…</td></tr>
+        <tr><td class="name" data-label="Pull">Construct Wing Pull 10</td><td data-label="Start">19:08:03</td><td data-label="Mobs">2</td><td data-label="Mob HP">299,790</td><td data-label="Dur">0:11</td><td data-label="Raid DPS">36,983</td><td data-label="Gap before">53s</td><td class="wrap-cell" data-label="Composition">2× Stitched Spewer</td></tr>
+      </tbody></table></div></article>
+      <article class="panel" style="margin-top:12px"><div class="panel-head"><h3>Calls on the pull data</h3><span>what the 47 pulls say</span></div><div class="panel-body">
+        <div class="callout"><strong>Spider Wing Pull 8 (18:36, 9 mobs, 676k HP) is the worst pull of the run: 1:41 at 8.7k raid DPS.</strong> A trickle gauntlet (Plagued Ghouls + Dread Creepers) where mobs kept arriving instead of being pulled together — Flaps died during it. Combined with the clean 47k pulls around it, this single pull is worth ~30–40s if it's pulled as one pack.</div>
+        <div class="callout"><strong>Construct Wing Pulls 3–4 overlap (19:02):</strong> 3 Embalming Slimes took 45s at 833 raid DPS while the next 33-mob pack was already engaged at 19:02:39 — the raid outran its own mop-up and left slimes to a skeleton crew. Fine if intentional; if not, execute-range stragglers need a finisher call.</div>
+        <div class="callout"><strong>Plague Wing Pull 7 (45 mobs, 642k HP, 39s, 21.3k raid DPS)</strong> — the bat/grub swarm is the biggest pull of the run and still only mid-pack DPS; AoE classes are under-represented in damage here (see the class table below).</div>
+        <div class="callout"><strong>Best pulls:</strong> Plague Wing Pulls 4–6 (Stoneskin Gargoyle pairs at 61–69k raid DPS) and Military Wing Pull 10 (15 mobs, 70.5k) show the raid's ceiling — stacked packs, everyone in range at pull start.</div>
+        <div class="callout"><strong>Gap discipline:</strong> worst pre-pull gaps are recovery, not travel — Construct Pull 1 (65s, after the 7-man 4HM death bill) and Construct Pull 10 (53s, Patchwerk kill → Grobbulus door). Only four other pulls waited &gt;15s all run.</div>
+      </div></article>
+      <article class="panel" style="margin-top:12px"><div class="panel-head"><h3>DPS by class on trash pulls</h3><span>DPS-role players · healers excluded</span></div><div class="table-wrap"><table id="tpClassTable"><thead><tr><th>Class</th><th>Players</th><th>Engage %</th><th>Activity</th><th>Pull DPS</th><th>Trash damage</th></tr></thead><tbody>
+        <tr><td class="name" data-label="Class">Warrior</td><td data-label="Players">18</td><td data-label="Engage %">95.5%</td><td data-label="Activity">0.81</td><td data-label="Pull DPS">1,410</td><td data-label="Trash damage">18,762,300</td></tr>
+        <tr><td class="name" data-label="Class">Mage</td><td data-label="Players">3</td><td data-label="Engage %">94.3%</td><td data-label="Activity">0.69</td><td data-label="Pull DPS">862</td><td data-label="Trash damage">1,973,343</td></tr>
+        <tr><td class="name" data-label="Class">Rogue</td><td data-label="Players">1</td><td data-label="Engage %">74.5%</td><td data-label="Activity">0.49</td><td data-label="Pull DPS">613</td><td data-label="Trash damage">403,500</td></tr>
+        <tr><td class="name" data-label="Class">Hunter</td><td data-label="Players">1</td><td data-label="Engage %">87.2%</td><td data-label="Activity">0.42</td><td data-label="Pull DPS">350</td><td data-label="Trash damage">250,529</td></tr>
+        <tr><td class="name" data-label="Class">Warlock</td><td data-label="Players">1</td><td data-label="Engage %">46.8%</td><td data-label="Activity">0.37</td><td data-label="Pull DPS">347</td><td data-label="Trash damage">138,425</td></tr>
+      </tbody></table></div><div class="panel-body" style="border-top:1px solid var(--line)">
+        <p class="section-note" style="margin:0">Warriors carry trash (1,410 avg pull DPS at 0.81 activity). Mages engage nearly every pull (94%) but are quieter inside them (0.69 activity — casters get caught out of position between packs). The rogue (Flaps, 0.49 activity, 74.5% engage) and the lock/hunter trail on activity, not output per hit — they're late to pulls, not weak in them. Shadow-priest/healer damage isn't scored here; healers are excluded by design.</p>
+      </div></article>
+      <article class="panel" style="margin-top:12px"><div class="panel-head"><h3>Trash Score — per player</h3><div class="table-tools"><div class="segmented" id="tpScopeTabs"><button class="active" data-scope="raid">Entire raid</button><button data-scope="spider">Spider</button><button data-scope="plague">Plague</button><button data-scope="military">Military</button><button data-scope="construct">Construct</button></div><input class="search" id="tpScoreSearch" type="search" placeholder="Filter player…" aria-label="Filter Trash Score table"></div></div>
+      <div class="panel-body" style="border-bottom:1px solid var(--line)"><div class="formula">Score = 10 × (0.55 × Relative pull DPS + 0.25 × Activity + 0.20 × Engage %)</div><p class="section-note" style="margin:12px 0 0">v1, DPS-role players only (24), computed per wing and for the whole raid. Components are shown so the score can be argued with.</p></div>
+      <div class="table-wrap"><table id="tpScoreTable"><thead><tr><th>Player</th><th>Class</th><th>Score</th><th>Pull DPS</th><th>Activity</th><th>Engage</th><th>Pulls</th></tr></thead><tbody></tbody></table></div>
+      <div class="panel-body" style="border-top:1px solid var(--line)"><div class="takeaway" style="margin:0"><strong>Ellaria: 8.34, 14th of 24 raid-wide</strong> (14th Spider, 15th Plague, 16th Military, 11th Construct). His engage (95.7%, 45/47) is tied with the leaders and his activity (0.803) is mid-pack; the gap to the top five is pure pull DPS (1,297 vs Nalga's 1,614). Trash is not where his PMS #2 comes from — bosses carry him; trash is where his headroom is. Nalga/Gophie/Dinkie/Junsa set the trash pace.</div></div></article>
+      <article class="panel" style="margin-top:12px"><div class="panel-head"><h3>Recommendations — trash time</h3><span>execution only</span></div><div class="panel-body"><ol class="action-list">
+        <li><b class="num">1</b><div><strong>Pull Spider 8 as one pack</strong><small>(or two deliberate packs): it's the single slowest pull of the run (~35s available).</small></div></li>
+        <li><b class="num">2</b><div><strong>Late-arrival classes lose more to activity than output</strong><small>Mages at 0.69 activity vs warriors 0.80: pre-position ranged at the NEXT pack during the current one's last 10% instead of finishing casts at max range behind the raid.</small></div></li>
+        <li><b class="num">3</b><div><strong>Chain into packs that will live &gt;15s</strong><small>(Plague 7 swarm, Construct 4 slime stream): the next pull arriving early costs nothing and removes the tail-watch.</small></div></li>
+        <li><b class="num">4</b><div><strong>Straggler rule</strong><small>When the raid moves on, name the finishers for execute-range leftovers (Construct 3's 45s slime tail).</small></div></li>
+        <li><b class="num">5</b><div><strong>Pre-pull gaps are recovery, not travel</strong><small>The trash fix and the idle fix are the same fix: fewer deaths, faster rezzes, pull on a timer.</small></div></li>
+      </ol></div></article>
+    </section>
+
+    <section class="section" id="bosses">
+      <header class="report-head"><div><h2>Bosses vs PB</h2><p>Warcraft Logs fight-entry durations for both the Sep 29 run and the Sep 22 guild PB.</p></div><span class="pill"><span class="dot"></span>Boss total: +0:34</span></header>
+      <p class="section-note">Six encounters matched or beat the PB. Kel’Thuzad contributed the largest boss loss (+25s); Gothik was identical and is wave-gated.</p>
+      <article class="panel"><div class="panel-head"><h3>Encounter comparison</h3><span>Click a header to sort</span></div><div class="table-wrap"><table id="bossTable"><thead><tr><th>Boss</th><th>Sep 29</th><th>PB</th><th>Delta</th><th>Read</th></tr></thead><tbody></tbody></table></div></article>
+    </section>
+
+    <section class="section" id="deaths">
+      <header class="report-head"><div><h2>Deaths</h2><p>32 UNIT_DIED events resolve to 24 real player deaths and eight Kurassa Feign Deaths.</p></div><span class="pill">WCL showed 22</span></header>
+      <div class="grid death-summary"><div class="death-bucket"><div class="n">7</div><div class="where">Trash</div><p>All isolated single deaths. No wipe or reset.</p></div><div class="death-bucket"><div class="n">6</div><div class="where">Four Horsemen</div><p>Holy Wrath cluster late in the 1:27 kill.</p></div><div class="death-bucket"><div class="n">6</div><div class="where">Gluth + KT</div><p>Three each; includes two early tank/melee deaths.</p></div><div class="death-bucket"><div class="n">5</div><div class="where">Grobb + Sapph</div><p>Two post-kill Sapph ticks were absent from WCL.</p></div></div>
+      <div class="grid two-col">
+        <article class="panel"><div class="panel-head"><h3>Encounter detail</h3><span>24 real deaths</span></div><div class="panel-body"><div class="timeline" id="deathTimeline"></div></div></article>
+        <article class="panel"><div class="panel-head"><h3>Corrections to the public report</h3><span>raw event stream</span></div><div class="panel-body">
+          <div class="callout"><strong>Trash deaths were not wipes.</strong> They occurred as isolated singles minutes apart while the raid continued the pull sequence.</div>
+          <div class="callout"><strong>Two deaths happened after Sapphiron died.</strong> Sgtboolaid and Pinaclex took lingering Frost Aura/Life Drain ticks roughly two seconds after the kill.</div>
+          <div class="callout"><strong>Feign Death is not player death.</strong> Kurassa’s eight UNIT_DIED events are excluded from the real-death total.</div>
+          <p class="section-note" style="margin:16px 0 0">Concentration matters more than the headline count: 12 deaths were packed into 4HM, Gluth, and KT.</p>
+        </div></article>
+      </div>
+    </section>
+
+    <section class="section" id="sunder">
+      <header class="report-head"><div><h2>Sunder + Expose</h2><p>Effective Sunder CPM by warrior, then the armor-debuff handoff that changes how those casts should be interpreted.</p></div><span class="pill">TSA minimum: 0.8 CPM</span></header>
+      <div class="grid metrics"><div class="metric"><div class="label">All Sunders</div><div class="value">1,873</div><div class="note">24 warriors</div></div><div class="metric"><div class="label">Effective</div><div class="value">1,270</div><div class="note">68% raid efficiency</div></div><div class="metric negative"><div class="label">At 5 stacks</div><div class="value">603</div><div class="note">32% of casts</div></div><div class="metric positive"><div class="label">Ellaria efficiency</div><div class="value">86%</div><div class="note">highest in raid</div></div></div>
+      <article class="panel"><div class="panel-head"><h3>Effective Sunder CPM</h3><div class="table-tools"><input class="search" id="sunderSearch" type="search" placeholder="Filter player…" aria-label="Filter Sunder table"><span>39.9 combat min denominator</span></div></div><div class="table-wrap"><table id="sunderTable"><thead><tr><th>Player</th><th>Effective</th><th>Total</th><th>CPM</th><th>@ 5 stacks</th><th>Efficiency</th></tr></thead><tbody></tbody></table></div></article>
+      <article class="panel" style="margin-top:12px"><div class="panel-head"><h3>Sunder → Expose handoff</h3><span>bosses</span></div><div class="panel-body">
+        <div class="handoff"><div><span class="tag">OPEN</span><strong>Warriors stack</strong><small>5 Sunders needed</small></div><div><span class="tag">~11–26s</span><strong>Flaps applies Expose</strong><small>Sunder aura removed at the same timestamp</small></div><div><span class="tag">REST OF FIGHT</span><strong>~99.5% uptime</strong><small>Expose carries the debuff on long kills</small></div></div>
+        <div class="grid split"><div><div class="hero-number">~134</div><div class="hero-label">redundant boss Sunder GCDs</div><p class="hero-copy">Roughly ten per boss as 13–22 warriors race to bank a counted Sunder before Expose closes the window.</p></div><div><div class="callout"><strong>The incentive is individually rational, collectively expensive.</strong> PMS counts Sunders only below five stacks, so the opening window rewards a raid-wide pile-in. Add Expose uptime to the weekly review and separate tank/debuff assignments from DPS credit.</div><p class="section-note" style="margin:0">Faerlina and Maexxna correctly skipped Expose on sub-36s kills. On 4HM, Zeliek received no Expose while the other three horsemen did.</p></div></div>
+      </div></article>
+    </section>
+
+    <section class="section" id="engineering">
+      <header class="report-head"><div><h2>Engineering</h2><p>Raw logged damage including overkill. Top 15 shown; ranged damage can be undercounted from Ellaria’s melee POV.</p></div><span class="pill">Raid total 2.12M</span></header>
+      <div class="grid metrics"><div class="metric"><div class="label">Goblin Sapper</div><div class="value">1.151M</div><div class="note">54% of engineering damage</div></div><div class="metric"><div class="label">Dense Dynamite</div><div class="value">385k</div><div class="note">18%</div></div><div class="metric"><div class="label">Holy Water</div><div class="value">381k</div><div class="note">mages lead vs undead</div></div><div class="metric"><div class="label">Dragonbreath Chili</div><div class="value">204k</div><div class="note">no Oil of Immolation</div></div></div>
+      <article class="panel"><div class="panel-head"><h3>Damage leaderboard</h3><div class="table-tools"><input class="search" id="engSearch" type="search" placeholder="Filter player…" aria-label="Filter engineering table"><span>Click a header to sort</span></div></div><div class="table-wrap"><table id="engTable"><thead><tr><th>Player</th><th>Total</th><th>Sapper</th><th>Dynamite</th><th>Holy Water</th><th>Chili</th></tr></thead><tbody></tbody></table></div></article>
+      <div class="callout" style="margin-top:12px"><strong>Ellaria:</strong> 64.4k total—21k Sapper, 21k Dynamite, and 22k Chili. The raid-wide opportunity is consistent Sapper use, not boss DPS.</div>
+    </section>
+
+    <section class="section" id="utility">
+      <header class="report-head"><div><h2>Interrupts + Utility</h2><p>Successful interrupts only, plus assignment signals from Demo, Disarm, Challenging Shout, and target dummies.</p></div></header>
+      <div class="grid two-col">
+        <article class="panel"><div class="panel-head"><h3>Kel’Thuzad Frostbolt</h3><span>11 successful interrupts</span></div><div class="panel-body" id="ktInterrupts"></div></article>
+        <article class="panel"><div class="panel-head"><h3>Other successful interrupts</h3><span>5 events</span></div><div class="panel-body">
+          <div class="mini-stat"><span>Lumberyak · Rider Shadow Bolt Volley</span><strong>1</strong></div><div class="mini-stat"><span>Xmage · Rider Shadow Bolt Volley</span><strong>1</strong></div><div class="mini-stat"><span>Junsa · Spectral Rider Drain Life</span><strong>1</strong></div><div class="mini-stat"><span>Sempai · Sludge Belcher Disease Buffet</span><strong>1</strong></div><div class="mini-stat"><span>Flaps · Sludge Belcher Disease Buffet</span><strong>1</strong></div>
+        </div></article>
+      </div>
+      <div class="grid split" style="margin-top:12px">
+        <article class="panel"><div class="panel-head"><h3>Warrior utility</h3><span>top contributors</span></div><div class="panel-body">
+          <div class="mini-stat"><span>Demoralizing Shout</span><strong>Vincint 55</strong></div><div class="mini-stat"><span>Demo support</span><strong>Booty 29 · Sven 18</strong></div><div class="mini-stat"><span>Disarm</span><strong>Sven 8</strong></div><div class="mini-stat"><span>Disarm support</span><strong>Sempai 5 · Ellaria 5</strong></div><div class="mini-stat"><span>Challenging Shout</span><strong>Vincint 3 · Sven 3</strong></div>
+        </div></article>
+        <article class="panel"><div class="panel-head"><h3>Dummies + Sapphiron</h3><span>Nu post validation</span></div><div class="panel-body">
+          <div class="mini-stat"><span>Top MTD casts</span><strong>Loganw 6 · Iynx 6</strong></div><div class="mini-stat"><span>Five MTD each</span><strong>5 players</strong></div><div class="mini-stat"><span>Sapphiron total</span><strong>20 MTD + 1 LF</strong></div><div class="mini-stat"><span>Polarity #1</span><strong>Egg 155.3k</strong></div><div class="mini-stat"><span>Polarity #2 / #3</span><strong>Daddy 151.7k · Ellaria 148.8k</strong></div>
+        </div></article>
+      </div>
+    </section>
+
+    <section class="section" id="rotation">
+      <header class="report-head"><div><h2>Warrior Rotation</h2><p>Targeted mob openers, the first attacking GCD at pull start, and the post-opener view. Tanks are separated from DPS because Revenge openers and assigned threat targets create a different priority rotation.</p></div><span class="pill">18 DPS · 1 MT · 5 OT</span></header>
+      <div class="grid two-col">
+        <article class="panel"><div class="panel-head"><h3>DPS targeted trash openers</h3><span>1,174 engagements · 18 DPS · target below 5 stacks</span></div><div class="panel-body"><div class="hstack" aria-label="49.1% Sunder, 50.4% Bloodthirst, 0.5% other"><span class="sunder-c" style="width:49.1%">49.1%</span><span class="bt-c" style="width:50.4%">50.4%</span><span class="other-c" style="width:.5%"></span></div><div class="legend" style="margin-top:10px"><span><i style="--c:#9a6b3f"></i>Sunder 576</span><span><i style="--c:#b84437"></i>BT 592</span><span><i style="--c:#646d77"></i>Other 6</span></div><div class="takeaway">Top DPS: Ejaxtwo 67.8% (61/90), Bort 63.6%, Pinaclex 59.5%, Dodyy 59.4%.</div></div></article>
+        <article class="panel"><div class="panel-head"><h3>DPS at 37 multi-mob pull starts</h3><span>624 DPS warrior-pulls · first attacking GCD</span></div><div class="panel-body"><div class="hstack" aria-label="38.8% Sunder, 32.9% Bloodthirst, 28.4% Whirlwind"><span class="sunder-c" style="width:38.8%">38.8%</span><span class="bt-c" style="width:32.9%">32.9%</span><span class="ww-c" style="width:28.4%">28.4%</span></div><div class="legend" style="margin-top:10px"><span><i style="--c:#9a6b3f"></i>Sunder 242</span><span><i style="--c:#b84437"></i>BT 205</span><span><i style="--c:#3479a7"></i>WW 177</span></div><div class="takeaway">At pull start, 61.3% of DPS first attacking GCDs were damage abilities.</div></div></article>
+      </div>
+      <div class="callout" style="margin-top:12px"><strong>Role coding from Angry Era assignments:</strong> Vincint is MT; Bootythweat, Sven, Sempai, Tankina, and Egg are offtanks; the other 18 warriors are DPS. On targeted trash openers, Vincint was 59.2% Sunder; the OT group was 40.5% combined (Egg 54.3%, Tankina 47.5%, Sempai 45.9%, Bootythweat 32.4%, Sven 22.5%). At pull start, OTs were 35.7% Sunder, 36.3% BT, 22.6% WW, and 5.4% other—primarily Revenge. Tank rows stay visible for reference; DPS-only rank is the comparison that matters.</div>
+      <div class="callout"><strong>Whirlwind attribution corrected.</strong> The old fresh-target metric did count every mob hit by Whirlwind—even if the warrior first targeted Skull with Sunder, then clipped three untouched ghouls with WW. That created 605 misleading “WW first” cases where the deliberate opener was Sunder (173) or Bloodthirst (432). The per-target view now uses targeted casts only; WW remains only in the pull-start view, where it is a real first button press.</div>
+      <article class="panel" style="margin-top:12px"><div class="panel-head"><h3>Player comparison</h3><div class="table-tools"><div class="segmented" id="rotationTabs"><button class="active" data-view="fresh">Targeted mobs</button><button data-view="post">Post-opener</button><button data-view="pull">Pull starts</button><button data-view="boss">Boss targets</button></div><input class="search" id="rotSearch" type="search" placeholder="Filter player…" aria-label="Filter rotation table"></div></div><div class="table-wrap"><table id="rotTable"><thead></thead><tbody></tbody></table></div></article>
+      <div class="grid split" style="margin-top:12px"><div class="callout"><strong>Ellaria spotlight:</strong> 46.4% Sunder (32/69) on targeted trash openers is 12th of 18 DPS. Remove each warrior’s pull-opening GCD and Ellaria rises to 49.0% (24/49), tied with Nalga for 5th of 18 DPS.</div><div class="callout"><strong>The pull opener is the anchor.</strong> Ellaria moves from 12th-of-18 DPS with the opener to 5th-of-18 without it. Vincint’s 76.7% post-opener and the offtank rows are useful role context, not DPS benchmarks.</div></div>
+    </section>
+
+    <section class="section" id="blender">
+      <header class="report-head"><div><h2>5 Second Blender</h2><p>Do trash mobs live long enough for Sunder Armor to repay the GCD, or should the warrior stack simply press damage and erase them?</p></div><span class="pill">674 real trash mobs</span></header>
+      <div class="grid metrics">
+        <div class="metric"><div class="label">Blender mobs</div><div class="value">329</div><div class="note">49% die in under 5s</div></div>
+        <div class="metric negative"><div class="label">Wasted Sunder-first GCDs</div><div class="value">219</div><div class="note">landed on under-5s mobs</div></div>
+        <div class="metric"><div class="label">Worthy-mob Sunder rate</div><div class="value">44.3%</div><div class="note">DPS · lower than on blenders</div></div>
+        <div class="metric positive"><div class="label">Ellaria DPS rank</div><div class="value">9 / 18</div><div class="note">47.8% · 11 / 23 worthy mobs</div></div>
+      </div>
+
+      <div class="grid two-col">
+        <article class="panel"><div class="panel-head"><h3>The break-even</h3><span>first Sunder stack</span></div><div class="panel-body">
+          <div class="formula">0.03 × D × L &gt; 1,000</div>
+          <p class="section-note" style="margin:13px 0 0"><strong>Cost:</strong> one 1.5s GCD, worth roughly one Bloodthirst or about 1,000 damage. <strong>Benefit:</strong> one Sunder removes 450 armor, worth approximately 3% more physical damage taken. Here <em>D</em> is physical DPS hitting the mob and <em>L</em> is the mob’s remaining lifetime.</p>
+          <div class="split" style="margin-top:12px"><div class="callout" style="margin:0"><strong>6 warriors:</strong> the first stack needs about <strong>9.5s</strong> of time-to-die to pay back.</div><div class="callout" style="margin:0"><strong>10 warriors:</strong> the first stack needs about <strong>6.3s</strong> of time-to-die to pay back.</div></div>
+          <div class="bucket-grid"><div class="bucket blend"><strong>&lt;5s</strong><span>Blender · don’t Sunder</span></div><div class="bucket marginal"><strong>5–10s</strong><span>Marginal · target-dependent</span></div><div class="bucket worthy"><strong>10s+</strong><span>Sunder-worthy</span></div></div>
+        </div></article>
+        <article class="panel"><div class="panel-head"><h3>Time-to-die distribution</h3><span>critters and target dummies excluded</span></div><div class="panel-body">
+          <div class="hstack" aria-label="49% die under 5 seconds, 25% die in 5 to 10 seconds, 26% live at least 10 seconds"><span class="ww-c" style="width:48.8%">49%</span><span style="width:25.1%;background:var(--warn)">25%</span><span style="width:26.1%;background:var(--good)">26%</span></div>
+          <div class="legend" style="margin-top:10px"><span><i style="--c:var(--blue)"></i>&lt;5s · 329</span><span><i style="--c:var(--warn)"></i>5–10s · 169</span><span><i style="--c:var(--good)"></i>10s+ · 176</span></div>
+          <div class="takeaway">The physics are right: almost half of real trash dies before the first Sunder stack can reasonably repay its GCD.</div>
+          <p class="section-note" style="margin:14px 0 0">That does not make “always press BT/WW” correct. One quarter of mobs are marginal and another quarter live long enough that early armor reduction compounds across the full melee stack.</p>
+        </div></article>
+      </div>
+
+      <article class="panel" style="margin-top:12px"><div class="panel-head"><h3>Does the raid select by time-to-die?</h3><span>Sunder-first rate by role</span></div><div class="table-wrap"><table id="blenderRoleTable"><thead><tr><th>Role</th><th>&lt;5s blender</th><th>5–10s marginal</th><th>10s+ worthy</th><th>Read</th></tr></thead><tbody>
+        <tr><td class="name" data-label="Role">DPS</td><td data-label="Under 5s">45.2%</td><td data-label="5–10s">55.3%</td><td data-label="10s+">44.3%</td><td data-label="Read">Flat · habit, not selection</td></tr>
+        <tr><td class="name" data-label="Role">Offtanks</td><td data-label="Under 5s">42.5%</td><td data-label="5–10s">48.0%</td><td data-label="10s+">29.2%</td><td data-label="Read">Less Sunder where it pays most</td></tr>
+        <tr><td class="name" data-label="Role">MT · Vincint</td><td data-label="Under 5s">56.0%</td><td data-label="5–10s">53.1%</td><td data-label="10s+"><strong style="color:var(--good)">73.7%</strong></td><td data-label="Read">Adapts correctly</td></tr>
+      </tbody></table></div><div class="panel-body" style="border-top:1px solid var(--line)"><div class="takeaway" style="margin:0">Nobody selects targets by time-to-die except the MT. DPS Sunder slightly less on worthy mobs than on blenders.</div></div></article>
+
+      <article class="panel" style="margin-top:12px"><div class="panel-head"><h3>Sensitivity: 3s and 4s cutoffs</h3><span>how much of the waste is airtight?</span></div><div class="panel-body">
+        <div class="callout"><strong>The conservative case still holds.</strong> At a 3s or 4s cutoff, the first Sunder stack would need more than 13k–22k physical DPS focused into one mob to repay a roughly 1,000-damage GCD. That is not plausible here, so these casts are unambiguous waste rather than a close modeling call.</div>
+        <div class="grid split">
+          <div class="table-wrap"><table id="blenderSensitivityTable"><thead><tr><th>Cutoff</th><th>Real mobs</th><th>Raid waste</th><th>DPS waste</th><th>Ellaria</th></tr></thead><tbody>
+            <tr><td class="name" data-label="Cutoff">&lt;3s</td><td data-label="Real mobs">196 / 674 · 29%</td><td data-label="Raid waste">67</td><td data-label="DPS waste">48</td><td data-label="Ellaria">1</td></tr>
+            <tr><td class="name" data-label="Cutoff">&lt;4s</td><td data-label="Real mobs">265 / 674 · 39%</td><td data-label="Raid waste">126</td><td data-label="DPS waste">93</td><td data-label="Ellaria">4</td></tr>
+            <tr><td class="name" data-label="Cutoff">&lt;5s</td><td data-label="Real mobs">329 / 674 · 49%</td><td data-label="Raid waste">219</td><td data-label="DPS waste">168</td><td data-label="Ellaria">8</td></tr>
+          </tbody></table></div>
+          <div><div class="mini-stat"><span>DPS Sunder-first · &lt;3s</span><strong>32.0% <small>(n=150)</small></strong></div><div class="mini-stat"><span>3–4s</span><strong>42.9% <small>(n=105)</small></strong></div><div class="mini-stat"><span>4–5s</span><strong>64.1% <small>(n=117)</small></strong></div><div class="mini-stat"><span>5–10s</span><strong>55.3% <small>(n=486)</small></strong></div><div class="mini-stat"><span>10s+</span><strong>44.3% <small>(n=314)</small></strong></div></div>
+        </div>
+        <div class="grid split" style="margin-top:12px"><div class="takeaway" style="margin:0"><strong>&lt;3s top wasters:</strong> Nalga 7 · Pinaclex 6 · Gophie 6 · Ryuma 5.</div><div class="takeaway" style="margin:0">Warriors do back off on the fastest deaths, but cannot distinguish a 4s mob from an 8s mob in the moment. The 4–5s band is the debatable zone—and where most incremental waste lives.</div></div>
+      </div></article>
+
+      <div class="grid split" style="margin-top:12px">
+        <article class="panel"><div class="panel-head"><h3>Fair DPS ranking</h3><span>Sunder-first on 10s+ mobs</span></div><div class="table-wrap"><table id="blenderWorthyTable"><thead><tr><th>Player</th><th>Worthy rate</th><th>Split</th></tr></thead><tbody>
+          <tr><td class="name" data-label="Player"><span class="rank">01</span>Iynx</td><td data-label="Worthy rate">64.7%</td><td data-label="Split">11 / 17</td></tr>
+          <tr><td class="name" data-label="Player"><span class="rank">02</span>Ejaxtwo</td><td data-label="Worthy rate">63.6%</td><td data-label="Split">14 / 22</td></tr>
+          <tr><td class="name" data-label="Player"><span class="rank">03</span>Nalga</td><td data-label="Worthy rate">61.1%</td><td data-label="Split">11 / 18</td></tr>
+          <tr><td class="name" data-label="Player"><span class="rank">04</span>Junsa</td><td data-label="Worthy rate">55.0%</td><td data-label="Split">11 / 20</td></tr>
+          <tr><td class="name" data-label="Player"><span class="rank">05</span>Dodyy</td><td data-label="Worthy rate">53.3%</td><td data-label="Split">8 / 15</td></tr>
+          <tr><td class="name" data-label="Player"><span class="rank">06</span>Pinaclex</td><td data-label="Worthy rate">52.4%</td><td data-label="Split">11 / 21</td></tr>
+          <tr><td class="name" data-label="Player"><span class="rank">07</span>Bort</td><td data-label="Worthy rate">50.0%</td><td data-label="Split">4 / 8</td></tr>
+          <tr><td class="name" data-label="Player"><span class="rank">08</span>Imthebest</td><td data-label="Worthy rate">50.0%</td><td data-label="Split">7 / 14</td></tr>
+          <tr class="you"><td class="name" data-label="Player"><span class="rank">09</span>Ellaria</td><td data-label="Worthy rate">47.8%</td><td data-label="Split">11 / 23</td></tr>
+          <tr><td class="name" data-label="Player"><span class="rank">10</span>Vnx</td><td data-label="Worthy rate">43.8%</td><td data-label="Split">—</td></tr>
+          <tr><td class="name" data-label="Player"><span class="rank">11</span>Jeian</td><td data-label="Worthy rate">42.1%</td><td data-label="Split">—</td></tr>
+          <tr><td class="name" data-label="Player"><span class="rank">12</span>Dinkie</td><td data-label="Worthy rate">38.9%</td><td data-label="Split">—</td></tr>
+          <tr><td class="name" data-label="Player"><span class="rank">13</span>Gophie</td><td data-label="Worthy rate">37.5%</td><td data-label="Split">—</td></tr>
+          <tr><td class="name" data-label="Player"><span class="rank">14</span>Sgtboolaid</td><td data-label="Worthy rate">29.4%</td><td data-label="Split">—</td></tr>
+          <tr><td class="name" data-label="Player"><span class="rank">15</span>Kazugz</td><td data-label="Worthy rate">28.6%</td><td data-label="Split">—</td></tr>
+          <tr><td class="name" data-label="Player"><span class="rank">16</span>Loganw</td><td data-label="Worthy rate">26.3%</td><td data-label="Split">—</td></tr>
+          <tr><td class="name" data-label="Player"><span class="rank">17</span>Daddyshart</td><td data-label="Worthy rate">25.0%</td><td data-label="Split">—</td></tr>
+          <tr><td class="name" data-label="Player"><span class="rank">18</span>Ryuma</td><td data-label="Worthy rate">15.4%</td><td data-label="Split">—</td></tr>
+        </tbody></table></div><div class="panel-body" style="border-top:1px solid var(--line)"><p class="section-note" style="margin:0"><strong>Iynx is the model:</strong> two-dimensional skill means a high Sunder rate where it pays and low waste where it does not.</p></div></article>
+
+        <article class="panel"><div class="panel-head"><h3>Blender waste by DPS</h3><span>Sunder-first GCDs on under-5s mobs</span></div><div class="table-wrap"><table id="blenderWasteTable"><thead><tr><th>Player</th><th>Wasted GCDs</th></tr></thead><tbody>
+          <tr><td class="name" data-label="Player">Ejaxtwo</td><td data-label="Wasted GCDs">17</td></tr>
+          <tr><td class="name" data-label="Player">Pinaclex</td><td data-label="Wasted GCDs">14</td></tr>
+          <tr><td class="name" data-label="Player">Nalga</td><td data-label="Wasted GCDs">14</td></tr>
+          <tr><td class="name" data-label="Player">Dodyy</td><td data-label="Wasted GCDs">14</td></tr>
+          <tr><td class="name" data-label="Player">Gophie</td><td data-label="Wasted GCDs">12</td></tr>
+          <tr><td class="name" data-label="Player">Ryuma</td><td data-label="Wasted GCDs">12</td></tr>
+          <tr><td class="name" data-label="Player">Jeian</td><td data-label="Wasted GCDs">10</td></tr>
+          <tr><td class="name" data-label="Player">Dinkie</td><td data-label="Wasted GCDs">9</td></tr>
+          <tr><td class="name" data-label="Player">Bort</td><td data-label="Wasted GCDs">9</td></tr>
+          <tr><td class="name" data-label="Player">Junsa</td><td data-label="Wasted GCDs">9</td></tr>
+          <tr><td class="name" data-label="Player">Loganw</td><td data-label="Wasted GCDs">9</td></tr>
+          <tr class="you"><td class="name" data-label="Player">Ellaria</td><td data-label="Wasted GCDs">8</td></tr>
+          <tr><td class="name" data-label="Player">Sgtboolaid</td><td data-label="Wasted GCDs">7</td></tr>
+          <tr><td class="name" data-label="Player">Iynx</td><td data-label="Wasted GCDs">6</td></tr>
+          <tr><td class="name" data-label="Player">Vnx</td><td data-label="Wasted GCDs">6</td></tr>
+          <tr><td class="name" data-label="Player">Kazugz</td><td data-label="Wasted GCDs">5</td></tr>
+          <tr><td class="name" data-label="Player">Daddyshart</td><td data-label="Wasted GCDs">5</td></tr>
+          <tr><td class="name" data-label="Player">Imthebest</td><td data-label="Wasted GCDs">2</td></tr>
+        </tbody></table></div><div class="panel-body" style="border-top:1px solid var(--line)"><p class="section-note" style="margin:0"><strong>Ejaxtwo is the most wasteful</strong> despite ranking first on the raw Sunder-first leaderboard. The 219 raid-wide total also includes tank-role GCDs.</p></div></article>
+      </div>
+
+      <div class="grid split" style="margin-top:12px">
+        <article class="panel"><div class="panel-head"><h3>The Sunder list</h3><span>average time-to-die</span></div><div class="panel-body"><ul class="mob-list">
+          <li><strong>Carrion Spinner</strong><span>27.9s</span></li><li><strong>Plagued Ghoul</strong><span>27.3s</span></li><li><strong>Embalming Slime</strong><span>22.9s</span></li><li><strong>Dread Creeper</strong><span>16.8s</span></li><li><strong>Bile Sludge</strong><span>14.6s</span></li><li><strong>Soul Weaver</strong><span>14.5s</span></li><li><strong>Mad Scientist</strong><span>13.5s</span></li><li><strong>Sludge Belcher</strong><span>12.7s</span></li><li><strong>Patchwork Golem</strong><span>12.2s</span></li><li><strong>Surgical Assistant</strong><span>12.1s</span></li>
+        </ul></div></article>
+        <article class="panel"><div class="panel-head"><h3>The blender list</h3><span>don’t Sunder</span></div><div class="panel-body"><ul class="mob-list">
+          <li><strong>Soldier of the Frozen Wastes</strong><span>2.2s · n=93</span></li><li><strong>Spectral Trainee</strong><span>1.7s</span></li><li><strong>Spectral Deathknight</strong><span>2.6s</span></li><li><strong>Skeletal Steed</strong><span>3.1s</span></li><li><strong>Bats</strong><span>3.8–5.3s</span></li><li><strong>Unrelenting Trainee</strong><span>3.9s</span></li><li><strong>Unstoppable Abomination</strong><span>4.5s</span></li><li><strong>Risen Deathknight</strong><span>4.5s</span></li>
+        </ul></div></article>
+      </div>
+
+      <div class="grid split" style="margin-top:12px">
+        <div class="callout"><strong>Ellaria:</strong> eight GCDs were wasted on blenders and 12 Sunders were missed on worthy mobs. The BT/WW habit is accidentally right on blenders and mid-pack where Sunder counts. Fix: Sunder-first the Sunder list; keep blending the rest.</div>
+        <div class="callout"><strong>The upside:</strong> recover roughly 219 wasted GCDs—about 200k+ direct damage at the stated Bloodthirst assumption—then accelerate worthy kills by applying stacks earlier. No roster or strategy change is needed; this is target selection.</div>
+      </div>
+    </section>
+
+    <section class="section" id="blender35">
+      <header class="report-head"><div><h2>3.5 Second Blender</h2><p>The same blender question with a stricter clock. At 3.5 seconds a mob lives for about two GCDs, so a first sunder gets only ~2s of payoff — every “wasted” call on this page is airtight. Cross-reference the <a href="#blender">5 Second Blender</a> tab for the looser cutoff.</p></div><span class="pill">674 real trash mobs</span></header>
+      <div class="grid metrics">
+        <div class="metric"><div class="label">Blender mobs</div><div class="value">239</div><div class="note">35.5% die in under 3.5s</div></div>
+        <div class="metric negative"><div class="label">Wasted Sunder-first GCDs</div><div class="value">91</div><div class="note">65 by DPS · 219 at the 5s cutoff</div></div>
+        <div class="metric positive"><div class="label">Ellaria wasted GCDs</div><div class="value">2</div><div class="note">vs 8 at the 5s cutoff</div></div>
+        <div class="metric"><div class="label">DPS blender Sunder rate</div><div class="value">31.6%</div><div class="note">lowest of any time-to-die band</div></div>
+      </div>
+
+      <div class="grid two-col">
+        <article class="panel"><div class="panel-head"><h3>The break-even</h3><span>first Sunder stack · same assumptions as the 5s tab</span></div><div class="panel-body">
+          <div class="formula">0.03 × D × L &gt; 1,000</div>
+          <p class="section-note" style="margin:13px 0 0"><strong>Cost:</strong> one 1.5s GCD, worth roughly one Bloodthirst or about 1,000 damage. <strong>Benefit:</strong> one Sunder removes 450 armor, worth approximately 3% more physical damage taken. At 3.5s, a first sunder lands with only ~2s of the mob’s life left — nowhere near the ~6–9.5s of payoff the first stack needs, which is why these calls are airtight rather than debatable.</p>
+          <div class="bucket-grid"><div class="bucket blend"><strong>&lt;3.5s</strong><span>Blender · don’t Sunder</span></div><div class="bucket marginal"><strong>3.5–10s</strong><span>Marginal · target-dependent</span></div><div class="bucket worthy"><strong>10s+</strong><span>Sunder-worthy</span></div></div>
+        </div></article>
+        <article class="panel"><div class="panel-head"><h3>Time-to-die distribution</h3><span>critters and target dummies excluded</span></div><div class="panel-body">
+          <div class="hstack" aria-label="35.5% die under 3.5 seconds, 38.4% die in 3.5 to 10 seconds, 26.1% live at least 10 seconds"><span class="ww-c" style="width:35.5%">35.5%</span><span style="width:38.4%;background:var(--warn)">38.4%</span><span style="width:26.1%;background:var(--good)">26.1%</span></div>
+          <div class="legend" style="margin-top:10px"><span><i style="--c:var(--blue)"></i>&lt;3.5s · 239</span><span><i style="--c:var(--warn)"></i>3.5–10s · 259</span><span><i style="--c:var(--good)"></i>10s+ · 176</span></div>
+          <div class="takeaway">Just over a third of real trash is blender material at 3.5s, against about half (49%) at the 5s cutoff.</div>
+          <p class="section-note" style="margin:14px 0 0">Time-to-die is measured from first damage taken to death. The stricter cutoff moves 90 mobs out of the blender bucket and into the marginal band — the contested zone below.</p>
+        </div></article>
+      </div>
+
+      <article class="panel" style="margin-top:12px"><div class="panel-head"><h3>Does the raid select by time-to-die?</h3><span>Sunder-first rate by role · targeted openers, target below 5 stacks</span></div><div class="table-wrap"><table id="blender35RoleTable"><thead><tr><th>Role</th><th>&lt;3.5s blender</th><th>3.5–10s marginal</th><th>10s+ worthy</th><th>Read</th></tr></thead><tbody>
+        <tr><td class="name" data-label="Role">DPS</td><td data-label="Under 3.5s">31.6% · n=206</td><td data-label="3.5–10s">57.1% · n=652</td><td data-label="10s+">44.3% · n=314</td><td data-label="Read">Barely responds — but lowest where it matters most</td></tr>
+        <tr><td class="name" data-label="Role">Offtanks</td><td data-label="Under 3.5s">40.9% · n=44</td><td data-label="3.5–10s">47.0% · n=168</td><td data-label="10s+">29.2% · n=96</td><td data-label="Read">Sunders blenders more than worthy mobs</td></tr>
+        <tr><td class="name" data-label="Role">MT · Vincint</td><td data-label="Under 3.5s">57.1% · n=14</td><td data-label="3.5–10s">53.5% · n=43</td><td data-label="10s+"><strong style="color:var(--good)">73.7% · n=19</strong></td><td data-label="Read">Adapts correctly · small blender sample</td></tr>
+      </tbody></table></div><div class="panel-body" style="border-top:1px solid var(--line)"><div class="takeaway" style="margin:0">DPS sundering barely responds to mob lifetime overall, but the 31.6% blender rate is the lowest of any band — warriors do hold back most on the fastest-dying mobs.</div></div></article>
+
+      <article class="panel" style="margin-top:12px"><div class="panel-head"><h3>The contested zone: 3.5–5s</h3><span>where the two tabs disagree</span></div><div class="panel-body">
+        <div class="callout"><strong>DPS sunder-first peaks here: 62.0% (n=166)</strong> — the highest rate of any band. Under the 5 Second Blender those GCDs count as waste; on this tab those mobs live ~2–3 GCDs, so a sunder buys 1–2 payoff GCDs. This band is the grey area between the two tabs.</div>
+        <div class="mini-stat"><span>DPS Sunder-first · &lt;3.5s</span><strong>31.6% <small>(n=206)</small></strong></div>
+        <div class="mini-stat"><span>3.5–5s · contested</span><strong>62.0% <small>(n=166)</small></strong></div>
+        <div class="mini-stat"><span>3.5–10s · marginal overall</span><strong>57.1% <small>(n=652)</small></strong></div>
+        <div class="mini-stat"><span>10s+ · worthy</span><strong>44.3% <small>(n=314)</small></strong></div>
+      </div></article>
+
+      <div class="grid split" style="margin-top:12px">
+        <article class="panel"><div class="panel-head"><h3>Blender waste by DPS</h3><span>Sunder-first GCDs on under-3.5s mobs</span></div><div class="table-wrap"><table id="blender35WasteTable"><thead><tr><th>Player</th><th>Wasted GCDs</th></tr></thead><tbody>
+          <tr><td class="name" data-label="Player">Nalga</td><td data-label="Wasted GCDs">8</td></tr>
+          <tr><td class="name" data-label="Player">Pinaclex</td><td data-label="Wasted GCDs">7</td></tr>
+          <tr><td class="name" data-label="Player">Gophie</td><td data-label="Wasted GCDs">7</td></tr>
+          <tr><td class="name" data-label="Player">Dodyy</td><td data-label="Wasted GCDs">7</td></tr>
+          <tr><td class="name" data-label="Player">Loganw</td><td data-label="Wasted GCDs">7</td></tr>
+          <tr><td class="name" data-label="Player">Ejaxtwo</td><td data-label="Wasted GCDs">6</td></tr>
+          <tr><td class="name" data-label="Player">Ryuma</td><td data-label="Wasted GCDs">5</td></tr>
+          <tr><td class="name" data-label="Player">Iynx</td><td data-label="Wasted GCDs">4</td></tr>
+          <tr><td class="name" data-label="Player">Sgtboolaid</td><td data-label="Wasted GCDs">3</td></tr>
+          <tr><td class="name" data-label="Player">Jeian</td><td data-label="Wasted GCDs">3</td></tr>
+          <tr><td class="name" data-label="Player">Kazugz</td><td data-label="Wasted GCDs">2</td></tr>
+          <tr><td class="name" data-label="Player">Junsa</td><td data-label="Wasted GCDs">2</td></tr>
+          <tr class="you"><td class="name" data-label="Player">Ellaria</td><td data-label="Wasted GCDs">2</td></tr>
+          <tr><td class="name" data-label="Player">Imthebest</td><td data-label="Wasted GCDs">1</td></tr>
+          <tr><td class="name" data-label="Player">Daddyshart</td><td data-label="Wasted GCDs">1</td></tr>
+        </tbody></table></div><div class="panel-body" style="border-top:1px solid var(--line)"><p class="section-note" style="margin:0"><strong>91 sunder-first GCDs raid-wide</strong> landed on sub-3.5s mobs, 65 of them by DPS. Nalga leads the waste; Ellaria has just two.</p></div></article>
+
+        <article class="panel"><div class="panel-head"><h3>The blender list · 3.5s</h3><span>average time-to-die · don’t Sunder</span></div><div class="panel-body"><ul class="mob-list">
+          <li><strong>Spectral Trainee</strong><span>1.7s · n=30</span></li><li><strong>Soldier of the Frozen Wastes</strong><span>2.2s · n=93</span></li><li><strong>Spectral Deathknight</strong><span>2.6s · n=13</span></li><li><strong>Skeletal Steed</strong><span>3.1s · n=8</span></li><li><strong>Shade of Naxxramas</strong><span>3.3s · n=3</span></li>
+        </ul>
+        <p class="section-note" style="margin:14px 0 0">The Sunder-worthy (10s+) list is identical to the <a href="#blender">5 Second Blender</a> tab — it is referenced there rather than repeated here.</p>
+        </div></article>
+      </div>
+
+      <div class="grid split" style="margin-top:12px">
+        <div class="callout"><strong>Ellaria:</strong> 25.0% sunder-first on blenders (2/8), 50.0% on marginal mobs (19/38), and 47.8% on worthy mobs (11/23 — unchanged; the worthy bucket is identical on both tabs). Only 2 wasted GCDs at this cutoff: at the strictest reading Ellaria is nearly clean, and his contested calls all live in the 3.5–5s band.</div>
+        <div class="callout"><strong>Reading the two tabs together:</strong> 91 wasted GCDs here against 219 on the 5 Second Blender. The 128-cast difference is the contested zone — mobs that live long enough for a sunder to buy a GCD or two of payoff, where reasonable warriors can disagree.</div>
+      </div>
+    </section>
+
+    <section class="section" id="wwpacks">
+      <header class="report-head"><div><h2>Whirlwind Packs</h2><p>On which trash packs could all the DPS warriors have opened with Whirlwind and skipped Sunder entirely, killing the pack just as fast? This tab models exactly that, per pack, from the raw log.</p></div><span class="pill">Strict WW-only model</span></header>
+      <div class="grid metrics">
+        <div class="metric"><div class="label">WW per application · 0 stacks</div><div class="value">744</div><div class="note">801 per landed hit</div></div>
+        <div class="metric negative"><div class="label">Pure-WW packs</div><div class="value">0</div><div class="note">under the strict model</div></div>
+        <div class="metric"><div class="label">Near-miss packs</div><div class="value">5</div><div class="note">lowest TTK ratios</div></div>
+        <div class="metric"><div class="label">Closest ratio</div><div class="value">1.25×</div><div class="note">675,960 HP Spider pack</div></div>
+      </div>
+      <div class="grid two-col">
+        <article class="panel"><div class="panel-head"><h3>Whirlwind damage by Sunder stacks</h3><span>3,940 hits/misses tracked</span></div><div class="table-wrap"><table id="wwStackTable"><thead><tr><th>Sunder stacks</th><th>Hits+misses</th><th>Per application</th><th>Per landed hit</th></tr></thead><tbody>
+          <tr><td class="name" data-label="Sunder stacks">0</td><td data-label="Hits+misses">1,628</td><td data-label="Per application">744</td><td data-label="Per landed hit">801</td></tr>
+          <tr><td class="name" data-label="Sunder stacks">1</td><td data-label="Hits+misses">655</td><td data-label="Per application">678</td><td data-label="Per landed hit">742</td></tr>
+          <tr><td class="name" data-label="Sunder stacks">2</td><td data-label="Hits+misses">358</td><td data-label="Per application">764</td><td data-label="Per landed hit">817</td></tr>
+          <tr><td class="name" data-label="Sunder stacks">3</td><td data-label="Hits+misses">247</td><td data-label="Per application">816</td><td data-label="Per landed hit">899</td></tr>
+          <tr><td class="name" data-label="Sunder stacks">4</td><td data-label="Hits+misses">168</td><td data-label="Per application">817</td><td data-label="Per landed hit">880</td></tr>
+          <tr><td class="name" data-label="Sunder stacks">5</td><td data-label="Hits+misses">884</td><td data-label="Per application">958</td><td data-label="Per landed hit">1,011</td></tr>
+        </tbody></table></div><div class="panel-body" style="border-top:1px solid var(--line)">
+          <p class="section-note" style="margin:0">The price that matters for the no-Sunder model is the 0-stack row: <strong>744 damage per Whirlwind application</strong> (801 per landed hit). The 1-stack row (678) sits below the 0-stack row — that is not Sunder making Whirlwind worse. It is target mix: warriors Whirlwind fresh, low-armor blender mobs at 0 stacks, while the first Sunders (and therefore the 1-stack Whirlwind hits) land disproportionately on the beefy, high-armor targets. From 2 stacks up the expected armor curve shows through. Treat the stack table as observational, not a controlled experiment.</p>
+        </div></article>
+        <article class="panel"><div class="panel-head"><h3>The model</h3><span>warriors only · deliberately conservative</span></div><div class="panel-body">
+          <div class="formula">WW-only kill time = pack HP / (DPS wars × min(4, mobs) × 744 / 10s)</div>
+          <ul style="margin:14px 0 0;padding-left:18px;color:var(--muted)">
+            <li>Whirlwind cooldown 10s, hits at most 4 targets (Classic Era cap).</li>
+            <li>DPS wars = the 18 non-tank warriors (excludes MT Vincint and offtanks Bootythweat, Sven, Sempai, Tankina, Egg); the war count per pack is how many actually damaged that pack in the log.</li>
+            <li>Pack HP = sum of the mobs' max HP, read from the combat log's advanced unit block.</li>
+            <li>Warriors alone, Whirlwind only. A real no-Sunder opener also adds Bloodthirst, Mortal Strike, executes, auto-attacks and every other class's damage on top. If Whirlwind alone matches the actual kill time, Sunders on that pack bought nothing.</li>
+            <li>A pack only earns a verdict if all its mobs were engaged within an 8-second span and at least 6 DPS warriors damaged it. Wider packs are chain/trickle segments (mobs arriving over time) and thin packs were killed by a subset; both are listed separately with no verdict.</li>
+          </ul>
+        </div></article>
+      </div>
+      <article class="panel" style="margin-top:12px"><div class="panel-head"><h3>Pure-Whirlwind packs — Sunder optional</h3><span>strict model verdict</span></div><div class="panel-body">
+        <div class="grid split"><div><div class="hero-number">0</div><div class="hero-label">packs qualify under the strict model</div><p class="hero-copy">Even the closest packs took longer to kill with the whole raid hitting them than 18 DPS warriors could have managed with Whirlwind alone — Whirlwind was the minority of pack damage (median ~12% of it).</p></div>
+        <div class="callout" style="margin:0"><strong>Sunder is not replaceable by WW spam on this run's packs.</strong> The closest pack still ran 25% over WW-only pace. That does not kill the idea; it relocates it — the real question is whether the Sunder GCDs beat the Bloodthirsts they replaced pack-by-pack, which is the borderline and near-miss zone below.</div></div>
+      </div></article>
+      <article class="panel" style="margin-top:12px"><div class="panel-head"><h3>Near-miss packs</h3><span>5 lowest TTK ratios · where the call is closest</span></div><div class="table-wrap"><table id="wwNearTable"><thead><tr><th>Pack</th><th>Composition</th><th>Mobs</th><th>Pack HP</th><th>Actual (s)</th><th>Span (s)</th><th>DPS wars</th><th>WW-only TTK (s)</th><th>TTK / actual</th><th>Sunders cast</th></tr></thead><tbody>
+        <tr><td data-label="Pack">10</td><td class="wrap-cell" data-label="Composition">4x Plagued Ghoul, 4x Dread Creeper, Tomb Horror</td><td data-label="Mobs">9</td><td data-label="Pack HP">675,960</td><td data-label="Actual (s)">100.6</td><td data-label="Span (s)">4.9</td><td data-label="DPS wars">18</td><td data-label="WW-only TTK (s)">126.1</td><td data-label="TTK / actual">1.25</td><td data-label="Sunders cast">67</td></tr>
+        <tr><td data-label="Pack">23</td><td class="wrap-cell" data-label="Composition">4x Frenzied Bat, 2x Plagued Bat, Plague Beast, Larva</td><td data-label="Mobs">8</td><td data-label="Pack HP">120,692</td><td data-label="Actual (s)">9.2</td><td data-label="Span (s)">6.4</td><td data-label="DPS wars">18</td><td data-label="WW-only TTK (s)">22.5</td><td data-label="TTK / actual">2.45</td><td data-label="Sunders cast">25</td></tr>
+        <tr><td data-label="Pack">15</td><td class="wrap-cell" data-label="Composition">4x Patchwork Golem</td><td data-label="Mobs">4</td><td data-label="Pack HP">352,128</td><td data-label="Actual (s)">17.9</td><td data-label="Span (s)">5.8</td><td data-label="DPS wars">18</td><td data-label="WW-only TTK (s)">65.7</td><td data-label="TTK / actual">3.67</td><td data-label="Sunders cast">21</td></tr>
+        <tr><td data-label="Pack">3</td><td class="wrap-cell" data-label="Composition">10x Infectious Skitterer</td><td data-label="Mobs">10</td><td data-label="Pack HP">157,200</td><td data-label="Actual (s)">7.1</td><td data-label="Span (s)">4.8</td><td data-label="DPS wars">18</td><td data-label="WW-only TTK (s)">29.3</td><td data-label="TTK / actual">4.1</td><td data-label="Sunders cast">5</td></tr>
+        <tr><td data-label="Pack">63</td><td class="wrap-cell" data-label="Composition">5x Surgical Assistant, 4x Mad Scientist, Living Monstrosity, Bile Retcher</td><td data-label="Mobs">11</td><td data-label="Pack HP">567,070</td><td data-label="Actual (s)">24.6</td><td data-label="Span (s)">5.1</td><td data-label="DPS wars">17</td><td data-label="WW-only TTK (s)">112.0</td><td data-label="TTK / actual">4.56</td><td data-label="Sunders cast">44</td></tr>
+      </tbody></table></div><div class="panel-body" style="border-top:1px solid var(--line)"><p class="section-note" style="margin:0"><strong>Borderline packs (0):</strong> none inside the 1.00–1.25× band on this run.</p></div></article>
+      <article class="panel" style="margin-top:12px"><div class="panel-head"><h3>Furthest from WW-only feasibility</h3><span>8 shown · read with the Sunders column</span></div><div class="table-wrap"><table id="wwFarTable"><thead><tr><th>Pack</th><th>Composition</th><th>Mobs</th><th>Pack HP</th><th>Actual (s)</th><th>Span (s)</th><th>DPS wars</th><th>WW-only TTK (s)</th><th>TTK / actual</th><th>Sunders cast</th></tr></thead><tbody>
+        <tr><td data-label="Pack">18</td><td class="wrap-cell" data-label="Composition">3x Stoneskin Gargoyle</td><td data-label="Mobs">3</td><td data-label="Pack HP">792,225</td><td data-label="Actual (s)">16.1</td><td data-label="Span (s)">5.4</td><td data-label="DPS wars">18</td><td data-label="WW-only TTK (s)">197.1</td><td data-label="TTK / actual">12.26</td><td data-label="Sunders cast">38</td></tr>
+        <tr><td data-label="Pack">34</td><td class="wrap-cell" data-label="Composition">8x Skeletal Steed, 4x Risen Deathknight, 2x Deathknight Cavalier, Death Lord</td><td data-label="Mobs">15</td><td data-label="Pack HP">792,261</td><td data-label="Actual (s)">12.2</td><td data-label="Span (s)">4.4</td><td data-label="DPS wars">18</td><td data-label="WW-only TTK (s)">147.8</td><td data-label="TTK / actual">12.15</td><td data-label="Sunders cast">6</td></tr>
+        <tr><td data-label="Pack">28</td><td class="wrap-cell" data-label="Composition">2x Deathknight, 2x Deathknight Captain</td><td data-label="Mobs">4</td><td data-label="Pack HP">339,552</td><td data-label="Actual (s)">7.9</td><td data-label="Span (s)">1.1</td><td data-label="DPS wars">18</td><td data-label="WW-only TTK (s)">63.4</td><td data-label="TTK / actual">8.07</td><td data-label="Sunders cast">32</td></tr>
+        <tr><td data-label="Pack">30</td><td class="wrap-cell" data-label="Composition">2x Deathknight, Deathknight Captain</td><td data-label="Mobs">3</td><td data-label="Pack HP">245,232</td><td data-label="Actual (s)">7.6</td><td data-label="Span (s)">1.6</td><td data-label="DPS wars">18</td><td data-label="WW-only TTK (s)">61.0</td><td data-label="TTK / actual">8.04</td><td data-label="Sunders cast">26</td></tr>
+        <tr><td data-label="Pack">2</td><td class="wrap-cell" data-label="Composition">10x Infectious Skitterer, Dread Creeper</td><td data-label="Mobs">11</td><td data-label="Pack HP">204,360</td><td data-label="Actual (s)">5.2</td><td data-label="Span (s)">0.3</td><td data-label="DPS wars">18</td><td data-label="WW-only TTK (s)">38.1</td><td data-label="TTK / actual">7.35</td><td data-label="Sunders cast">0</td></tr>
+        <tr><td data-label="Pack">9</td><td class="wrap-cell" data-label="Composition">10x Infectious Skitterer, 4x Dread Creeper, Tomb Horror</td><td data-label="Mobs">15</td><td data-label="Pack HP">455,880</td><td data-label="Actual (s)">11.6</td><td data-label="Span (s)">7.2</td><td data-label="DPS wars">18</td><td data-label="WW-only TTK (s)">85.1</td><td data-label="TTK / actual">7.35</td><td data-label="Sunders cast">21</td></tr>
+        <tr><td data-label="Pack">6</td><td class="wrap-cell" data-label="Composition">20x Infectious Skitterer</td><td data-label="Mobs">20</td><td data-label="Pack HP">314,400</td><td data-label="Actual (s)">8.5</td><td data-label="Span (s)">5.0</td><td data-label="DPS wars">18</td><td data-label="WW-only TTK (s)">58.7</td><td data-label="TTK / actual">6.94</td><td data-label="Sunders cast">4</td></tr>
+        <tr><td data-label="Pack">61</td><td class="wrap-cell" data-label="Composition">5x Surgical Assistant, 4x Mad Scientist, Living Monstrosity</td><td data-label="Mobs">10</td><td data-label="Pack HP">460,174</td><td data-label="Actual (s)">13.2</td><td data-label="Span (s)">1.5</td><td data-label="DPS wars">17</td><td data-label="WW-only TTK (s)">90.9</td><td data-label="TTK / actual">6.89</td><td data-label="Sunders cast">35</td></tr>
+      </tbody></table></div><div class="panel-body" style="border-top:1px solid var(--line)">
+        <p class="section-note" style="margin:0">Whirlwind-only kill time furthest above the actual kill time. This is <em>not</em> a pure Sunder-value ranking: read it with the Sunders-cast column. The gargoyle and deathknight packs are where real Sunder investment paid off. The skitterer packs at the bottom cast almost no Sunders and died in 5–12s anyway — caster AoE and Bloodthirst did that work, which is its own argument that warriors need not have sundered them either. A high ratio means "the raid's real damage mix was far stronger than WW spam alone," whatever produced it.</p>
+      </div></article>
+      <article class="panel" style="margin-top:12px"><div class="panel-head"><h3>Chain/trickle and boss-encounter packs</h3><span>26 shown · no verdict</span></div><div class="panel-body" style="border-bottom:1px solid var(--line)"><p class="section-note" style="margin:0">No verdict when the pack is made of mobs first damaged inside a boss encounter window (Gothik/Kel'Thuzad waves, Razuvious understudies — boss-fight mechanics, not trash-pack decisions), when the mobs arrived over more than 8 seconds (continuous combat, waves, gauntlet trickle — kill-time math does not apply), or when fewer than 6 DPS warriors touched the pack (a subset killed it; the model's war count would not be representative).</p></div><div class="table-wrap"><table id="wwChainTable"><thead><tr><th>Pack</th><th>Composition</th><th>Mobs</th><th>Pack HP</th><th>Actual (s)</th><th>Span (s)</th><th>Sunders cast</th></tr></thead><tbody>
+        <tr><td data-label="Pack">1</td><td class="wrap-cell" data-label="Composition">20x Infectious Skitterer, 6x Carrion Spinner, 3x Dread Creeper, 2x Crypt Guard, 2x Venom Stalker, Battle Chicken</td><td data-label="Mobs">34</td><td data-label="Pack HP">1,393,592</td><td data-label="Actual (s)">55.1</td><td data-label="Span (s)">13.6</td><td data-label="Sunders cast">15</td></tr>
+        <tr><td data-label="Pack">7</td><td class="wrap-cell" data-label="Composition">4x Naxxramas Worshipper, 2x Naxxramas Follower</td><td data-label="Mobs">6</td><td data-label="Pack HP">550,250</td><td data-label="Actual (s)">36.3</td><td data-label="Span (s)">2.8</td><td data-label="Sunders cast">4</td></tr>
+        <tr><td data-label="Pack">21</td><td class="wrap-cell" data-label="Composition">3x Plagued Warrior</td><td data-label="Mobs">3</td><td data-label="Pack HP">94,320</td><td data-label="Actual (s)">5.4</td><td data-label="Span (s)">2.4</td><td data-label="Sunders cast">0</td></tr>
+        <tr><td data-label="Pack">35</td><td class="wrap-cell" data-label="Composition">4x Deathknight Understudy</td><td data-label="Mobs">4</td><td data-label="Pack HP">366,240</td><td data-label="Actual (s)">42.2</td><td data-label="Span (s)">3.7</td><td data-label="Sunders cast">2</td></tr>
+        <tr><td data-label="Pack">42</td><td class="wrap-cell" data-label="Composition">3x Unrelenting Trainee</td><td data-label="Mobs">3</td><td data-label="Pack HP">13,734</td><td data-label="Actual (s)">3.8</td><td data-label="Span (s)">0.7</td><td data-label="Sunders cast">1</td></tr>
+        <tr><td data-label="Pack">43</td><td class="wrap-cell" data-label="Composition">6x Spectral Trainee, 6x Unrelenting Trainee, 2x Necropolis Acolyte, Plagued Ghoul</td><td data-label="Mobs">15</td><td data-label="Pack HP">281,468</td><td data-label="Actual (s)">44.1</td><td data-label="Span (s)">30.2</td><td data-label="Sunders cast">21</td></tr>
+        <tr><td data-label="Pack">44</td><td class="wrap-cell" data-label="Composition">3x Plagued Ghoul, 3x Spectral Trainee, 3x Unrelenting Trainee, 2x Unrelenting Deathknight</td><td data-label="Mobs">11</td><td data-label="Pack HP">352,656</td><td data-label="Actual (s)">14.0</td><td data-label="Span (s)">10.6</td><td data-label="Sunders cast">25</td></tr>
+        <tr><td data-label="Pack">45</td><td class="wrap-cell" data-label="Composition">3x Spectral Trainee, 3x Unrelenting Trainee, 2x Spectral Deathknight, 2x Unrelenting Deathknight, 2x Plagued Gargoyle</td><td data-label="Mobs">12</td><td data-label="Pack HP">605,066</td><td data-label="Actual (s)">24.5</td><td data-label="Span (s)">15.4</td><td data-label="Sunders cast">24</td></tr>
+        <tr><td data-label="Pack">46</td><td class="wrap-cell" data-label="Composition">3x Unrelenting Trainee, 2x Spectral Deathknight, 2x Spectral Trainee, 2x Unrelenting Deathknight</td><td data-label="Mobs">9</td><td data-label="Pack HP">97,036</td><td data-label="Actual (s)">24.6</td><td data-label="Span (s)">8.4</td><td data-label="Sunders cast">4</td></tr>
+        <tr><td data-label="Pack">48</td><td class="wrap-cell" data-label="Composition">9x Unrelenting Trainee, 8x Spectral Trainee, 4x Spectral Deathknight, 4x Unrelenting Deathknight, 2x Spectral Horse, 2x Spectral Rider, 2x Necropolis Acolyte, Unrelenting Rider</td><td data-label="Mobs">32</td><td data-label="Pack HP">463,270</td><td data-label="Actual (s)">49.0</td><td data-label="Span (s)">46.0</td><td data-label="Sunders cast">38</td></tr>
+        <tr><td data-label="Pack">49</td><td class="wrap-cell" data-label="Composition">3x Spectral Trainee, 3x Unrelenting Trainee, 2x Unrelenting Deathknight, Spectral Deathknight, Unrelenting Rider, Spectral Horse, Spectral Rider</td><td data-label="Mobs">12</td><td data-label="Pack HP">151,753</td><td data-label="Actual (s)">20.9</td><td data-label="Span (s)">16.6</td><td data-label="Sunders cast">13</td></tr>
+        <tr><td data-label="Pack">50</td><td class="wrap-cell" data-label="Composition">3x Unrelenting Trainee, 2x Spectral Deathknight, 2x Spectral Trainee, 2x Unrelenting Deathknight, Unrelenting Rider</td><td data-label="Mobs">10</td><td data-label="Pack HP">122,936</td><td data-label="Actual (s)">19.8</td><td data-label="Span (s)">10.0</td><td data-label="Sunders cast">4</td></tr>
+        <tr><td data-label="Pack">51</td><td class="wrap-cell" data-label="Composition">3x Spectral Trainee, 2x Spectral Deathknight, Spectral Rider, Spectral Horse</td><td data-label="Mobs">7</td><td data-label="Pack HP">87,432</td><td data-label="Actual (s)">12.7</td><td data-label="Span (s)">9.3</td><td data-label="Sunders cast">8</td></tr>
+        <tr><td data-label="Pack">67</td><td class="wrap-cell" data-label="Composition">91x Soldier of the Frozen Wastes, 8x Unstoppable Abomination, 8x Soul Weaver</td><td data-label="Mobs">107</td><td data-label="Pack HP">1,462,000</td><td data-label="Actual (s)">203.8</td><td data-label="Span (s)">197.7</td><td data-label="Sunders cast">81</td></tr>
+        <tr><td data-label="Pack">22</td><td class="wrap-cell" data-label="Composition">19x Frenzied Bat, 17x Plagued Bat, 2x Larva, Plague Beast</td><td data-label="Mobs">39</td><td data-label="Pack HP">441,160</td><td data-label="Actual (s)">37.9</td><td data-label="Span (s)">32.8</td><td data-label="Sunders cast">31</td></tr>
+        <tr><td data-label="Pack">57</td><td class="wrap-cell" data-label="Composition">17x Embalming Slime, 5x Surgical Assistant, 4x Mad Scientist, 3x Sludge Belcher, 2x Bile Sludge, Living Monstrosity</td><td data-label="Mobs">32</td><td data-label="Pack HP">929,907</td><td data-label="Actual (s)">44.2</td><td data-label="Span (s)">13.8</td><td data-label="Sunders cast">25</td></tr>
+        <tr><td data-label="Pack">5</td><td class="wrap-cell" data-label="Composition">20x Infectious Skitterer, 2x Necro Stalker</td><td data-label="Mobs">22</td><td data-label="Pack HP">477,888</td><td data-label="Actual (s)">13.1</td><td data-label="Span (s)">8.4</td><td data-label="Sunders cast">22</td></tr>
+        <tr><td data-label="Pack">29</td><td class="wrap-cell" data-label="Composition">6x Deathknight, 3x Deathknight Captain, 2x Death Touched Warrior, 2x Deathchill Servant, Doom Touched Warrior, Dark Touched Warrior</td><td data-label="Mobs">15</td><td data-label="Pack HP">855,168</td><td data-label="Actual (s)">26.7</td><td data-label="Span (s)">23.6</td><td data-label="Sunders cast">69</td></tr>
+        <tr><td data-label="Pack">25</td><td class="wrap-cell" data-label="Composition">4x Risen Deathknight, 2x Necro Knight, 2x Deathknight, 2x Deathknight Captain, 2x Deathchill Servant, Shade of Naxxramas</td><td data-label="Mobs">13</td><td data-label="Pack HP">594,852</td><td data-label="Actual (s)">15.5</td><td data-label="Span (s)">11.7</td><td data-label="Sunders cast">21</td></tr>
+        <tr><td data-label="Pack">62</td><td class="wrap-cell" data-label="Composition">5x Surgical Assistant, 4x Mad Scientist, Sludge Belcher, Living Monstrosity, Bile Sludge</td><td data-label="Mobs">12</td><td data-label="Pack HP">550,810</td><td data-label="Actual (s)">17.8</td><td data-label="Span (s)">10.5</td><td data-label="Sunders cast">38</td></tr>
+        <tr><td data-label="Pack">16</td><td class="wrap-cell" data-label="Composition">6x Infectious Ghoul, 3x Plague Slime</td><td data-label="Mobs">9</td><td data-label="Pack HP">990,360</td><td data-label="Actual (s)">33.7</td><td data-label="Span (s)">14.3</td><td data-label="Sunders cast">78</td></tr>
+        <tr><td data-label="Pack">55</td><td class="wrap-cell" data-label="Composition">3x Sewage Slime, 2x Patchwork Golem, Bile Retcher, Sludge Belcher, Bile Sludge</td><td data-label="Mobs">8</td><td data-label="Pack HP">831,396</td><td data-label="Actual (s)">23.9</td><td data-label="Span (s)">9.1</td><td data-label="Sunders cast">62</td></tr>
+        <tr><td data-label="Pack">52</td><td class="wrap-cell" data-label="Composition">4x Plagued Ghoul, 2x Necropolis Acolyte, Spirit of Naxxramas</td><td data-label="Mobs">7</td><td data-label="Pack HP">616,820</td><td data-label="Actual (s)">18.5</td><td data-label="Span (s)">9.1</td><td data-label="Sunders cast">40</td></tr>
+        <tr><td data-label="Pack">60</td><td class="wrap-cell" data-label="Composition">4x Patchwork Golem, Sludge Belcher, Bile Retcher, Bile Sludge</td><td data-label="Mobs">7</td><td data-label="Pack HP">549,660</td><td data-label="Actual (s)">19.8</td><td data-label="Span (s)">9.5</td><td data-label="Sunders cast">44</td></tr>
+        <tr><td data-label="Pack">13</td><td class="wrap-cell" data-label="Composition">2x Plagued Gargoyle, 2x Necropolis Acolyte</td><td data-label="Mobs">4</td><td data-label="Pack HP">632,500</td><td data-label="Actual (s)">16.0</td><td data-label="Span (s)">9.2</td><td data-label="Sunders cast">40</td></tr>
+        <tr><td data-label="Pack">56</td><td class="wrap-cell" data-label="Composition">3x Embalming Slime</td><td data-label="Mobs">3</td><td data-label="Pack HP">36,624</td><td data-label="Actual (s)">45.0</td><td data-label="Span (s)">1.7</td><td data-label="Sunders cast">0</td></tr>
+      </tbody></table></div></article>
+      <article class="panel" style="margin-top:12px"><div class="panel-head"><h3>Methodology and caveats</h3><span>how the numbers were built</span></div><div class="panel-body"><div class="method-grid" style="grid-template-columns:1fr 1fr">
+        <div class="method-card"><h3>Mob set</h3><p>650 real trash mobs with a measured time-to-die (the Blender tabs' 674-mob universe additionally counts 18 boss/unit GUIDs and Web Wraps). Critters and target dummies excluded; packs made of mobs first damaged inside boss encounter windows are flagged as boss-encounter packs, not trash packs.</p></div>
+        <div class="method-card"><h3>Packs</h3><p>Mobs clustered by first-damage time with a 6-second gap, the same segmentation as the Warrior Rotation and Blender tabs. Pack duration is first damage to last death.</p></div>
+        <div class="method-card"><h3>Mob HP</h3><p>Read from the combat log itself: in spell/ranged damage events, fields[15] is the target's max HP (the advanced unit block), verified constant per species across the whole log (Soldier of the Frozen Wastes 2,000; Spectral Trainee 5,030; Embalming Slime 12,208; Dread Creeper 47,160; Crypt Guard 204,360). The rare mob with no spell damage event falls back to player damage taken minus the killing blow's overkill.</p></div>
+        <div class="method-card"><h3>The retired HP bug</h3><p>fields[31] is not overkill (it is never 0 and exceeds the hit on 43.5% of creature damage events), so nothing here subtracts it per-hit. This is also what the mob-HP fields above rely on instead.</p></div>
+        <div class="method-card"><h3>WW pricing</h3><p>Observational across all 24 warriors' gear and buffs; the 1-stack dip (see the stack table) is target mix, not an argument against Sunder.</p></div>
+        <div class="method-card"><h3>Model limits</h3><p>The model ignores rage: it assumes every DPS warrior can Whirlwind on cooldown from the pull start. It also ignores tank Whirlwinds, so real no-Sunder kill times would be faster than the model's. Verdicts use only packs of 3+ mobs; 1-2 mob leftovers are in the data file but not headlined.</p></div>
+      </div></div></article>
+    </section>
+
+    <section class="section" id="ivscore">
+      <header class="report-head"><div><h2>IV Score</h2><p>Our own warrior ranking, built to fix the gap between PMS’s model and the blender analysis. PMS values every effective sunder at a flat 7,000 damage — a figure derived from a ~100k-HP mob — while our data shows half of trash dies in under 5s. IV Score weights each sunder by how long its target actually lived.</p></div><span class="pill">IV Score v1</span></header>
+
+      <article class="panel"><div class="panel-head"><h3>How IV Score works</h3><span>sunder value follows target lifetime</span></div><div class="panel-body">
+        <div class="formula">Score = 10 × (Damage + SunderValue + SoftPoints − Waste − TSA) / 3,600,000</div>
+        <p class="section-note" style="margin:13px 0 0">The 3.6M “10-point” yardstick is PMS’s own for this raid, so IV Score and PMS are directly comparable — same scale, different treatment of the sunder.</p>
+        <div class="bucket-grid four">
+          <div class="bucket" style="--c:var(--bad)"><strong>&lt;3s</strong><span>0 per sunder · blender range</span></div>
+          <div class="bucket marginal"><strong>3–5s</strong><span>1,400 per sunder</span></div>
+          <div class="bucket" style="--c:#c27723"><strong>5–10s</strong><span>3,500 per sunder</span></div>
+          <div class="bucket worthy"><strong>10s+</strong><span>7,000 per sunder · PMS parity</span></div>
+        </div>
+        <p class="section-note" style="margin:12px 0 0">Each effective sunder — a cast made while its target had fewer than five sunder stacks — is weighted by that target’s time-to-die, measured from first damage to death. Targets that never died during the log count as 10s+.</p>
+      </div></article>
+
+      <div class="method-grid" style="margin-top:12px">
+        <div class="method-card"><h3>Waste</h3><p>−500 per sunder cast at the five-stack cap — a GCD that could have been a roughly 1,000-damage Bloodthirst. Caveat: for the main tank, refreshing at five stacks is part of holding threat, so read tank rows with care.</p></div>
+        <div class="method-card"><h3>Soft points</h3><p>PMS’s values and caps, unchanged: Demo Shout 3,500 (cap 4), Disarm 14,000 (cap 4), successful interrupt 28,000 (cap 6), Challenging Shout 21,000 (cap 2), Dummies 14,000 per point (Masterwork = 1, Advanced/Love Fool = 0.5, cap 5), and 2× damage from Sapper, Dynamite, Holy Water, and Chili.</p></div>
+        <div class="method-card"><h3>TSA penalty</h3><p>−100,000 for flagged recipients: Dinkie, Jeian, and Iynx, per PMS’s flags on this run. Provisional until the flags are confirmed.</p></div>
+        <div class="method-card"><h3>Damage</h3><p>The warrior’s total damage from the raw combat log (Ellaria POV), which can differ slightly from Warcraft Logs. Roles from the Angry Era assignments: MT Vincint; OT Bootythweat, Sven, Sempai, Tankina, and Egg.</p></div>
+      </div>
+      <div class="callout" style="margin-top:12px"><strong>Reconciliation:</strong> 1,268 of 1,270 effective sunders were tagged with a target time-to-die, and per-warrior counts match PMS — Ellaria 72, Ejaxtwo 80.</div>
+
+      <article class="panel" style="margin-top:12px"><div class="panel-head"><h3>Warrior ranking</h3><span>Click a header to sort</span></div><div class="table-wrap"><table id="ivTable"><thead><tr><th>Warrior</th><th>IV Score</th><th>PMS</th><th>Delta</th><th>Role</th><th>Damage</th><th>Eff. Sunders</th><th>Sunder value</th><th>Worthy %</th><th>Wasted at cap</th></tr></thead><tbody></tbody></table></div></article>
+
+      <article class="panel" style="margin-top:12px"><div class="panel-head"><h3>Key takeaways</h3><span>what the reweighting moved</span></div><div class="panel-body"><ol class="action-list">
+        <li><b class="num">1</b><div><strong>Same band, different order</strong><small>Scores land in the same range as PMS, with deltas from −0.4 to +0.2. Damage dominates any sane score — the reweighting moves people, it doesn’t rewrite them.</small></div></li>
+        <li><b class="num">2</b><div><strong>Ejaxtwo falls 10th to 12th</strong><small>A raid-high 80 effective sunders, but only 24 landed on 10s+ targets — sunder value 315k, against PMS’s flat 560k.</small></div></li>
+        <li><b class="num">3</b><div><strong>Selectivity is rewarded</strong><small>Egg falls 7th to 8th, while Imthebest rises 18th to 16th: 34 sunders, 47% on worthy targets, only 13 wasted. Fewer, better-placed sunders beat volume.</small></div></li>
+        <li><b class="num">4</b><div><strong>Ellaria holds 2nd</strong><small>47% of his sunders landed on worthy targets and only 12 were wasted at cap. His headroom is damage, not sundering.</small></div></li>
+        <li><b class="num">5</b><div><strong>The selectivity spread</strong><small>Best: Bootythweat 61%, Ellaria and Imthebest 47%, Iynx 45%. Worst: Ryuma 12%, Sgtboolaid 18%.</small></div></li>
+        <li><b class="num">6</b><div><strong>Open knobs for v1.1</strong><small>A continuous weight curve instead of buckets, waste-penalty size and a possible MT exemption, confirmed TSA flags, and a boss-only damage split.</small></div></li>
+      </ol></div></article>
+    </section>
+
+    <section class="section" id="arrival">
+      <header class="report-head"><div><h2>Arrival Report Card</h2><p>Who reaches trash first, how far behind the first warrior each player enters a pull, and whether arrival order changes the Sunder decision.</p></div><span class="pill">non-boss targets + adds</span></header>
+      <div class="grid metrics"><div class="metric"><div class="label">Ellaria arrival rank</div><div class="value">20 / 24</div><div class="note">mean per-target rank 0.544</div></div><div class="metric"><div class="label">Pull-start delay</div><div class="value">2.20s</div><div class="note">19th · about 1s off fastest</div></div><div class="metric negative"><div class="label">First into pull</div><div class="value">0 / 35</div><div class="note">never first across measured pulls</div></div><div class="metric positive"><div class="label">Effective Sunder CPM</div><div class="value">1.80</div><div class="note">5th · 86% efficiency</div></div></div>
+      <div class="callout"><strong>Verdict:</strong> Ellaria is a little late, but not an outlier—and lateness does not explain the opener. She Sunder-firsts 25.6% when top-three to a mob and 47.2% when fourth or later. The weakest point is the first GCD of the pull, not total Sunder contribution.</div>
+      <article class="panel"><div class="panel-head"><h3>All-warrior report card</h3><div class="table-tools"><input class="search" id="arrivalSearch" type="search" placeholder="Filter player…" aria-label="Filter arrival report card"><span>Mean rank: 0 = first, 1 = last</span></div></div><div class="table-wrap"><table id="arrivalTable"><thead><tr><th>Player</th><th>Targets</th><th>Mean rank</th><th>First %</th><th>Last %</th><th>Pull delay</th><th>First-in</th><th>Early Sunder</th><th>Late Sunder</th><th>Eff. CPM</th><th>Efficiency</th></tr></thead><tbody></tbody></table></div></article>
+      <div class="grid split" style="margin-top:12px"><div class="callout"><strong>Fast arrival is not the deciding factor.</strong> Daddyshart leads per-target arrival at 0.362 but Sunders only 33.9% of early targets. Vincint arrives fifth at 0.435 and Sunders 54.7% when early.</div><div class="callout"><strong>How to use this:</strong> movement work can recover roughly a second at pull start, but Ellaria’s high CPM and best-in-raid efficiency show strong follow-through. The actionable change is choosing Sunder more often as the first attacking GCD.</div></div>
+    </section>
+
+    <section class="section" id="methods">
+      <header class="report-head"><div><h2>Methods + Sources</h2><p>What each number means, what the log can see, and where the source reports live.</p></div></header>
+      <div class="method-grid">
+        <div class="method-card"><h3>Effective Sunder</h3><p>A Sunder cast while the target had fewer than five stacks. This matches the PMS convention and counts casts, not landed applications.</p></div>
+        <div class="method-card"><h3>Targeted opener</h3><p>The first targeted on-GCD cast on each mob. Incidental Whirlwind hits are excluded, so the choice is usually Sunder or Bloodthirst.</p></div>
+        <div class="method-card"><h3>Pull-start opener</h3><p>The first attacking GCD cast by each warrior in a pull window. Whirlwind counts here because this view asks which button the warrior pressed first, not which mob it hit.</p></div>
+        <div class="method-card"><h3>Arrival rank</h3><p>Each warrior’s first targeted GCD timestamp is ranked within each mob: 0.00 is first and 1.00 is last. Pull delay is measured from the first warrior’s attacking GCD.</p></div>
+        <div class="method-card"><h3>Pull segmentation</h3><p>Trash mobs clustered by first player-damage time with a six-second gap. The 58 clusters—and 37 with four or more mobs—are heuristic, not a route map.</p></div>
+        <div class="method-card"><h3>Capture limits</h3><p>Ellaria’s melee POV gives near-complete melee coverage. Mage and hunter damage can be missing beyond ~40 yards, though nearby casts remain visible.</p></div>
+        <div class="method-card"><h3>Damage parsing</h3><p>Advanced log build 1.15.9: spell/range amount is payload field 29; swing amount is field 26. Duplicate SWING_DAMAGE_LANDED rows were excluded.</p></div>
+        <div class="method-card"><h3>Timing</h3><p>The PB comparison and high-level split use WCL fight-entry durations: 19:35 vs 19:01. The raw log’s first-damage-to-kill pass resolves Sep 29 to ~19:26 and is used only for event-level timing.</p></div>
+      </div>
+      <article class="panel" style="margin-top:12px"><div class="panel-head"><h3>Source ledger</h3><span>snapshot assembled Oct 1, 2026</span></div><div class="panel-body"><div class="source-list">
+        <div class="source"><div><strong>Sep 29 run · 9-29-26-Naxx</strong><small>52:09 · 15/15 · zero full wipes</small></div><a class="tag" href="https://vanilla.warcraftlogs.com/reports/a9pMA3fqRdD8c1XT" target="_blank" rel="noopener">WARCRAFT LOGS ↗</a></div>
+        <div class="source"><div><strong>Sep 22 guild PB · Naxx 2026-09-22</strong><small>47:45 · 15/15 · zero wipes</small></div><a class="tag" href="https://vanilla.warcraftlogs.com/reports/3zQ7CZ24rNMB6fkA?type=summary&boss=-3&difficulty=0" target="_blank" rel="noopener">WARCRAFT LOGS ↗</a></div>
+        <div class="source"><div><strong>Raw combat log · Ellaria POV</strong><small>465,683 events · 55.6-minute span · parsed locally</small></div><span class="tag">PRIMARY EVENT SOURCE</span></div>
+      </div></div></article>
+      <article class="panel" style="margin-top:12px"><div class="panel-head"><h3>Important caveats</h3></div><div class="panel-body"><ul style="margin:0;padding-left:18px;color:var(--muted)"><li>Engineering amounts include overkill.</li><li>Sunder aura source fields are misattributed to the logger; per-player results use SPELL_CAST_SUCCESS.</li><li>The KT encounter timer opened 3:52 before first damage while the raid cleared trash. KT cast nothing and took no damage, so this was not lost time.</li><li>Whether Flaps used Improved Expose Armor cannot be read directly; overwrite behavior is consistent with the stronger debuff winning the slot.</li></ul></div></article>
+    </section>
+    <footer>Static analysis snapshot · Pugs not drugs · Sep 29, 2026</footer>
+  </main>
+</div>
+<script>
+(function(){
+  'use strict';
+  var sections=[].slice.call(document.querySelectorAll('.section'));
+  var navButtons=[].slice.call(document.querySelectorAll('#sideNav button'));
+  var mobile=document.getElementById('mobileSelect');
+  function showSection(id, updateHash){
+    if(!document.getElementById(id)) id='overview';
+    sections.forEach(function(s){s.classList.toggle('active',s.id===id)});
+    navButtons.forEach(function(b){b.classList.toggle('active',b.dataset.section===id)});
+    mobile.value=id;
+    if(updateHash) history.replaceState(null,'','#'+id);
+    window.scrollTo({top:0,behavior:'auto'});
+  }
+  navButtons.forEach(function(b){b.addEventListener('click',function(){showSection(b.dataset.section,true)})});
+  mobile.addEventListener('change',function(){showSection(mobile.value,true)});
+  window.addEventListener('hashchange',function(){showSection(location.hash.slice(1),false)});
+
+  var tooltipSets={
+    bossTable:{
+      'Boss':'Encounter name from the Warcraft Logs boss-fight entries.',
+      'Sep 29':'Boss kill time in the Sep 29 run, using the Warcraft Logs fight-entry duration.',
+      'PB':'Boss kill time in the guild’s 47:45 personal-best run on Sep 22, using the same fight-entry duration.',
+      'Delta':'Sep 29 kill time minus the PB kill time. Positive seconds are slower; negative seconds are faster.',
+      'Read':'Short interpretation of the time delta, including matched, close, or the largest loss.'
+    },
+    sunderTable:{
+      'Player':'Warrior name. Ellaria is marked YOU because this combat log was recorded from her point of view.',
+      'Effective':'Sunder Armor casts made while the target had fewer than five stacks.',
+      'Total':'All successful Sunder Armor casts by the player, including casts made at the five-stack cap.',
+      'CPM':'Effective Sunders divided by 39.9 active combat minutes.',
+      '@ 5 stacks':'Sunder Armor casts made while the target already had five stacks; these did not add another stack.',
+      'Efficiency':'Effective Sunders divided by all Sunder Armor casts. The remainder were casts at the five-stack cap.'
+    },
+    engTable:{
+      'Player':'Player name from the raw combat log. Ellaria is marked YOU because the log is her point of view.',
+      'Total':'Sum of logged Goblin Sapper, Dense Dynamite, Holy Water, and Dragonbreath Chili damage, including overkill.',
+      'Sapper':'Logged Goblin Sapper Charge damage for the player, including overkill.',
+      'Dynamite':'Logged Dense Dynamite damage for the player, including overkill.',
+      'Holy Water':'Logged Stratholme Holy Water damage for the player, including overkill.',
+      'Chili':'Logged Dragonbreath Chili damage for the player, including overkill.'
+    },
+    blenderRoleTable:{
+      'Role':'Warriors grouped as DPS, offtanks, or main tank using the raid’s Angry Era assignments.',
+      '<5s blender':'Share of targeted openers that were Sunder Armor on mobs whose time-to-die was under five seconds.',
+      '5–10s marginal':'Share of targeted openers that were Sunder Armor on mobs whose time-to-die was five to ten seconds.',
+      '10s+ worthy':'Share of targeted openers that were Sunder Armor on mobs whose time-to-die was at least ten seconds.',
+      'Read':'Interpretation of whether the role changes its Sunder choice as mob time-to-die changes.'
+    },
+    blenderSensitivityTable:{
+      'Cutoff':'The stricter mob time-to-die threshold used to label a Sunder-first GCD as wasted.',
+      'Real mobs':'Number and share of the 674 real trash mobs that died below the cutoff, measured from first damage taken to death.',
+      'Raid waste':'Sunder-first GCDs by all warriors on mobs that died below the cutoff.',
+      'DPS waste':'Sunder-first GCDs by DPS warriors on mobs that died below the cutoff.',
+      'Ellaria':'Ellaria’s Sunder-first GCDs on mobs that died below the cutoff.'
+    },
+    blenderWorthyTable:{
+      'Player':'DPS warrior name, ranked by Sunder-first rate on Sunder-worthy mobs.',
+      'Worthy rate':'Share of targeted openers that were Sunder Armor on mobs living at least ten seconds.',
+      'Split':'Sunder-first worthy-mob openers over all eligible targeted openers on worthy mobs.'
+    },
+    blenderWasteTable:{
+      'Player':'DPS warrior name. Ellaria is marked YOU because this combat log was recorded from her point of view.',
+      'Wasted GCDs':'Sunder-first GCDs spent on mobs that died in under five seconds. The cutoff compares one roughly 1,000-damage GCD with about 3% added physical damage per Sunder stack.'
+    },
+    blender35RoleTable:{
+      'Role':'Warriors grouped as DPS, offtanks, or main tank using the raid’s Angry Era assignments.',
+      '<3.5s blender':'Share of targeted openers that were Sunder Armor on mobs whose time-to-die was under 3.5 seconds — about two GCDs, so a first sunder gets only ~2s of payoff. Incidental Whirlwind cleave is excluded and the target had fewer than five stacks.',
+      '3.5–10s marginal':'Share of targeted openers that were Sunder Armor on mobs whose time-to-die was 3.5 to ten seconds. Incidental Whirlwind cleave is excluded and the target had fewer than five stacks.',
+      '10s+ worthy':'Share of targeted openers that were Sunder Armor on mobs whose time-to-die was at least ten seconds. Incidental Whirlwind cleave is excluded and the target had fewer than five stacks.',
+      'Read':'Interpretation of whether the role changes its Sunder choice as mob time-to-die changes.'
+    },
+    blender35WasteTable:{
+      'Player':'DPS warrior name. Ellaria is marked YOU because this combat log was recorded from her point of view.',
+      'Wasted GCDs':'Sunder-first GCDs spent on mobs that died in under 3.5 seconds. At only ~2s of payoff a first sunder cannot repay its roughly 1,000-damage GCD, so these casts are airtight waste.'
+    },
+    arrivalTable:{
+      'Player':'Warrior name. Ellaria is marked YOU because this combat log was recorded from her point of view.',
+      'Targets':'Non-boss mob engagements, including trash and encounter adds, where the warrior’s first offensive action on that mob was recorded.',
+      'Mean rank':'Average per-mob arrival rank normalized so 0.00 means always first warrior to engage and 1.00 means always last. Lower is earlier.',
+      'First %':'Share of recorded mobs where this warrior was the first warrior to engage.',
+      'Last %':'Share of recorded mobs where this warrior was the last warrior to engage.',
+      'Pull delay':'Mean seconds between the pull’s first warrior engagement and this warrior’s first attacking GCD, across multi-mob pulls.',
+      'First-in':'Multi-mob pulls where the warrior engaged first, shown over the pulls that warrior attended.',
+      'Early Sunder':'When among the first three warriors to reach a mob, the share of eligible targeted openers that were Sunder Armor. Targets already at five stacks and incidental Whirlwind cleave are excluded.',
+      'Late Sunder':'When arriving fourth or later, the share of eligible targeted openers that were Sunder Armor. Targets already at five stacks and incidental Whirlwind cleave are excluded.',
+      'Eff. CPM':'Effective Sunders per active combat minute. A Sunder is effective when cast while the target had fewer than five stacks.',
+      'Efficiency':'Effective Sunders divided by all Sunder Armor casts. The remainder were casts at the five-stack cap.'
+    },
+    ivTable:{
+      'Warrior':'Warrior name, ranked by IV Score. Ellaria is marked YOU because this combat log was recorded from her point of view.',
+      'IV Score':'IV Score v1: 10 × (Damage + SunderValue + SoftPoints − Waste − TSA) ÷ 3,600,000. SunderValue weights each effective sunder by its target’s time-to-die instead of PMS’s flat 7,000.',
+      'PMS':'The warrior’s PMS score for this run, computed with PMS’s flat 7,000-damage value for every effective sunder. Shown so the two models can be compared on PMS’s own 3.6M yardstick.',
+      'Delta':'IV Score minus PMS. Positive means the time-to-die weighting ranked the warrior higher than PMS’s flat sunder value; negative means lower.',
+      'Role':'MT, OT, or DPS from the raid’s Angry Era tank assignments: Vincint is MT; Bootythweat, Sven, Sempai, Tankina, and Egg are OTs.',
+      'Damage':'The warrior’s total damage in millions, taken from the raw combat log (Ellaria POV). Can differ slightly from Warcraft Logs.',
+      'Eff. Sunders':'Sunder Armor casts made while the target had fewer than five stacks.',
+      'Sunder value':'Time-to-die-weighted sunder credit in thousands: 7,000 per effective sunder on a target living 10s or more, 3,500 at 5–10s, 1,400 at 3–5s, and 0 under 3s. Targets that never died count as 10s+.',
+      'Worthy %':'Share of the warrior’s effective sunders whose target lived at least ten seconds — the mobs where a sunder repays its GCD. Higher means better target selection.',
+      'Wasted at cap':'Sunder casts made at the five-stack cap, each charged −500 (a GCD that could have been a ~1,000-damage Bloodthirst). For the main tank, refreshing at cap is part of holding threat, so read tank rows with care.'
+    },
+    taWingTable:{
+      'Wing':'The five Naxxramas quarters in run order.',
+      'Total':'Elapsed run time spent in this wing, from first to last activity there.',
+      'Boss':'Time inside boss ENCOUNTER windows within this wing, including add and RP phases such as Gothik and Kel’Thuzad.',
+      'Trash':'Trash pull activity (first damage → last mob death, chained with the 6-second inflow rule) within this wing.',
+      'Idle':'Everything else in the wing: no boss encounter and no trash pull active.'
+    },
+    taGapsTable:{
+      '#':'Rank of the gap by duration, longest first.',
+      'Clock':'Clock window of the gap (HH:MM:SS start–end) inside the run.',
+      'Dur':'Gap duration in minutes:seconds.',
+      'Between':'What the raid finished immediately before the gap and what it pulled next.',
+      'What happened':'Why the gap happened and what it cost, from the raw combat log.'
+    },
+    tpWingTable:{
+      'Wing':'Naxxramas quarter.',
+      'Pulls':'Counted trash pulls in the wing (6-second inflow segmentation).',
+      'Mobs':'Mobs that died or took at least 25% of their HP from the raid within those pulls.',
+      'Total mob HP':'Sum of the mobs’ max HP, read from the combat log’s max-HP fields.',
+      'Pull time':'Sum of the individual pull durations. Chained pulls overlap, so this exceeds the 12:13 union of trash time.',
+      'Raid DPS':'HP-weighted raid DPS across the wing’s pulls.',
+      'Idle before':'Summed idle gap before each of the wing’s pulls.'
+    },
+    tpPullTable:{
+      'Pull':'Trash pull labelled by wing in pull order (e.g. Construct Wing Pull 5).',
+      'Start':'Clock time of the pull’s first damage.',
+      'Mobs':'Mobs in the pull that died or took at least 25% of their HP from the raid.',
+      'Mob HP':'Sum of the pull mobs’ max HP from the combat log.',
+      'Dur':'Pull duration, first damage to last mob death.',
+      'Raid DPS':'Total damage to the pull’s mobs divided by pull duration.',
+      'Gap before':'Idle gap immediately before the pull started.',
+      'Composition':'Mob types in the pull, highest counts first.'
+    },
+    tpClassTable:{
+      'Class':'Player class, DPS-role players only; healers excluded by design.',
+      'Players':'Players of that class included in the per-pull scoring.',
+      'Engage %':'Average share of the 47 pulls in which a player of this class dealt any damage.',
+      'Activity':'Share of each pull the player was actually dealing damage (first→last damage timestamp ÷ pull duration), averaged over engaged pulls.',
+      'Pull DPS':'Player damage ÷ pull duration, averaged over engaged pulls.',
+      'Trash damage':'Total damage by the class across all 47 pulls, including attributed pet damage.'
+    },
+    tpScoreTable:{
+      'Player':'DPS-role player name. Ellaria is marked YOU because this combat log was recorded from her point of view.',
+      'Class':'Player class.',
+      'Score':'Trash Score v1: 10 × (0.55 × relative pull DPS + 0.25 × activity + 0.20 × engage %). Relative pull DPS is normalized within the scored set.',
+      'Pull DPS':'Player damage ÷ pull duration, averaged over engaged pulls in this scope.',
+      'Activity':'Share of each pull the player was dealing damage (first→last damage ÷ pull duration), averaged over engaged pulls.',
+      'Engage':'Share of the scope’s pulls in which the player dealt any damage.',
+      'Pulls':'Pulls the player dealt damage in, over pulls in this scope.'
+    },
+    wwStackTable:{
+      'Sunder stacks':'Sunder stacks on the Whirlwind target at the moment the hit landed.',
+      'Hits+misses':'Warrior Whirlwind hits and misses tracked on real-trash mobs at that stack count.',
+      'Per application':'Average Whirlwind damage per application; dodges, parries and misses count as 0.',
+      'Per landed hit':'Average Whirlwind damage counting only hits that landed.'
+    },
+    wwNearTable:{
+      'Pack':'Trash pack number from the raw-log pack clustering (6-second gap segmentation).',
+      'Composition':'Mob types in the pack, highest counts first.',
+      'Mobs':'Real trash mobs in the pack.',
+      'Pack HP':'Sum of the mobs’ max HP from the combat log.',
+      'Actual (s)':'Actual pack kill time in seconds, first damage to last death.',
+      'Span (s)':'Seconds over which the pack’s mobs were first engaged; verdicts require 8 seconds or less.',
+      'DPS wars':'Of the 18 DPS warriors, how many actually damaged this pack.',
+      'WW-only TTK (s)':'Modelled kill time if the pack’s damage came only from DPS-warrior Whirlwind: pack HP ÷ (DPS wars × min(4, mobs) × 744 ÷ 10s).',
+      'TTK / actual':'WW-only TTK divided by the actual kill time. Below 1.00 would mean Whirlwind alone could have matched the real kill.',
+      'Sunders cast':'Sunder Armor casts on the pack in the real run.'
+    },
+    wwFarTable:{
+      'Pack':'Trash pack number from the raw-log pack clustering (6-second gap segmentation).',
+      'Composition':'Mob types in the pack, highest counts first.',
+      'Mobs':'Real trash mobs in the pack.',
+      'Pack HP':'Sum of the mobs’ max HP from the combat log.',
+      'Actual (s)':'Actual pack kill time in seconds, first damage to last death.',
+      'Span (s)':'Seconds over which the pack’s mobs were first engaged; verdicts require 8 seconds or less.',
+      'DPS wars':'Of the 18 DPS warriors, how many actually damaged this pack.',
+      'WW-only TTK (s)':'Modelled kill time if the pack’s damage came only from DPS-warrior Whirlwind: pack HP ÷ (DPS wars × min(4, mobs) × 744 ÷ 10s).',
+      'TTK / actual':'WW-only TTK divided by the actual kill time. Below 1.00 would mean Whirlwind alone could have matched the real kill.',
+      'Sunders cast':'Sunder Armor casts on the pack in the real run.'
+    },
+    wwChainTable:{
+      'Pack':'Trash pack number from the raw-log pack clustering (6-second gap segmentation).',
+      'Composition':'Mob types in the pack, highest counts first.',
+      'Mobs':'Real trash mobs in the pack.',
+      'Pack HP':'Sum of the mobs’ max HP from the combat log.',
+      'Actual (s)':'Actual pack kill time in seconds, first damage to last death.',
+      'Span (s)':'Seconds over which the pack’s mobs were first engaged; verdicts require 8 seconds or less.',
+      'Sunders cast':'Sunder Armor casts on the pack in the real run.'
+    }
+  };
+  function rotationTooltips(view){
+    var common={
+      'Player':'Warrior name. Ellaria is marked YOU because this combat log was recorded from her point of view.',
+      'Role':'MT, OT, or DPS from the raid’s Angry Era tank assignments: Vincint is MT; Bootythweat, Sven, Sempai, Tankina, and Egg are OTs.',
+      'DPS rank':'Rank among the 18 DPS warriors for Sunder-first rate in the selected view; tank rows are reference only.'
+    };
+    if(view==='fresh'){
+      common['Engagements']='Targeted trash engagements where the target had fewer than five Sunder stacks at the opener.';
+      common['Sunder %']='Share of eligible targeted openers that were Sunder Armor; incidental Whirlwind hits on secondary targets are excluded.';
+      common['BT %']='Share of eligible targeted openers that were Bloodthirst; incidental Whirlwind hits on secondary targets are excluded.';
+      common['Other %']='Share of eligible targeted openers that used an ability other than Sunder Armor or Bloodthirst.';
+    }else if(view==='post'){
+      common['Targeted GCDs']='Eligible targeted trash engagements after removing each warrior’s first attacking GCD of the pull.';
+      common['Sunder first']='Count of those post-opener targeted engagements that began with Sunder Armor.';
+      common['Sunder %']='Share of post-opener targeted engagements that began with Sunder Armor.';
+    }else if(view==='pull'){
+      common['Pulls']='Four-or-more-mob pull windows the warrior attended and in which a first attacking GCD was recorded.';
+      common['Sunder %']='Share of attended pull windows where the warrior’s first attacking GCD was Sunder Armor.';
+      common['BT %']='Share of attended pull windows where the warrior’s first attacking GCD was Bloodthirst.';
+      common['WW %']='Share of attended pull windows where the warrior’s first attacking GCD was Whirlwind.';
+      common['Other %']='Share of attended pull windows opened with Execute, Mortal Strike, Revenge, Shield Slam, or Overpower.';
+    }else{
+      common['Boss targets']='Boss engagements where the warrior’s first targeted attacking GCD on that boss was recorded.';
+      common['Sunder first']='Boss engagements whose first targeted attacking GCD was Sunder Armor.';
+      common['BT first']='Boss engagements whose first targeted attacking GCD was Bloodthirst.';
+      common['Other']='Boss engagements whose first targeted attacking GCD was an ability other than Sunder Armor or Bloodthirst.';
+      common['Boss Sunders']='All effective boss Sunders by the warrior: casts made while that boss had fewer than five stacks.';
+    }
+    return common;
+  }
+  function installHeaderTooltips(table,defs){
+    if(!table)return;
+    var headers=[].slice.call(table.querySelectorAll('th'));
+    headers.forEach(function(th){
+      var label=th.textContent.trim().replace(/\s+/g,' '),tip=defs[label];
+      if(!tip)return;
+      th.classList.add('has-tooltip');
+      th.tabIndex=0;
+      th.dataset.tooltip=tip;
+      th.setAttribute('aria-label',label+'. '+tip);
+      if(th.dataset.tooltipBound)return;
+      th.dataset.tooltipBound='1';
+      th.addEventListener('click',function(e){
+        if(window.matchMedia('(hover: none), (pointer: coarse)').matches){
+          var wasOpen=th.classList.contains('tip-open');
+          document.querySelectorAll('th.tip-open').forEach(function(open){open.classList.remove('tip-open')});
+          if(!wasOpen){th.classList.add('tip-open');e.preventDefault();e.stopImmediatePropagation()}
+          else{th.blur()}
+        }
+      });
+    });
+    [].slice.call(table.tBodies[0] ? table.tBodies[0].rows : []).forEach(function(row){
+      [].slice.call(row.cells).forEach(function(cell,index){
+        var header=headers[index],tip=header&&header.dataset.tooltip;
+        if(!tip||cell.querySelector('.mobile-col-tip'))return;
+        var label=cell.dataset.label||header.textContent.trim();
+        var button=document.createElement('button');
+        button.type='button';button.className='mobile-col-tip';button.textContent=label;
+        button.dataset.tooltip=tip;button.setAttribute('aria-label',label+'. '+tip);button.setAttribute('aria-expanded','false');
+        button.addEventListener('click',function(e){
+          var wasOpen=button.classList.contains('tip-open');
+          document.querySelectorAll('.mobile-col-tip.tip-open').forEach(function(open){open.classList.remove('tip-open');open.setAttribute('aria-expanded','false')});
+          if(!wasOpen){button.classList.add('tip-open');button.setAttribute('aria-expanded','true')}
+          e.preventDefault();e.stopPropagation();
+        });
+        cell.insertBefore(button,cell.firstChild);
+      });
+    });
+  }
+  document.addEventListener('click',function(e){
+    if(!e.target.closest('th.has-tooltip'))document.querySelectorAll('th.tip-open').forEach(function(th){th.classList.remove('tip-open')});
+    if(!e.target.closest('.mobile-col-tip'))document.querySelectorAll('.mobile-col-tip.tip-open').forEach(function(button){button.classList.remove('tip-open');button.setAttribute('aria-expanded','false')});
+  });
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){document.querySelectorAll('th.tip-open,.mobile-col-tip.tip-open').forEach(function(el){el.classList.remove('tip-open');el.setAttribute('aria-expanded','false');el.blur()})}});
+
+  var wings=[['Spider',107,149],['Plague',180,289],['Military',429,269],['Construct',338,295],['Frostwyrm',121,227]];
+  var wb=document.getElementById('wingBars');
+  wings.forEach(function(w){var total=w[1]+w[2],el=document.createElement('div');el.className='wing-row';el.innerHTML='<strong>'+w[0]+'</strong><div class="dualbar"><i class="wboss" style="width:'+(w[1]/total*100).toFixed(1)+'%"></i><i class="wtrash" style="width:'+(w[2]/total*100).toFixed(1)+'%"></i></div><em>'+fmt(w[1])+' / '+fmt(w[2])+'</em>';wb.appendChild(el)});
+  function fmt(sec){return Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0')}
+
+  var bosses=[
+    ["Anub'Rekhan",35,39,-4,'Ahead'],['Faerlina',36,39,-3,'Ahead'],['Maexxna',36,36,0,'Matched'],['Noth',35,44,-9,'Ahead'],['Heigan',45,49,-4,'Ahead'],['Loatheb',100,97,3,'Close'],['Razuvious',44,42,2,'Close'],['Gothik',298,298,0,'Wave-gated'],['Four Horsemen',87,85,2,'Close'],['Patchwerk',95,88,7,'Watch'],['Grobbulus',62,60,2,'Close'],['Gluth',45,39,6,'Watch'],['Thaddius',136,131,5,'Watch'],['Sapphiron',20,18,2,'Close'],["Kel'Thuzad",101,76,25,'Largest loss']
+  ];
+  renderRows(document.querySelector('#bossTable tbody'),bosses,function(r){var c=r[3]<0?'good':r[3]>0?'bad':'neutral';return ['<span class="rank">'+String(bosses.indexOf(r)+1).padStart(2,'0')+'</span>'+r[0],fmt(r[1]),fmt(r[2]),'<span class="delta '+c+'">'+(r[3]>0?'+':'')+r[3]+'s</span>',r[4]]},['Boss','Sep 29','PB','Delta','Read']);
+
+  var deathEvents=[
+    ['TRASH · 7','Nuu, Bootythweat ×2, Kephas, Flaps, Jeian, Bort','Isolated single deaths; raid played through all seven.'],
+    ['FOUR HORSEMEN · 6','Annette, Bernabini, Lumberyak, Xmage, Iynx, Bootythweat','Holy Wrath cluster at 1:03 and 1:17–1:19 of the 1:27 kill.'],
+    ['GROBBULUS · 2','Waamb, Nuu','Melee and Mutagen Explosion.'],
+    ['GLUTH · 3','Ejaxtwo, Sempai, Holyhaze','Two early melee deaths; Holyhaze died via Zombie Chow.'],
+    ['SAPPHIRON · 3','Velisse, Sgtboolaid, Pinaclex','Velisse to Cleave; two lingering post-kill aura deaths.'],
+    ["KEL'THUZAD · 3",'Ejaxtwo, Xmage, Imthebest','Melee at 0:25 and 0:34; Void Blast at 1:00.']
+  ];
+  var dt=document.getElementById('deathTimeline');deathEvents.forEach(function(e){var d=document.createElement('div');d.className='event';d.innerHTML='<div class="time">'+e[0]+'</div><div class="rail"></div><div><strong>'+e[1]+'</strong><p>'+e[2]+'</p></div>';dt.appendChild(d)});
+
+  var sunder=[
+    ['Vincint',97,175,2.43,78],['Ejaxtwo',80,99,2.01,19],['Egg',78,109,1.95,31],['Pinaclex',73,99,1.83,26],['Ellaria',72,84,1.80,12],['Sempai',57,101,1.43,44],['Dodyy',56,76,1.40,20],['Iynx',56,92,1.40,36],['Jeian',54,68,1.35,14],['Nalga',53,69,1.33,16],['Tankina',49,72,1.23,23],['Sven',47,64,1.18,17],['Junsa',46,72,1.15,26],['Dinkie',45,55,1.13,10],['Sgtboolaid',44,64,1.10,20],['Vnx',44,71,1.10,27],['Gophie',44,73,1.10,29],['Bort',42,63,1.05,21],['Ryuma',42,60,1.05,18],['Daddyshart',41,68,1.03,27],['Loganw',40,55,1.00,15],['Kazugz',40,71,1.00,31],['Bootythweat',36,66,.90,30],['Imthebest',34,47,.85,13]
+  ];
+  var sBody=document.querySelector('#sunderTable tbody');
+  function drawSunder(filter){var rows=sunder.filter(function(r){return r[0].toLowerCase().indexOf(filter.toLowerCase())>-1});renderRows(sBody,rows,function(r){var pct=Math.round(r[1]/r[2]*100);return [r[0],r[1],r[2],r[3].toFixed(2),r[4],'<span>'+pct+'%</span><div class="bar-track"><span class="bar-fill" style="width:'+pct+'%"></span></div>']},['Player','Effective','Total','CPM','@ 5 stacks','Efficiency']);markYou(sBody);installHeaderTooltips(document.getElementById('sunderTable'),tooltipSets.sunderTable)}
+  drawSunder('');document.getElementById('sunderSearch').addEventListener('input',function(){drawSunder(this.value)});
+
+  var eng=[
+    ['Winterly',144700,32000,7000,105000,0],['Lumberyak',130400,45000,1000,84000,0],['Ejaxtwo',99000,49000,7000,30000,13000],['Junsa',90500,53000,10000,18000,10000],['Iynx',80700,48000,16000,0,17000],['Vnx',78000,51000,14000,0,13000],['Gophie',77800,20000,14000,25000,19000],['Jeian',77500,42000,25000,0,10000],['Nalga',76900,35000,6000,18000,18000],['Dinkie',76700,43000,21000,0,13000],['Daddyshart',71000,48000,16000,7000,0],['Ellaria',64400,21000,21000,0,22000],['Bort',63100,46000,17000,0,0],['Tankina',61500,21000,23000,0,17000],['Sempai',54400,47000,2000,0,6000]
+  ];
+  var eBody=document.querySelector('#engTable tbody');function short(n){return n?Math.round(n/1000)+'k':'—'}
+  function drawEng(filter){var rows=eng.filter(function(r){return r[0].toLowerCase().indexOf(filter.toLowerCase())>-1});renderRows(eBody,rows,function(r){return ['<span class="rank">'+String(eng.indexOf(r)+1).padStart(2,'0')+'</span>'+r[0],'<span>'+short(r[1])+'</span><div class="bar-track"><span class="bar-fill" style="width:'+(r[1]/144700*100)+'%"></span></div>',short(r[2]),short(r[3]),short(r[4]),short(r[5])]},['Player','Total','Sapper','Dynamite','Holy Water','Chili']);markYou(eBody);installHeaderTooltips(document.getElementById('engTable'),tooltipSets.engTable)}
+  drawEng('');document.getElementById('engSearch').addEventListener('input',function(){drawEng(this.value)});
+
+  var kt=[['Daddyshart',4],['Ellaria',2],['Junsa',1],['Loganw',1],['Imthebest',1],['Sgtboolaid',1],['Tankina',1]];
+  var ki=document.getElementById('ktInterrupts');kt.forEach(function(r){var d=document.createElement('div');d.className='mini-stat';d.innerHTML='<span>'+r[0]+'</span><strong>'+r[1]+'</strong>';ki.appendChild(d)});
+
+  var fresh=[
+    ['Ejaxtwo',90,67.8,32.2,0],['Bort',44,63.6,29.5,6.8],['Pinaclex',84,59.5,40.5,0],['Dodyy',64,59.4,39.1,1.6],['Vincint',76,59.2,38.2,2.6],['Nalga',74,56.8,43.2,0],['Egg',70,54.3,45.7,0],['Ryuma',59,54.2,45.8,0],['Jeian',71,52.1,47.9,0],['Iynx',57,50.9,49.1,0],['Gophie',70,48.6,51.4,0],['Sgtboolaid',67,47.8,52.2,0],['Dinkie',63,47.6,52.4,0],['Tankina',61,47.5,47.5,4.9],['Ellaria',69,46.4,53.6,0],['Sempai',61,45.9,45.9,8.2],['Junsa',68,45.6,54.4,0],['Vnx',58,39.7,60.3,0],['Loganw',63,36.5,63.5,0],['Kazugz',43,34.9,62.8,2.3],['Bootythweat',37,32.4,54.1,13.5],['Imthebest',62,30.6,69.4,0],['Daddyshart',68,29.4,69.1,1.5],['Sven',80,22.5,60.0,17.5]
+  ];
+  var pull=[
+    ['Egg',35,68.6,8.6,22.9,0],['Bort',29,65.5,3.4,31.0,0],['Ejaxtwo',35,62.9,17.1,20.0,0],['Dodyy',35,57.1,8.6,34.3,0],['Iynx',35,57.1,22.9,20.0,0],['Nalga',35,51.4,25.7,22.9,0],['Sgtboolaid',35,51.4,28.6,20.0,0],['Tankina',34,44.1,23.5,29.4,2.9],['Pinaclex',35,42.9,8.6,48.6,0],['Ryuma',35,40.0,31.4,28.6,0],['Gophie',35,37.1,25.7,37.1,0],['Junsa',35,37.1,34.3,28.6,0],['Vnx',35,37.1,28.6,34.3,0],['Sempai',35,34.3,20.0,45.7,0],['Vincint',33,33.3,66.7,0,0],['Kazugz',35,31.4,45.7,22.9,0],['Dinkie',35,28.6,34.3,37.1,0],['Loganw',35,28.6,54.3,17.1,0],['Daddyshart',35,25.7,37.1,37.1,0],['Jeian',35,25.7,57.1,17.1,0],['Bootythweat',29,20.7,51.7,6.9,20.7],['Imthebest',35,14.3,74.3,11.4,0],['Ellaria',35,8.6,48.6,42.9,0],['Sven',35,8.6,80.0,5.7,5.7]
+  ];
+  var post=[
+    ['Vincint',43,33,76.7],['Ejaxtwo',56,34,60.7],['Ryuma',41,23,56.1],['Pinaclex',66,37,56.1],['Jeian',47,25,53.2],['Ellaria',49,24,49.0],['Nalga',49,24,49.0],['Iynx',37,18,48.6]
+  ];
+  var tankRoles={Vincint:'MT',Bootythweat:'OT',Sven:'OT',Sempai:'OT',Tankina:'OT',Egg:'OT'};
+  var dpsFreshRanks={Ejaxtwo:1,Bort:2,Pinaclex:3,Dodyy:4,Nalga:5,Ryuma:6,Jeian:7,Iynx:8,Gophie:9,Sgtboolaid:10,Dinkie:11,Ellaria:12,Junsa:13,Vnx:14,Loganw:15,Kazugz:16,Imthebest:17,Daddyshart:18};
+  var dpsPostRanks={Ejaxtwo:1,Ryuma:2,Pinaclex:2,Jeian:4,Ellaria:5,Nalga:5,Iynx:7};
+  function roleOf(name){return tankRoles[name]||'DPS'}
+  function roleTag(name){var role=roleOf(name);return '<span class="role-tag '+role.toLowerCase()+'">'+role+'</span>'}
+  function dpsRank(name,view){if(roleOf(name)!=='DPS')return '<span class="rank">REF</span>';var rank=view==='post'?dpsPostRanks[name]:dpsFreshRanks[name];return rank?rank+' / 18':'—'}
+  var bossOpen=[
+    ['Egg',18,16,2,0,20],['Sempai',16,15,1,0,31],['Dodyy',18,14,4,0,15],['Tankina',18,14,4,0,16],['Vnx',18,14,4,0,15],['Daddyshart',18,14,4,0,15],['Loganw',18,13,5,0,13],['Bort',18,11,7,0,11],['Ejaxtwo',19,11,8,0,11],['Ellaria',18,10,8,0,10],['Gophie',18,10,8,0,11],['Iynx',16,10,6,0,15],['Nalga',18,10,8,0,10],['Kazugz',18,10,8,0,11],['Bootythweat',16,8,7,1,16],['Dinkie',16,7,9,0,7],['Pinaclex',18,7,11,0,8],['Sven',17,7,9,1,12],['Jeian',16,6,10,0,7],['Junsa',18,6,12,0,9],['Sgtboolaid',18,5,13,0,6],['Vincint',19,3,13,3,31],['Ryuma',18,1,17,0,1],['Imthebest',18,0,18,0,0]
+  ];
+  var rotView='fresh',rotBody=document.querySelector('#rotTable tbody'),rotHead=document.querySelector('#rotTable thead');
+  function drawRot(){var q=document.getElementById('rotSearch').value.toLowerCase(),rows=(rotView==='fresh'?fresh:rotView==='post'?post:rotView==='pull'?pull:bossOpen).filter(function(r){return r[0].toLowerCase().indexOf(q)>-1});if(rotView==='boss'){rotHead.innerHTML='<tr><th>Player</th><th>Role</th><th>Boss targets</th><th>Sunder first</th><th>BT first</th><th>Other</th><th>Boss Sunders</th></tr>';renderRows(rotBody,rows,function(r){return [r[0],roleTag(r[0]),r[1],r[2],r[3],r[4],r[5]]},['Player','Role','Boss targets','Sunder first','BT first','Other','Boss Sunders'])}else if(rotView==='fresh'){rotHead.innerHTML='<tr><th>Player</th><th>Role</th><th>DPS rank</th><th>Engagements</th><th>Sunder %</th><th>BT %</th><th>Other %</th></tr>';renderRows(rotBody,rows,function(r){return [r[0],roleTag(r[0]),dpsRank(r[0],'fresh'),r[1],r[2].toFixed(1)+'%',r[3].toFixed(1)+'%',r[4].toFixed(1)+'%']},['Player','Role','DPS rank','Engagements','Sunder %','BT %','Other %'])}else if(rotView==='post'){rotHead.innerHTML='<tr><th>Player</th><th>Role</th><th>DPS rank</th><th>Targeted GCDs</th><th>Sunder first</th><th>Sunder %</th></tr>';renderRows(rotBody,rows,function(r){return [r[0],roleTag(r[0]),dpsRank(r[0],'post'),r[1],r[2],r[3].toFixed(1)+'%']},['Player','Role','DPS rank','Targeted GCDs','Sunder first','Sunder %'])}else{rotHead.innerHTML='<tr><th>Player</th><th>Role</th><th>Pulls</th><th>Sunder %</th><th>BT %</th><th>WW %</th><th>Other %</th></tr>';renderRows(rotBody,rows,function(r){return [r[0],roleTag(r[0]),r[1],r[2].toFixed(1)+'%',r[3].toFixed(1)+'%',r[4].toFixed(1)+'%',r[5].toFixed(1)+'%']},['Player','Role','Pulls','Sunder %','BT %','WW %','Other %'])}installHeaderTooltips(document.getElementById('rotTable'),rotationTooltips(rotView));markYou(rotBody);[].slice.call(rotBody.querySelectorAll('tr')).forEach(function(tr){var role=tr.cells[1]&&tr.cells[1].textContent.trim();if(role==='MT'||role==='OT')tr.classList.add('reference-row')})}
+  [].slice.call(document.querySelectorAll('#rotationTabs button')).forEach(function(b){b.addEventListener('click',function(){rotView=b.dataset.view;document.querySelectorAll('#rotationTabs button').forEach(function(x){x.classList.toggle('active',x===b)});drawRot()})});
+  document.getElementById('rotSearch').addEventListener('input',drawRot);drawRot();
+
+  var arrival=[
+    ['Daddyshart',145,.362,25.5,6.2,2.13,'2 / 34',33.9,20.7,1.03,60],
+    ['Egg',145,.364,26.9,17.9,1.37,'3 / 34',45.3,51.4,1.95,72],
+    ['Ejaxtwo',162,.390,21.6,16.0,1.16,'2 / 34',43.2,68.9,2.01,81],
+    ['Junsa',151,.427,17.9,11.9,2.11,'1 / 35',37.7,40.0,1.15,64],
+    ['Vincint',127,.435,27.6,17.3,1.73,'6 / 33',54.7,61.2,2.43,55],
+    ['Sven',136,.443,32.4,33.1,2.63,'3 / 35',13.8,29.0,1.18,73],
+    ['Sempai',119,.445,14.3,9.2,3.12,'0 / 34',37.0,55.6,1.43,56],
+    ['Dinkie',158,.450,17.1,13.9,1.59,'1 / 34',33.3,40.5,1.13,82],
+    ['Sgtboolaid',147,.455,12.9,8.2,1.89,'2 / 34',38.0,48.8,1.10,69],
+    ['Pinaclex',152,.457,21.7,17.8,1.79,'3 / 34',55.6,44.4,1.83,74],
+    ['Tankina',133,.458,20.3,15.0,3.49,'2 / 34',36.7,43.6,1.23,68],
+    ['Nalga',141,.459,10.6,12.1,1.27,'1 / 35',54.3,41.9,1.33,77],
+    ['Gophie',152,.479,9.9,11.8,1.55,'3 / 34',47.6,43.2,1.10,60],
+    ['Imthebest',149,.509,10.7,16.1,1.27,'2 / 35',32.5,22.0,.85,72],
+    ['Loganw',153,.513,8.5,9.2,1.82,'1 / 34',45.5,19.4,1.00,73],
+    ['Bort',123,.516,10.6,14.6,1.34,'0 / 29',45.5,56.7,1.05,67],
+    ['Vnx',136,.517,2.9,11.0,2.05,'0 / 35',51.3,35.1,1.10,62],
+    ['Jeian',156,.525,11.5,14.7,1.77,'1 / 35',45.8,44.2,1.35,79],
+    ['Iynx',129,.526,7.0,13.2,1.66,'1 / 35',51.5,42.1,1.40,61],
+    ['Ellaria',153,.544,13.7,16.3,2.20,'0 / 35',25.6,47.2,1.80,86],
+    ['Ryuma',147,.550,8.2,12.9,1.71,'1 / 35',50.0,50.0,1.05,70],
+    ['Dodyy',135,.561,5.2,15.6,1.79,'0 / 33',66.7,40.4,1.40,74],
+    ['Bootythweat',84,.642,10.7,27.4,5.62,'0 / 29',13.8,34.6,.90,55],
+    ['Kazugz',143,.648,14.7,30.8,2.71,'0 / 33',31.0,31.6,1.00,56]
+  ];
+  var arrivalBody=document.querySelector('#arrivalTable tbody');
+  function drawArrival(filter){var rows=arrival.filter(function(r){return r[0].toLowerCase().indexOf(filter.toLowerCase())>-1});renderRows(arrivalBody,rows,function(r){return ['<span class="rank">'+String(arrival.indexOf(r)+1).padStart(2,'0')+'</span>'+r[0],r[1],r[2].toFixed(3),r[3].toFixed(1)+'%',r[4].toFixed(1)+'%',r[5].toFixed(2)+'s',r[6],r[7].toFixed(1)+'%',r[8].toFixed(1)+'%',r[9].toFixed(2),r[10]+'%']},['Player','Targets','Mean rank','First %','Last %','Pull delay','First-in','Early Sunder','Late Sunder','Eff. CPM','Sunder eff.']);markYou(arrivalBody);installHeaderTooltips(document.getElementById('arrivalTable'),tooltipSets.arrivalTable)}
+  drawArrival('');document.getElementById('arrivalSearch').addEventListener('input',function(){drawArrival(this.value)});
+
+  var iv=[
+    ['Junsa',9.57,9.4,2.97,46,182,35,26],['Ellaria',8.92,9.0,2.56,72,341,47,12],['Nalga',8.90,8.8,2.84,53,204,32,16],['Dinkie',8.84,8.8,2.91,45,180,31,10],['Gophie',8.62,8.7,2.77,44,162,32,29],['Pinaclex',8.58,8.8,2.72,73,288,30,26],['Vnx',8.42,8.4,2.62,44,188,41,27],['Egg',8.39,8.7,2.48,78,305,31,31],['Daddyshart',8.38,8.4,2.50,41,156,29,27],['Sgtboolaid',8.04,8.1,2.55,44,156,18,20],['Loganw',7.91,8.0,2.51,40,155,35,15],['Ejaxtwo',7.89,8.2,2.29,80,315,30,19],['Ryuma',7.81,8.0,2.58,42,129,12,18],['Jeian',7.72,7.8,2.46,54,197,26,14],['Iynx',7.65,7.7,2.38,56,263,45,36],['Imthebest',7.52,7.3,2.41,34,164,47,13],['Bort',7.27,7.3,2.30,42,143,21,21],['Dodyy',7.25,7.5,2.30,56,201,25,20],['Tankina',7.10,7.2,2.07,49,216,41,23],['Sempai',6.59,6.7,1.83,57,242,39,44],['Kazugz',6.54,6.8,2.07,40,158,32,31],['Sven',5.79,6.0,1.63,47,208,36,17],['Vincint',5.18,5.6,1.33,97,415,41,78],['Bootythweat',3.78,3.9,1.01,36,193,61,30]
+  ];
+  var ivBody=document.querySelector('#ivTable tbody');
+  renderRows(ivBody,iv,function(r){var d=Math.round((r[1]-r[2])*10)/10;var dc=d>0?'good':d<0?'bad':'neutral';return ['<span class="rank">'+String(iv.indexOf(r)+1).padStart(2,'0')+'</span>'+r[0],'<strong>'+r[1].toFixed(2)+'</strong>',r[2].toFixed(1),'<span class="delta '+dc+'">'+(d>0?'+':'')+d.toFixed(1)+'</span>',roleTag(r[0]),r[3].toFixed(2)+'M',r[4],r[5]+'k',r[6]+'%',r[7]]},['Warrior','IV Score','PMS','Delta','Role','Damage','Eff. Sunders','Sunder value','Worthy %','Wasted at cap']);markYou(ivBody);installHeaderTooltips(document.getElementById('ivTable'),tooltipSets.ivTable);
+
+  function renderRows(body,rows,mapper,labels){body.innerHTML='';if(!rows.length){body.innerHTML='<tr><td class="empty" colspan="10">No matching players</td></tr>';return}rows.forEach(function(r){var tr=document.createElement('tr');mapper(r).forEach(function(val,i){var td=document.createElement('td');td.dataset.label=labels[i];td.innerHTML=val;if(i===0)td.className='name';if((labels[i]||'').toLowerCase()==='total'||(labels[i]||'').toLowerCase()==='efficiency')td.classList.add('bar-cell');tr.appendChild(td)});body.appendChild(tr)})}
+  function markYou(body){[].slice.call(body.querySelectorAll('tr')).forEach(function(tr){var n=tr.querySelector('.name');if(n&&n.textContent.indexOf('Ellaria')>-1)tr.classList.add('you')})}
+  Object.keys(tooltipSets).forEach(function(id){installHeaderTooltips(document.getElementById(id),tooltipSets[id])});
+  function makeSortable(table){[].slice.call(table.querySelectorAll('th')).forEach(function(th,index){th.addEventListener('click',function(){var body=table.tBodies[0],rows=[].slice.call(body.rows),asc=th.dataset.dir!=='asc';rows.sort(function(a,b){var av=a.cells[index].textContent.trim().replace(/[^0-9.\-]/g,''),bv=b.cells[index].textContent.trim().replace(/[^0-9.\-]/g,'');if(index===0||isNaN(parseFloat(av))||isNaN(parseFloat(bv)))return asc?a.cells[index].textContent.localeCompare(b.cells[index].textContent):b.cells[index].textContent.localeCompare(a.cells[index].textContent);return asc?parseFloat(av)-parseFloat(bv):parseFloat(bv)-parseFloat(av)});rows.forEach(function(r){body.appendChild(r)});th.dataset.dir=asc?'asc':'desc'})})}
+  var tpClassOf={Winterly:'Mage',Lumberyak:'Mage',Xmage:'Mage',Flaps:'Rogue',Kurassa:'Hunter',Bernabini:'Warlock'};
+  var tpScore={
+    raid:[["Nalga",9.49,1614.832,"95.7%","45/47"],["Gophie",9.33,1578.815,"95.7%","45/47"],["Dinkie",9.28,1560.822,"95.7%","45/47"],["Junsa",9.27,1563.810,"95.7%","45/47"],["Sgtboolaid",9.07,1495.808,"97.9%","46/47"],["Ryuma",8.91,1445.828,"95.7%","45/47"],["Jeian",8.87,1444.816,"95.7%","45/47"],["Bort",8.80,1503.790,"85.1%","40/47"],["Iynx",8.79,1421.813,"95.7%","45/47"],["Pinaclex",8.76,1424.799,"95.7%","45/47"],["Vnx",8.74,1412.805,"95.7%","45/47"],["Loganw",8.73,1405.813,"95.7%","45/47"],["Ejaxtwo",8.70,1384.829,"95.7%","45/47"],["Ellaria",8.34,1297.803,"95.7%","45/47"],["Imthebest",8.33,1290.790,"97.9%","46/47"],["Dodyy",8.30,1283.804,"95.7%","45/47"],["Daddyshart",7.84,1158.775,"97.9%","46/47"],["Kazugz",7.54,1113.733,"95.7%","45/47"],["Winterly",7.13,966.737,"100.0%","47/47"],["Lumberyak",6.38,824.664,"95.7%","45/47"],["Xmage",6.14,795.673,"87.2%","41/47"],["Flaps",4.79,613.486,"74.5%","35/47"],["Kurassa",3.98,350.419,"87.2%","41/47"],["Bernabini",3.03,347.366,"46.8%","22/47"]],
+    spider:[["Bort",9.67,1285.867,"100.0%","12/12"],["Iynx",9.61,1275.861,"100.0%","12/12"],["Junsa",9.30,1207.853,"100.0%","12/12"],["Gophie",9.24,1186.867,"100.0%","12/12"],["Jeian",9.20,1161.891,"100.0%","12/12"],["Dinkie",8.99,1147.833,"100.0%","12/12"],["Ryuma",8.66,1056.858,"100.0%","12/12"],["Imthebest",8.62,1031.882,"100.0%","12/12"],["Nalga",8.60,1031.876,"100.0%","12/12"],["Daddyshart",8.58,1022.881,"100.0%","12/12"],["Ejaxtwo",8.46,1024.830,"100.0%","12/12"],["Sgtboolaid",8.46,1040.803,"100.0%","12/12"],["Loganw",8.29,983.835,"100.0%","12/12"],["Ellaria",8.08,939.826,"100.0%","12/12"],["Dodyy",8.03,921.835,"100.0%","12/12"],["Pinaclex",7.96,908.830,"100.0%","12/12"],["Vnx",7.82,875.828,"100.0%","12/12"],["Lumberyak",7.06,751.740,"100.0%","12/12"],["Kazugz",7.05,743.747,"100.0%","12/12"],["Winterly",6.99,717.770,"100.0%","12/12"],["Xmage",5.93,488.735,"100.0%","12/12"],["Bernabini",4.88,752.329,"41.7%","5/12"],["Kurassa",3.32,218.221,"91.7%","11/12"],["Flaps",1.22,67.173,"25.0%","3/12"]],
+    plague:[["Nalga",9.63,1886.852,"100.0%","8/8"],["Sgtboolaid",9.24,1757.847,"100.0%","8/8"],["Dinkie",9.11,1689.873,"100.0%","8/8"],["Vnx",9.10,1708.847,"100.0%","8/8"],["Gophie",8.88,1667.808,"100.0%","8/8"],["Junsa",8.85,1627.842,"100.0%","8/8"],["Iynx",8.81,1621.834,"100.0%","8/8"],["Ryuma",8.78,1592.855,"100.0%","8/8"],["Loganw",8.72,1611.810,"100.0%","8/8"],["Bort",8.64,1549.851,"100.0%","8/8"],["Jeian",8.61,1626.747,"100.0%","8/8"],["Pinaclex",8.59,1578.796,"100.0%","8/8"],["Imthebest",8.54,1492.876,"100.0%","8/8"],["Ejaxtwo",8.51,1475.885,"100.0%","8/8"],["Ellaria",8.17,1419.811,"100.0%","8/8"],["Daddyshart",8.11,1404.808,"100.0%","8/8"],["Dodyy",7.94,1341.812,"100.0%","8/8"],["Kazugz",7.74,1287.796,"100.0%","8/8"],["Winterly",6.14,791.733,"100.0%","8/8"],["Xmage",5.44,643.624,"100.0%","8/8"],["Lumberyak",5.40,640.615,"100.0%","8/8"],["Flaps",4.55,539.492,"87.5%","7/8"],["Kurassa",3.47,302.336,"87.5%","7/8"],["Bernabini",3.05,299.272,"75.0%","6/8"]],
+    military:[["Iynx",9.44,2010.824,"94.1%","16/17"],["Dinkie",9.22,1935.819,"94.1%","16/17"],["Gophie",9.20,1908.839,"94.1%","16/17"],["Jeian",9.20,1895.852,"94.1%","16/17"],["Bort",9.17,1931.803,"94.1%","16/17"],["Nalga",9.04,1862.825,"94.1%","16/17"],["Junsa",8.97,1869.790,"94.1%","16/17"],["Pinaclex",8.77,1757.834,"94.1%","16/17"],["Sgtboolaid",8.69,1698.819,"100.0%","17/17"],["Vnx",8.57,1713.799,"94.1%","16/17"],["Imthebest",8.47,1665.814,"94.1%","16/17"],["Ryuma",8.41,1631.828,"94.1%","16/17"],["Loganw",8.33,1590.838,"94.1%","16/17"],["Ejaxtwo",8.25,1560.839,"94.1%","16/17"],["Dodyy",8.05,1531.790,"94.1%","16/17"],["Ellaria",7.91,1450.825,"94.1%","16/17"],["Daddyshart",7.65,1369.809,"94.1%","16/17"],["Winterly",6.70,1098.677,"100.0%","17/17"],["Kazugz",6.82,1161.704,"94.1%","16/17"],["Lumberyak",6.53,1045.716,"94.1%","16/17"],["Xmage",6.42,1148.653,"82.4%","14/17"],["Flaps",5.79,873.608,"94.1%","16/17"],["Kurassa",4.06,460.460,"82.4%","14/17"],["Bernabini",2.18,371.230,"29.4%","5/17"]],
+    construct:[["Nalga",9.23,1767.772,"90.0%","9/10"],["Sgtboolaid",8.58,1560.769,"90.0%","9/10"],["Junsa",8.57,1565.758,"90.0%","9/10"],["Ryuma",8.57,1555.770,"90.0%","9/10"],["Gophie",8.54,1573.736,"90.0%","9/10"],["Ejaxtwo",8.44,1517.769,"90.0%","9/10"],["Dinkie",8.38,1496.769,"90.0%","9/10"],["Loganw",8.38,1502.763,"90.0%","9/10"],["Pinaclex",8.30,1504.726,"90.0%","9/10"],["Vnx",8.14,1434.751,"90.0%","9/10"],["Ellaria",8.11,1430.743,"90.0%","9/10"],["Dodyy",7.99,1364.776,"90.0%","9/10"],["Kazugz",7.71,1337.698,"90.0%","9/10"],["Winterly",7.62,1192.765,"100.0%","10/10"],["Jeian",7.08,1096.747,"90.0%","9/10"],["Imthebest",6.82,1045.628,"100.0%","10/10"],["Daddyshart",6.44,923.626,"100.0%","10/10"],["Iynx",5.94,744.729,"90.0%","9/10"],["Xmage",5.90,911.664,"70.0%","7/10"],["Lumberyak",5.77,814.575,"90.0%","9/10"],["Flaps",5.42,726.546,"90.0%","9/10"],["Bort",4.91,939.474,"40.0%","4/10"],["Kurassa",4.68,420.628,"90.0%","9/10"],["Bernabini",3.22,240.508,"60.0%","6/10"]]
+  };
+  var tpScope='raid';
+  var tpBody=document.querySelector('#tpScoreTable tbody');
+  function drawTpScore(filter){
+    var source=tpScore[tpScope];
+    var rows=source.filter(function(r){return r[0].toLowerCase().indexOf(filter.toLowerCase())>-1});
+    renderRows(tpBody,rows,function(r){return ['<span class="rank">'+String(source.indexOf(r)+1).padStart(2,'0')+'</span>'+r[0],tpClassOf[r[0]]||'Warrior','<strong>'+r[1].toFixed(2)+'</strong>',Math.floor(r[2]).toLocaleString('en-US'),(r[2]%1).toFixed(3),r[3],r[4]]},['Player','Class','Score','Pull DPS','Activity','Engage','Pulls']);
+    markYou(tpBody);installHeaderTooltips(document.getElementById('tpScoreTable'),tooltipSets.tpScoreTable);
+  }
+  drawTpScore('');
+  document.getElementById('tpScopeTabs').querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){document.getElementById('tpScopeTabs').querySelectorAll('button').forEach(function(x){x.classList.remove('active')});b.classList.add('active');tpScope=b.dataset.scope;drawTpScore(document.getElementById('tpScoreSearch').value)})});
+  document.getElementById('tpScoreSearch').addEventListener('input',function(){drawTpScore(this.value)});
+  var tpPullSearch=document.getElementById('tpPullSearch');
+  tpPullSearch.addEventListener('input',function(){
+    var q=tpPullSearch.value.toLowerCase();
+    document.querySelectorAll('#tpPullTable tbody tr').forEach(function(row){
+      var text='';
+      row.querySelectorAll('td').forEach(function(cell){cell.childNodes.forEach(function(n){if(n.nodeType===3)text+=n.textContent+' '})});
+      row.style.display=text.toLowerCase().indexOf(q)>-1?'':'none';
+    });
+  });
+  makeSortable(document.getElementById('tpPullTable'));makeSortable(document.getElementById('tpScoreTable'));
+  showSection(location.hash.slice(1)||'overview',false);
+})();
+</script>
+</body>
+</html>
