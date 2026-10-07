@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>Judgement of Light — Oct 6 (Trash Focus)</title>
+<style>
+:root{
+  --bg:#f6f4ef; --panel:#fffdf8; --panel2:#efece3; --ink:#1c1a15; --muted:#6b6557; --line:#ddd6c4;
+  --gold:#9a6b00; --gold-bg:#fdf3d3; --gold-ink:#5c3f00;
+  --green:#1a7a3d; --green-bg:#e2f3e6; --red:#b42318; --red-bg:#fdecea; --amber:#9a5a00; --amber-bg:#fef0d6;
+  --blue:#175cd3; --blue-bg:#e8effe; --teal:#0e7490; --teal-bg:#e0f2f7;
+  --bar-track:#e7e2d3;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#14120e; --panel:#1e1b15; --panel2:#262218; --ink:#f0ead8; --muted:#a89f8a; --line:#3a3527;
+    --gold:#e8b84b; --gold-bg:#3a2f0e; --gold-ink:#ffd97a;
+    --green:#4ade80; --green-bg:#123324; --red:#f87171; --red-bg:#3b1512; --amber:#fbbf24; --amber-bg:#3a2a0a;
+    --blue:#7aa7ff; --blue-bg:#16294f; --teal:#38bdf8; --teal-bg:#0d2f3f;
+    --bar-track:#3a3527;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.55}
+a{color:var(--blue)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 18px 64px}
+.topnav{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 0;display:flex;gap:8px;flex-wrap:wrap}
+.topnav a{color:var(--ink);text-decoration:none;font-size:13px;font-weight:700;padding:6px 10px;border:1px solid var(--line);border-radius:999px;background:var(--panel)}
+.topnav a:hover{border-color:var(--gold)}
+h1,h2,h3{font-family:Iowan Old Style,Palatino,Georgia,serif;line-height:1.15;margin:0}
+h1{font-size:clamp(30px,5vw,52px);letter-spacing:-.02em}
+h2{font-size:clamp(24px,3.4vw,34px);margin-bottom:8px}
+h3{font-size:19px}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:800}
+.lede{font-size:18px;color:var(--muted);max-width:820px}
+.hero{padding:28px 0 8px}
+.hero-grid{display:grid;grid-template-columns:1.5fr .9fr;gap:18px;align-items:start;margin-top:18px}
+@media(max-width:860px){.hero-grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+.card h3{margin-bottom:6px}
+.muted{color:var(--muted)} .small{font-size:13px} .tiny{font-size:12px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}
+@media(max-width:860px){.stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:460px){.stats{grid-template-columns:1fr}}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+.stat b{font-size:30px;display:block;line-height:1;font-family:Georgia,serif}
+.stat span{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.score-big{font-size:56px;font-family:Georgia,serif;line-height:1}
+.bar{height:10px;background:var(--bar-track);border-radius:99px;overflow:hidden;margin:8px 0}
+.bar i{display:block;height:100%;background:var(--gold)}
+.bar.green i{background:var(--green)} .bar.red i{background:var(--red)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:900px){.grid2,.grid3{grid-template-columns:1fr}}
+section{margin-top:36px;scroll-margin-top:70px}
+.verdict{border-left:5px solid var(--gold);background:var(--gold-bg);color:var(--gold-ink);border-radius:0 12px 12px 0;padding:16px 18px}
+@media(prefers-color-scheme:dark){.verdict{color:var(--gold-ink)}}
+.tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:999px;vertical-align:middle}
+.tag.best{background:var(--green-bg);color:var(--green)} .tag.waste{background:var(--red-bg);color:var(--red)}
+.tag.missed{background:var(--amber-bg);color:var(--amber)} .tag.skip{background:var(--panel2);color:var(--muted)}
+.tag.info{background:var(--blue-bg);color:var(--blue)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+@media(max-width:720px){
+  table,thead,tbody,tr,th,td{display:block;width:100%}
+  thead{display:none}
+  tr{border:1px solid var(--line);border-radius:12px;margin-bottom:10px;background:var(--panel);padding:8px 4px}
+  td{border:none;padding:5px 10px}
+  td.num{text-align:left}
+  td::before{content:attr(data-l);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;display:block}
+}
+.pull-list{display:grid;gap:10px}
+.pull{display:grid;grid-template-columns:170px 1fr auto;gap:12px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+@media(max-width:720px){.pull{grid-template-columns:1fr}}
+.pull b{font-size:15px}
+.pull .nums{font-variant-numeric:tabular-nums;text-align:right;font-size:13px}
+@media(max-width:720px){.pull .nums{text-align:left}}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.filters button{font:inherit;font-size:13px;font-weight:700;padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.filters select{font:inherit;font-size:13px;padding:7px 10px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--ink)}
+.playbook{counter-reset:pb;display:grid;gap:12px}
+.rule{display:flex;gap:14px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+.rule::before{counter-increment:pb;content:counter(pb);font-family:Georgia,serif;font-size:28px;font-weight:700;color:var(--gold);line-height:1;flex:0 0 auto}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.kv:last-child{border:none}
+.patch{border:2px solid var(--green);background:var(--green-bg);border-radius:14px;padding:18px}
+ul.tight{margin:6px 0;padding-left:18px} ul.tight li{margin:4px 0}
+.foot{margin-top:40px;border-top:1px solid var(--line);padding-top:16px;color:var(--muted);font-size:13px}
+details{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+summary{font-weight:800;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="topnav" aria-label="Sections">
+  <a href="#verdict">Verdict</a><a href="#best">Best packs</a><a href="#wasted">Wasted</a><a href="#missed">Missed</a><a href="#playbook">Playbook</a><a href="#allpulls">All pulls</a><a href="#judges">Judges</a><a href="#bosses">Bosses ↓ separate</a><a href="#methods">Methods</a>
+</nav>
+
+<header class="hero">
+  <p class="eyebrow">Naxxramas · Oct 6, 2026 · Junsa POV log · Trash focus</p>
+  <h1>Judgement of Light on trash: where it pays, where it’s wasted</h1>
+  <p class="lede">JoL is a free 81 HP heal on every melee hit against the judged target — but only if melee are actually hurt and the target lives long enough. On Oct 6 it returned <strong>79,756 effective healing on trash</strong> from just 34 applications, almost all of it from a handful of packs. The rest of the instance shows the two failure modes clearly: judging mobs that die in seconds, and never judging the long Construct pulls at all.</p>
+  <div class="hero-grid">
+    <div class="card">
+      <h3>The one-sentence answer</h3>
+      <p><strong>Judge gargoyles, slimes, belchers, golems and scientist packs in the first second — and stop judging everything else.</strong> Gargoyle pairs alone returned 29,081 effective in ~20 seconds across two pulls. Construct scientist/slime pulls of the same shape returned zero, because they were never judged.</p>
+      <p class="small muted">Bosses are kept in their own section at the bottom (§ Bosses). Patchwerk is <em>not</em> a miss — see the callout there.</p>
+    </div>
+    <div class="card">
+      <span class="small" style="font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Trash JoL Score</span>
+      <div class="score-big">3.7 <span style="font-size:22px;color:var(--muted)">/ 10</span></div>
+      <div class="bar red"><i style="width:37%"></i></div>
+      <div class="kv"><span>Coverage (pulls ≥10s, duration-weighted)</span><b>19.4%</b></div>
+      <div class="kv"><span>Trash efficiency (effective ÷ gross)</span><b>53.6%</b></div>
+      <p class="tiny muted">Trash Score = 10 × (0.50 × coverage + 0.50 × efficiency). When JoL is used on trash it works reasonably well (53.6%) — it just isn’t used on 4 out of 5 seconds of trash time. Coverage, not efficiency, is the drag.</p>
+    </div>
+  </div>
+</header>
+
+<div class="stats">
+  <div class="stat"><span>Trash effective healing</span><b>79,756</b><p class="small muted" style="margin:6px 0 0">from 148,717 gross on trash</p></div>
+  <div class="stat"><span>Pulls judged</span><b>25 of 53</b><p class="small muted" style="margin:6px 0 0">34 applications on trash all night</p></div>
+  <div class="stat"><span>Best single pull</span><b>14,819</b><p class="small muted" style="margin:6px 0 0">Plague 6 — gargoyle pair, 10.4s, 21.1% overheal</p></div>
+  <div class="stat"><span>Whole-night context</span><b>500,376</b><p class="small muted" style="margin:6px 0 0">effective from 15,178 procs · 59.2% overhealed overall</p></div>
+</div>
+
+<section id="verdict">
+  <h2>Verdict: three patterns explain almost everything</h2>
+  <div class="grid3">
+    <div class="card"><span class="tag best">Pays</span><h3 style="margin-top:8px">Tanky pair + full melee stack + real damage</h3><p class="small">Every top pack shares the shape: 1–3 mobs that live 7–15s, the whole melee pile on the judged target, and incoming damage that leaves people below full HP so procs land. Gargoyles are the prototype; Sewage Slimes and Sludge Belchers splash melee the same way (5–22% overheal on Construct pulls).</p></div>
+    <div class="card"><span class="tag waste">Wasted</span><h3 style="margin-top:8px">Late, or onto a dying mob</h3><p class="small">Every wasted judgement was applied at +3.4s or later, or onto a mob with under ~5s left to live. 17 applications all night landed on mobs that died in &lt;5s. Necropolis Acolytes: 5 applications, average aura 1.0s. The GCD and re-seal buy almost nothing.</p></div>
+    <div class="card"><span class="tag missed">Missed</span><h3 style="margin-top:8px">Long pulls never judged at all</h3><p class="small">The biggest upside isn’t fixing the waste — it’s the Construct Wing. Scientist/slime Pulls 5, 6, 11 and 13 (16–37s each) all went unjudged while judged Construct pulls in the same wing returned at 5–22% overheal. Same mobs, same melee damage — just no judgement.</p></div>
+  </div>
+  <div class="verdict" style="margin-top:14px"><strong>The 8-second rule the data supports:</strong> if the target won’t live 8s+, or the pull won’t last 10s+, don’t spend the GCD. If it will — judge it in the first 2 seconds, on the longest-lived mob, and don’t chase when it dies.</div>
+</section>
+
+<section id="best">
+  <h2>✓ Best packs — judged well</h2>
+  <p class="muted">Ranked by effective healing. Note the timing column in the notes: every one of these was judged inside the first ~2.6 seconds.</p>
+  <div class="card" style="padding:6px 14px">
+  <table>
+    <thead><tr><th>Pull</th><th class="num">Duration</th><th class="num">Coverage</th><th class="num">Effective</th><th class="num">Overheal</th><th>What happened</th></tr></thead>
+    <tbody>
+      <tr><td data-l="Pull"><b>Plague 6</b> — 2× Stoneskin Gargoyle</td><td class="num" data-l="Duration">10.4s</td><td class="num" data-l="Coverage">97.1%</td><td class="num" data-l="Effective"><b>14,819</b></td><td class="num" data-l="Overheal">21.1%</td><td data-l="Notes">Both gargoyles judged ≤1.0s in — Holyhaze + Nuu split the pair. The model pull.</td></tr>
+      <tr><td data-l="Pull"><b>Plague 7</b> — 2× Stoneskin Gargoyle</td><td class="num" data-l="Duration">9.5s</td><td class="num" data-l="Coverage">99.8%</td><td class="num" data-l="Effective"><b>14,262</b></td><td class="num" data-l="Overheal">18.5%</td><td data-l="Notes">Same split-pair pattern, same result.</td></tr>
+      <tr><td data-l="Pull"><b>Construct 15</b> — 3× Sewage Slime</td><td class="num" data-l="Duration">18.8s</td><td class="num" data-l="Coverage">47.8%</td><td class="num" data-l="Effective"><b>8,370</b></td><td class="num" data-l="Overheal">5.2%</td><td data-l="Notes">One judgement at +1.0s. Melee took 122,538 that pull — enormous demand, almost no overheal. Even at half coverage it paid.</td></tr>
+      <tr><td data-l="Pull"><b>Plague 4</b> — 2× Stoneskin Gargoyle</td><td class="num" data-l="Duration">10.2s</td><td class="num" data-l="Coverage">94.3%</td><td class="num" data-l="Effective"><b>6,538</b></td><td class="num" data-l="Overheal">61.6%</td><td data-l="Notes">Gargoyle pair again — judged right, raid was healthier so more overhealed.</td></tr>
+      <tr><td data-l="Pull"><b>Plague 5</b> — 1× Stoneskin Gargoyle</td><td class="num" data-l="Duration">5.6s</td><td class="num" data-l="Coverage">100%</td><td class="num" data-l="Effective"><b>4,414</b></td><td class="num" data-l="Overheal">47.1%</td><td data-l="Notes">Single gargoyle, both judges on it from the opener.</td></tr>
+      <tr><td data-l="Pull"><b>Construct 1</b> — 3× Sewage Slime</td><td class="num" data-l="Duration">5.3s</td><td class="num" data-l="Coverage">71.8%</td><td class="num" data-l="Effective"><b>3,645</b></td><td class="num" data-l="Overheal">6.2%</td><td data-l="Notes">Slime judged at +1.5s. Short pull, still paid — slime splash keeps melee hurt.</td></tr>
+      <tr><td data-l="Pull"><b>Construct 9</b> — scientists + belchers</td><td class="num" data-l="Duration">25.1s</td><td class="num" data-l="Coverage">47.1%</td><td class="num" data-l="Effective"><b>2,708</b></td><td class="num" data-l="Overheal">22.3%</td><td data-l="Notes">Sludge Belcher judged at +2.6s, aura 11.8s. Melee took 86,438 — proof the scientist-pack shape pays; more coverage was available.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="small muted">Stoneskin Gargoyles across the night: 9 applications, average aura 6.6s — the best trash target in the instance. Slimes are second: Sewage Slime judgements ran 5–6% overheal because the splash damage is constant.</p>
+</section>
+
+<section id="wasted">
+  <h2>✕ Wasted — a GCD for almost nothing</h2>
+  <p class="muted">Two distinct wastes: <strong>chasing</strong> (re-judging onto trickle mobs mid-pull) and <strong>short-pull judging</strong> (spending the opener GCD on packs that die in 3–7s).</p>
+  <div class="grid2">
+    <div class="card">
+      <h3>Chasing: Plague 3 &amp; Plague 8</h3>
+      <p class="small"><b>Plague 3</b> (29.2s) — 4 applications, <b>2,020 effective, 88.6% overheal</b>. First ghoul judged at +3.2s died 2.0s later; re-judges at +13.2 / +15.1 / +23.2 chased trickle mobs while the raid sat topped off. Coverage read 61.6% and it still returned nothing — coverage on the <em>wrong</em> mobs doesn’t count.</p>
+      <p class="small"><b>Plague 8</b> (44.2s, the longest real trash pull) — only <b>17.8% covered, 2,141 effective</b>. All 3 applications landed on dying adds: a Plague Beast with 3.9s to live, Mutated Grubs with 1–3s. The long-lived target was never judged. A 44-second pull is exactly where JoL should shine.</p>
+    </div>
+    <div class="card">
+      <h3>Short Military pulls: judged, gone in seconds</h3>
+      <table>
+        <thead><tr><th>Pull</th><th class="num">Effective</th><th class="num">Overheal</th></tr></thead>
+        <tbody>
+          <tr><td data-l="Pull">Military 8 — Deathknight at +3.4s of a 6.6s pull</td><td class="num" data-l="Eff">533</td><td class="num" data-l="OH">80.1%</td></tr>
+          <tr><td data-l="Pull">Military 10 — Deathknight, 7.1s pull</td><td class="num" data-l="Eff">662</td><td class="num" data-l="OH">84.3%</td></tr>
+          <tr><td data-l="Pull">Military 2 / 6 / 14 / 15 / 16 — Shades, weapons, Deathknights in 3–7s pulls</td><td class="num" data-l="Eff">648–1,205</td><td class="num" data-l="OH">59–79%</td></tr>
+        </tbody>
+      </table>
+      <p class="small muted">Deathknight / Shade / Unholy-weapon packs die too fast and don’t splash the melee pile. Judging them is habit, not value — leave Military short pulls unjudged.</p>
+    </div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <h3>Judged-mob anti-patterns</h3>
+    <div class="grid2">
+      <div><div class="kv"><span>Necropolis Acolyte — 5 applications</span><b>avg aura 1.0s</b></div><div class="kv"><span>Mutated Grub — 2 applications</span><b>avg aura 1.8s · TTD ~2s</b></div><div class="kv"><span>Shade of Naxxramas — judged at +2.3s</span><b>aura 0.8s</b></div></div>
+      <div><div class="kv"><span>Stoneskin Gargoyle (contrast) — 9 applications</span><b>avg aura 6.6s</b></div><div class="kv"><span>Sludge Belcher — 1 application</span><b>aura 11.8s</b></div><div class="kv"><span>Plague Slime — 2 applications</span><b>avg aura 8.0s</b></div></div>
+    </div>
+    <p class="small muted" style="margin-top:8px">Aura lifetime is the tell: under ~3s of aura, the judgement almost never earns its GCD back.</p>
+  </div>
+</section>
+
+<section id="missed">
+  <h2>◎ Missed — no JoL, ranked by melee damage taken</h2>
+  <p class="muted">Melee damage taken is the demand signal: where melee soaked the most with no judgement up is where procs would have landed. Not all of these should be judged — the short ones are judgement calls — but the Construct block is systematic.</p>
+  <div class="card" style="padding:6px 14px">
+  <table>
+    <thead><tr><th>Pull</th><th class="num">Duration</th><th class="num">Melee taken</th><th>Composition / read</th></tr></thead>
+    <tbody>
+      <tr><td data-l="Pull"><b>Military 4</b></td><td class="num" data-l="Dur">9.5s</td><td class="num" data-l="Melee taken">107,493</td><td data-l="Read">3× Skeletal Smith + Shade — smiths hammer melee. Short; only if a judge is free on the opener.</td></tr>
+      <tr><td data-l="Pull"><b>Spider 1</b></td><td class="num" data-l="Dur">17.4s</td><td class="num" data-l="Melee taken">80,352</td><td data-l="Read">Carrion Spinners + Crypt Reaver. Long enough, hurt enough — add to the judged list.</td></tr>
+      <tr><td data-l="Pull"><b>Military 13</b> (sapper bomb pull)</td><td class="num" data-l="Dur">11.3s</td><td class="num" data-l="Melee taken">73,679</td><td data-l="Read">Melee take real damage, but the pull is a called bomb — a judgement would have to be the opener GCD. Optional.</td></tr>
+      <tr><td data-l="Pull"><b>Construct 13</b> <span class="tag missed">Best missed candidate</span></td><td class="num" data-l="Dur">22.7s</td><td class="num" data-l="Melee taken">72,868</td><td data-l="Read">Surgical Assistants + Mad Scientists — identical shape to judged Construct 9, which paid at 22.3% overheal.</td></tr>
+      <tr><td data-l="Pull"><b>Construct 11</b></td><td class="num" data-l="Dur">16.4s</td><td class="num" data-l="Melee taken">52,431</td><td data-l="Read">Same scientist-pack shape as 13.</td></tr>
+      <tr><td data-l="Pull"><b>Plague 1</b></td><td class="num" data-l="Dur">12.6s</td><td class="num" data-l="Melee taken">52,750</td><td data-l="Read">4× Patchwork Golem — tanky, exactly the gargoyle profile in a different wing.</td></tr>
+      <tr><td data-l="Pull"><b>Construct 6</b></td><td class="num" data-l="Dur">16.6s</td><td class="num" data-l="Melee taken">40,606</td><td data-l="Read">Scientists + Sludge Belcher — the belcher is a proven JoL target (11.8s aura on Pull 9).</td></tr>
+      <tr><td data-l="Pull"><b>Construct 5</b></td><td class="num" data-l="Dur">37.2s</td><td class="num" data-l="Melee taken">40,361</td><td data-l="Read">17 Embalming Slimes + scientists — the longest unjudged pull of the night.</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section id="playbook">
+  <h2>The playbook — how to adjust</h2>
+  <p class="muted">Five rules, each traceable to a pull above. Nothing here changes assignments or routing — it’s purely which target gets the judgement GCD, and when.</p>
+  <div class="playbook">
+    <div class="rule"><div><h3>Judge by mob type, not by wing</h3><p class="small" style="margin:4px 0 0"><strong>Always:</strong> Stoneskin Gargoyles, slimes (Sewage / Embalming), Sludge Belchers, Patchwork Golems, scientist packs (Mad Scientist / Surgical Assistant). <strong>Skip:</strong> Deathknight / Shade / Unholy-weapon packs and anything dying in &lt;8s — the Military short-pull rows show why.</p></div></div>
+    <div class="rule"><div><h3>Split the pair — both paladins, first second</h3><p class="small" style="margin:4px 0 0">On two-tanky-mob pulls, each judge takes one mob inside the first second. That’s the Plague 6/7 pattern: 14k+ effective in ~10s, twice. A single judgement on one gargoyle leaves the other half of the melee pile unhealed.</p></div></div>
+    <div class="rule"><div><h3>Judge the longest-lived mob, once — no chasing</h3><p class="small" style="margin:4px 0 0">When the judged mob dies, re-judge only if a 10s+ target remains <em>and</em> melee are actually hurt. Plague 3 (4 apps, 88.6% overheal) and Plague 8 (3 apps, all on 1–4s adds) are the anti-examples.</p></div></div>
+    <div class="rule"><div><h3>Add the Construct scientist pulls, Spider 1 and Plague 1</h3><p class="small" style="margin:4px 0 0">Construct 5 / 6 / 11 / 13 join the judged list — same shapes that already paid on Construct 1 / 9 / 15. Spider 1 (17.4s, 80k melee taken) and Plague 1 golems (52.8k) with them. Leave Military short pulls alone.</p></div></div>
+    <div class="rule"><div><h3>First GCD matters more than coverage %</h3><p class="small" style="margin:4px 0 0">Every best pack was judged at +0 to +2.6s; every wasted one at +3.4s or later, or onto a dying add. If the judgement can’t be in the first two seconds on the right mob, it’s usually better not to throw it at all.</p></div></div>
+  </div>
+</section>
+
+<section id="allpulls">
+  <h2>All trash pulls</h2>
+  <p class="muted">Every counted pull except Construct 14 (the Grobbulus wipe span — excluded from all trash stats). Filter to audit the playbook against your own memory of the night.</p>
+  <div class="filters" role="group" aria-label="Pull filters">
+    <button data-f="all" aria-pressed="true">All</button>
+    <button data-f="judged" aria-pressed="false">Judged</button>
+    <button data-f="unjudged" aria-pressed="false">Never judged</button>
+    <button data-f="longmiss" aria-pressed="false">Long &amp; unjudged (≥10s)</button>
+    <select id="wingSel" aria-label="Wing"><option value="all">All wings</option><option>Spider Wing</option><option>Plague Wing</option><option>Military Wing</option><option>Construct Wing</option></select>
+    <span class="small muted" id="pullCount" style="align-self:center"></span>
+  </div>
+  <div class="pull-list" id="pullList"></div>
+</section>
+
+<section id="judges">
+  <h2>The judges</h2>
+  <p class="muted">Only two paladins judged Light all night, in clearly different jobs — which is why there’s no single per-paladin score. Nearly all trash judging is Holyhaze’s; Nuu is the second judge on gargoyle pairs.</p>
+  <div class="grid2">
+    <div class="card"><h3>Holyhaze — the opener</h3><div class="kv"><span>Applications</span><b>43</b></div><div class="kv"><span>Refreshes</span><b>30</b></div><div class="kv"><span>Distinct targets</span><b>41</b></div><div class="kv"><span>Boss uptime owned</span><b>~556s</b></div><p class="small muted">Owns almost every boss opener and effectively all trash judging. The playbook above is mostly his GCD to spend differently.</p></div>
+    <div class="card"><h3>Nuu — the maintainer</h3><div class="kv"><span>Applications</span><b>14</b></div><div class="kv"><span>Refreshes</span><b>41</b></div><div class="kv"><span>Distinct targets</span><b>13</b></div><div class="kv"><span>Signature</span><b>Loatheb held solo, 96.3%</b></div><p class="small muted">Second judge on the gargoyle pairs — the split that makes Plague 6/7 work. His value is refresh discipline, not application count.</p></div>
+  </div>
+  <div class="card" style="margin-top:14px"><h3>Who actually received the healing</h3><p class="small">Top recipients (effective, whole night): <b>Ellaria 26,325 · Nalga 25,570 · Loganw 25,243 · Sempai 23,121 · Gophie 22,459</b> — all melee and tanks. Casters get essentially nothing: they never hit the judged target. JoL is a melee-pile heal, which is exactly why target choice on trash matters.</p></div>
+</section>
+
+<section id="bosses">
+  <h2>Bosses — kept separate</h2>
+  <p class="muted">Boss judging is a different question from trash, so it lives down here on its own. Headline: boss coverage is genuinely good — <strong>84.5%</strong> on judgeable targets — and two fights carry the night.</p>
+  <div class="patch" style="margin:14px 0">
+    <h3>Patchwerk: 0% JoL — and that is correct. Do not judge him.</h3>
+    <p style="margin:6px 0 0">Hateful Strike targets the highest-HP non-tank, so melee DPS <strong>intentionally keep their HP low</strong> to keep strikes landing on the designated soakers. Judgement of Light would heal melee up <em>into</em> Hateful range — the “free heal” would actively break the strat. Patchwerk is therefore <strong>excluded from boss coverage</strong> in the score, as a deliberate non-use — the same category as skipping a sub-8s trash mob, not a miss. An earlier draft of this analysis flagged Patchwerk as the biggest gap; that was wrong and is retracted here.</p>
+  </div>
+  <div class="grid2">
+    <div class="card"><h3>Sapphiron — JoL’s showcase</h3><p class="small"><b>105,234 effective · 1,551 procs · 99.5% uptime · 16.2% overheal.</b> Constant frost-aura damage means nearly every proc lands on someone actually missing health. One fight is a fifth of JoL’s entire night.</p></div>
+    <div class="card"><h3>Loatheb — procs bypass the lockout</h3><p class="small"><b>61,450 effective · 2,455 procs · 96.3% uptime (Nuu).</b> JoL procs aren’t cast heals, so they flow straight through Loatheb’s healing lockout. Nuu’s refresh discipline — 91.2 of 94.7 seconds — is the model for long fights.</p></div>
+  </div>
+  <div class="card" style="padding:6px 14px;margin-top:14px">
+  <table>
+    <thead><tr><th>Boss</th><th class="num">Uptime</th><th class="num">Procs</th><th class="num">Effective</th><th class="num">Overheal</th><th>Note</th></tr></thead>
+    <tbody>
+      <tr><td data-l="Boss"><b>Sapphiron</b></td><td class="num" data-l="Uptime">99.5%</td><td class="num" data-l="Procs">1,551</td><td class="num" data-l="Eff">105,234</td><td class="num" data-l="OH">16.2%</td><td data-l="Note">Best fight in the game for JoL.</td></tr>
+      <tr><td data-l="Boss"><b>Loatheb</b></td><td class="num" data-l="Uptime">96.3%</td><td class="num" data-l="Procs">2,455</td><td class="num" data-l="Eff">61,450</td><td class="num" data-l="OH">69.1%</td><td data-l="Note">Nuu solo. Procs ignore the healing lockout.</td></tr>
+      <tr><td data-l="Boss"><b>Kel’Thuzad</b></td><td class="num" data-l="Uptime">~98% of boss-active</td><td class="num" data-l="Procs">1,493</td><td class="num" data-l="Eff">43,447</td><td class="num" data-l="OH">64.1%</td><td data-l="Note">Counted from boss activation (+229.7s).</td></tr>
+      <tr><td data-l="Boss"><b>Thaddius</b></td><td class="num" data-l="Uptime">covered</td><td class="num" data-l="Procs">1,408</td><td class="num" data-l="Eff">38,123</td><td class="num" data-l="OH">66.6%</td><td data-l="Note">Stalagg + Thaddius both covered.</td></tr>
+      <tr><td data-l="Boss"><b>Gluth</b></td><td class="num" data-l="Uptime">75.8%</td><td class="num" data-l="Procs">653</td><td class="num" data-l="Eff">32,237</td><td class="num" data-l="OH">38.6%</td><td data-l="Note">Real melee damage — efficient.</td></tr>
+      <tr><td data-l="Boss"><b>Faerlina</b></td><td class="num" data-l="Uptime">96.0%</td><td class="num" data-l="Procs">596</td><td class="num" data-l="Eff">29,676</td><td class="num" data-l="OH">38.5%</td><td data-l="Note">Efficient for the same reason.</td></tr>
+      <tr><td data-l="Boss"><b>Grobbulus</b></td><td class="num" data-l="Uptime">65.8%</td><td class="num" data-l="Procs">683</td><td class="num" data-l="Eff">26,833</td><td class="num" data-l="OH">51.5%</td><td data-l="Note">Opened at +1.4s, then a ~19s mid-fight lapse — pure refresh timing.</td></tr>
+      <tr><td data-l="Boss"><b>Heigan</b></td><td class="num" data-l="Uptime">91.8%</td><td class="num" data-l="Procs">855</td><td class="num" data-l="Eff">15,092</td><td class="num" data-l="OH">78.2%</td><td data-l="Note">Low raid damage — mostly overheal.</td></tr>
+      <tr><td data-l="Boss"><b>Four Horsemen</b></td><td class="num" data-l="Uptime">Blaumeux only</td><td class="num" data-l="Procs">319</td><td class="num" data-l="Eff">13,486</td><td class="num" data-l="OH">47.8%</td><td data-l="Note"><b>Fix:</b> only Blaumeux was judged, with a 13.6s gap. The melee stack opens on <b>Thane</b> — judge the kill target, re-judge on swaps.</td></tr>
+      <tr><td data-l="Boss"><b>Noth</b></td><td class="num" data-l="Uptime">90.5%</td><td class="num" data-l="Procs">683</td><td class="num" data-l="Eff">11,848</td><td class="num" data-l="OH">78.6%</td><td data-l="Note">Habit judging — low value.</td></tr>
+      <tr><td data-l="Boss"><b>Razuvious</b></td><td class="num" data-l="Uptime">87.5%</td><td class="num" data-l="Procs">811</td><td class="num" data-l="Eff">9,029</td><td class="num" data-l="OH">86.3%</td><td data-l="Note">Highest overheal of the night.</td></tr>
+      <tr><td data-l="Boss"><b>Anub’Rekhan</b></td><td class="num" data-l="Uptime">94.1%</td><td class="num" data-l="Procs">700</td><td class="num" data-l="Eff">8,377</td><td class="num" data-l="OH">85.2%</td><td data-l="Note">Low damage — procs can’t land.</td></tr>
+      <tr><td data-l="Boss"><b>Maexxna</b></td><td class="num" data-l="Uptime">94.1%</td><td class="num" data-l="Procs">653</td><td class="num" data-l="Eff">7,714</td><td class="num" data-l="OH">85.4%</td><td data-l="Note">Same shape as Anub.</td></tr>
+      <tr><td data-l="Boss"><b>Gothik</b></td><td class="num" data-l="Uptime">—</td><td class="num" data-l="Procs">0</td><td class="num" data-l="Eff">0</td><td class="num" data-l="OH">—</td><td data-l="Note">Excluded from coverage — boss isn’t hittable most of the fight. One 2.8s judgement on an add all fight; the live-side add pile is a possible trash-style target.</td></tr>
+      <tr><td data-l="Boss"><b>Patchwerk</b> <span class="tag skip">Intentional skip</span></td><td class="num" data-l="Uptime">0%</td><td class="num" data-l="Procs">0</td><td class="num" data-l="Eff">0</td><td class="num" data-l="OH">—</td><td data-l="Note">Correct non-use — see callout above. Excluded from coverage.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <h3>Overall JoL Score v1.1 — 5.4 / 10</h3>
+    <div class="bar"><i style="width:54%"></i></div>
+    <div class="kv"><span>Boss coverage (×0.45) — Patchwerk &amp; Gothik excluded</span><b>84.5%</b></div>
+    <div class="kv"><span>Trash coverage (×0.30)</span><b>19.4%</b></div>
+    <div class="kv"><span>Efficiency (×0.25) — 500,376 ÷ 1,227,095</span><b>40.8%</b></div>
+    <p class="small muted">Score = 10 × (0.45·boss + 0.30·trash + 0.25·efficiency). Boss judging is already a strength; essentially all the headroom in this score is the trash-coverage term — which is the point of this report. Efficiency is partly fight-intrinsic (procs fire whether or not the attacker is hurt), so week-over-week, weight coverage more.</p>
+    <p class="small"><b>Boss fixes, for completeness:</b> judge Thane first on 4HM and re-judge on swaps; close the Grobbulus / Blaumeux refresh gaps; keep Sapphiron and Loatheb exactly as they are — those two fights alone returned ~167k effective, a third of JoL’s night.</p>
+  </div>
+</section>
+
+<section id="methods">
+  <h2>Methods &amp; definitions</h2>
+  <details>
+    <summary>How this was measured — tap to expand</summary>
+    <ul class="tight small">
+      <li>The log spells it “Judgement” — aura spell 20346; heal proc spell 20343, <b>81 HP per proc</b> at rank 4. Heal amount = log field 29, overheal = field 31 (calibrated: overheal is 0 at low HP, equals amount at full HP).</li>
+      <li>Applications / refreshes / removals from SPELL_AURA_APPLIED / REFRESH / REMOVED for Judgement of Light, per target. Coverage on a pull = union of JoL aura time on any mob in the window ÷ pull duration.</li>
+      <li>Pull windows are the run’s counted pulls (6s-inflow definition). Construct Pull 14 — the span containing the Grobbulus wipe, hearth-out and re-entry — is excluded from all trash stats.</li>
+      <li>Damage taken per pull is summed from damage events with player destinations inside the pull window; “melee taken” restricts to melee/tank recipients.</li>
+      <li>Trash totals (79,756 effective / 148,717 gross / 53.6% efficiency) and both scores are the dashboard brief’s headline figures; per-pull rows come from the same analyzers (<code>analyze_jol_oct6.py</code>, <code>analyze_jol_trash_oct6.py</code>). Log POV: Junsa. Character names only.</li>
+      <li>Patchwerk and Gothik are excluded from boss coverage by design: Patchwerk for the Hateful Strike / low-HP melee strat, Gothik because the boss target isn’t hittable for most of the window. Kel’Thuzad is counted from boss activation.</li>
+    </ul>
+  </details>
+</section>
+
+<p class="foot">Judgement of Light — Oct 6, 2026 · Pugs not drugs, Naxxramas · Trash focus with bosses kept separate · Built from the Oct 6 combat log (Junsa POV). Scores are v1.1 definitions — compare future weeks on the same formulas.</p>
+</div>
+
+<script>
+var PULLS=[
+["Spider 1","Spider Wing",17.4,0,0,null,80352,"5× Carrion Spinner, Crypt Reaver, Infectious Skitterer"],
+["Spider 2","Spider Wing",7.3,0,0,null,16444,"9× Infectious Skitterer"],
+["Spider 3","Spider Wing",6.1,0,0,null,15257,"10× Infectious Skitterer"],
+["Spider 4","Spider Wing",6.9,0,0,null,9164,"10× Infectious Skitterer"],
+["Spider 5","Spider Wing",17.9,0,0,null,29935,"20× Infectious Skitterer, 4× Necro Stalker"],
+["Spider 6","Spider Wing",12.2,42.3,535,79.4,14709,"Tomb Horror judged +2.4s (Holyhaze)"],
+["Spider 7","Spider Wing",8.9,0,0,null,12370,"4× Dread Creeper, Tomb Horror"],
+["Spider 8","Spider Wing",10.9,35.9,1747,62.2,21954,"Plagued Ghoul judged by Nuu at pull start"],
+["Spider 9","Spider Wing",5.5,27.9,1701,19.2,33330,"Necropolis Acolyte judged +3.9s"],
+["Spider 10","Spider Wing",3.8,0,0,null,4759,"2× Necropolis Acolyte"],
+["Spider 11","Spider Wing",6.8,52.8,2106,23.5,57156,"4 applications onto Acolytes — aura averaged ~1s"],
+["Plague 1","Plague Wing",12.6,0,0,null,52750,"4× Patchwork Golem — MISSED"],
+["Plague 2","Plague Wing",6.9,74.7,2938,64.8,2598,"Stoneskin Gargoyle +1.7s"],
+["Plague 3","Plague Wing",29.2,61.6,2020,88.6,51331,"4 apps chasing ghouls/slimes — WASTED"],
+["Plague 4","Plague Wing",10.2,94.3,6538,61.6,15903,"Gargoyle pair split +0.6/+0.9s — BEST"],
+["Plague 5","Plague Wing",5.6,100,4414,47.1,18735,"Single gargoyle, both judges — BEST"],
+["Plague 6","Plague Wing",10.4,97.1,14819,21.1,66509,"Gargoyle pair split ≤1.0s — BEST"],
+["Plague 7","Plague Wing",9.5,99.8,14262,18.5,71910,"Gargoyle pair split — BEST"],
+["Plague 8","Plague Wing",44.2,17.8,2141,49.2,39712,"3 apps on 1–4s adds — WASTED"],
+["Military 1","Military Wing",14.5,0,0,null,22986,"Deathknights + captains"],
+["Military 2","Military Wing",3.1,26.7,648,0,48927,"Shade judged +2.3s, aura 0.8s"],
+["Military 3","Military Wing",7.9,0,0,null,61899,"Deathknight / smith mix"],
+["Military 4","Military Wing",9.5,0,0,null,107493,"3× Skeletal Smith + Shade — high melee taken"],
+["Military 5","Military Wing",7.5,0,0,null,13415,"2× Captain, 2× Deathknight"],
+["Military 6","Military Wing",4.4,61,962,65.1,9598,"Deathknight Captain +0.8s, 4.4s pull"],
+["Military 7","Military Wing",9.2,0,0,null,17244,"Deathknights"],
+["Military 8","Military Wing",6.6,48.8,533,80.1,10403,"Deathknight at +3.4s — WASTED"],
+["Military 9","Military Wing",7.5,0,0,null,15825,"Deathknights"],
+["Military 10","Military Wing",7.1,90.2,662,84.3,11164,"Deathknight +0.7s — WASTED (overheal)"],
+["Military 11","Military Wing",27.7,5,972,25,96088,"Cavalier judged at +26.3s — effectively unjudged"],
+["Military 12","Military Wing",6.1,37,1944,20,24086,"Cavalier +2.6s"],
+["Military 13","Military Wing",11.3,0,0,null,73679,"Sapper bomb pull — MISSED (optional)"],
+["Military 14","Military Wing",6.1,47.6,736,73.3,10399,"Unholy Axe +1.6s"],
+["Military 15","Military Wing",6,41.4,1205,58.7,3315,"Unholy Staff +3.5s"],
+["Military 16","Military Wing",5.6,40.2,695,79.1,4840,"Unholy Swords +3.4s"],
+["Military 17","Military Wing",6,0,0,null,5395,"Unholy Staff + Axe"],
+["Military 18","Military Wing",10.8,53.7,1571,66.6,26551,"Cavaliers judged +5.0/+6.1s — late"],
+["Military 19","Military Wing",7.2,0,0,null,26133,"Necro Knights + Captains"],
+["Military 20","Military Wing",7.8,0,0,null,70301,"Necro Knight Guardians + Vindicator"],
+["Military 21","Military Wing",6.1,0,0,null,25824,"2× Necropolis Acolyte"],
+["Construct 1","Construct Wing",5.3,71.8,3645,6.2,24988,"Sewage Slime +1.5s — BEST"],
+["Construct 2","Construct Wing",11.1,0,0,null,23133,"Bile Retchers + Belcher"],
+["Construct 3","Construct Wing",7.7,25.1,1972,30.4,24850,"Bile Retcher +1.1s (golems unjudged)"],
+["Construct 4","Construct Wing",48.4,0,0,null,0,"3× Embalming Slime — no damage taken in window"],
+["Construct 5","Construct Wing",37.2,0,0,null,40361,"17 slimes + scientists — MISSED, longest unjudged"],
+["Construct 6","Construct Wing",16.6,0,0,null,40606,"Scientists + Belcher — MISSED"],
+["Construct 7","Construct Wing",8.7,0,0,null,33350,"4× Patchwork Golem"],
+["Construct 8","Construct Wing",8.5,0,0,null,13601,"2× Sludge Belcher"],
+["Construct 9","Construct Wing",25.1,47.1,2708,22.3,86438,"Belcher +2.6s, aura 11.8s — BEST shape"],
+["Construct 10","Construct Wing",9.4,21.5,648,20,35994,"Carry-over aura only"],
+["Construct 11","Construct Wing",16.4,0,0,null,52431,"Scientist pack — MISSED"],
+["Construct 12","Construct Wing",7.2,0,0,null,22024,"Belcher + Bile Sludge"],
+["Construct 13","Construct Wing",22.7,0,0,null,72868,"Scientist pack — MISSED, best candidate"],
+["Construct 15","Construct Wing",18.8,47.8,8370,5.2,122538,"Sewage Slime +1.0s — BEST"]
+];
+var filt="all";
+function fmt(n){return n.toLocaleString("en-US");}
+function render(){
+  var wing=document.getElementById("wingSel").value;
+  var list=document.getElementById("pullList"); list.innerHTML=""; var shown=0;
+  PULLS.forEach(function(p){
+    var judged=p[4]>0;
+    if(filt==="judged"&&!judged)return;
+    if(filt==="unjudged"&&judged)return;
+    if(filt==="longmiss"&&!( !judged&&p[2]>=10))return;
+    if(wing!=="all"&&p[1]!==wing)return;
+    shown++;
+    var tag=!judged?(p[2]>=10?'<span class="tag missed">Missed</span>':'<span class="tag skip">Unjudged · short</span>'):(p[5]!==null&&p[5]>=80?'<span class="tag waste">Judged · high overheal</span>':'<span class="tag best">Judged</span>');
+    var div=document.createElement("div"); div.className="pull";
+    div.innerHTML="<div><b>"+p[0]+"</b><br><span class='small muted'>"+p[1]+" · "+p[2]+"s</span><br>"+tag+"</div>"+
+      "<div class='small'>"+p[7]+"</div>"+
+      "<div class='nums'>Cov <b>"+(judged?p[3]+"%":"—")+"</b> · Eff <b>"+(judged?fmt(p[4]):"0")+"</b>"+(p[5]!==null?" · OH "+p[5]+"%":"")+"<br><span class='muted'>Melee taken "+fmt(p[6])+"</span></div>";
+    list.appendChild(div);
+  });
+  document.getElementById("pullCount").textContent=shown+" pulls shown";
+  if(!shown) list.innerHTML="<p class='muted'>No pulls match this filter.</p>";
+}
+document.querySelectorAll(".filters button").forEach(function(b){
+  b.addEventListener("click",function(){
+    document.querySelectorAll(".filters button").forEach(function(x){x.setAttribute("aria-pressed","false")});
+    b.setAttribute("aria-pressed","true"); filt=b.getAttribute("data-f"); render();
+  });
+});
+document.getElementById("wingSel").addEventListener("change",render);
+render();
+</script>
+</body>
+</html>
