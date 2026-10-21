@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="color-scheme" content="light dark"/>
+<link rel="icon" href="data:,"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Naxxramas Speedrun Report — Oct 20, 2026</title>
+<style>
+:root{color-scheme:light dark;--bg:#eef0f2;--panel:#fff;--panel-2:#f7f8f9;--panel-3:#e7eaed;--text:#17191c;--muted:#59616a;--faint:#76808a;--line:#d1d6db;--accent:#b66509;--accent-soft:#f4dfc4;--accent-ink:#6e3800;--good:#18794e;--good-soft:#d9f0e4;--bad:#b42318;--bad-soft:#fbe0dd;--warn:#996900;--warn-soft:#f6e9b9;--blue:#2667a7;--blue-soft:#daeaf8;--shadow:0 10px 28px rgba(21,25,29,.08);--radius:10px}
+@media(prefers-color-scheme:dark){:root{--bg:#101214;--panel:#181b1f;--panel-2:#1f2328;--panel-3:#282d33;--text:#f0f2f4;--muted:#aeb5bd;--faint:#838b94;--line:#333941;--accent:#e38a29;--accent-soft:#402c18;--accent-ink:#ffd3a2;--good:#54c990;--good-soft:#173a2b;--bad:#ff7168;--bad-soft:#43211f;--warn:#e6bd54;--warn-soft:#3b3119;--blue:#62a6df;--blue-soft:#172f44;--shadow:0 12px 30px rgba(0,0,0,.28)}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:"IBM Plex Sans",sans-serif;font-size:14px;line-height:1.45}
+a{color:var(--accent)}button,input,select{font:inherit;color:inherit}
+.app{min-height:100vh;display:grid;grid-template-columns:240px minmax(0,1fr)}
+.sidebar{position:sticky;top:0;height:100vh;padding:14px 14px;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;gap:8px;overflow:auto}
+.run-stamp{padding:2px 8px 10px;border-bottom:1px solid var(--line)}.run-stamp strong{font-family:"Barlow Condensed",sans-serif;font-size:22px;display:block;line-height:1.05}.run-stamp span{display:block;color:var(--muted);font-size:12px;margin-top:5px}
+.nav-group{font:700 10px "IBM Plex Mono",monospace;letter-spacing:.12em;color:var(--faint);padding:7px 10px 2px}
+.nav{display:grid;gap:2px}.nav button{background:transparent;border:0;text-align:left;padding:7px 10px;border-radius:7px;color:var(--muted);font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;width:100%}
+.nav button:hover{background:var(--panel-2);color:var(--text)}.nav button.active{background:var(--accent-soft);color:var(--accent-ink)}
+.nav .count{font:500 10px "IBM Plex Mono",monospace;padding:3px 6px;border-radius:10px;background:var(--panel-3);color:var(--faint)}
+.sidebar-foot{margin-top:auto;border-top:1px solid var(--line);padding:12px 8px 2px;color:var(--faint);font-size:11px}.sidebar-foot a{display:block;margin-top:6px}
+.main{min-width:0;padding:22px clamp(18px,3vw,42px) 72px}.mobile-nav{display:none}
+.section{display:none;max-width:1220px;margin:0 auto}.section.active{display:block}
+.report-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin:0 0 18px}.report-head h1,.report-head h2{font:700 clamp(31px,4vw,50px)/.98 "Barlow Condensed",sans-serif;margin:0}.report-head h2{font-size:clamp(29px,3.5vw,42px)}.report-head p{margin:8px 0 0;color:var(--muted);max-width:740px}
+.head-meta{text-align:right;color:var(--faint);font:500 11px/1.6 "IBM Plex Mono",monospace;white-space:nowrap}
+.pill{display:inline-flex;padding:5px 9px;border-radius:999px;border:1px solid var(--line);background:var(--panel);font-size:11px;font-weight:600;color:var(--muted)}
+.grid{display:grid;gap:12px}.metrics{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:12px}
+.metric{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:15px 16px;box-shadow:var(--shadow)}.metric .label{color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em}.metric .value{font:700 30px/1.05 "Barlow Condensed",sans-serif;margin:4px 0 2px;font-variant-numeric:tabular-nums}.metric .note{color:var(--faint);font-size:11px}.metric .value.good{color:var(--good)}.metric .value.bad{color:var(--bad)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:12px}
+.panel-head{padding:14px 17px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;align-items:center}.panel-head h3{font:700 20px/1 "Barlow Condensed",sans-serif;margin:0}.panel-head span{font-size:11px;color:var(--faint)}
+.panel-body{padding:16px 17px}.two-col{grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr)}.split2{grid-template-columns:1fr 1fr}
+.stacked{height:32px;border-radius:6px;overflow:hidden;display:flex;background:var(--panel-3);margin:6px 0 12px}.stacked span{height:100%;display:flex;align-items:center;justify-content:center;font:700 11px "IBM Plex Mono",monospace;color:#fff}.stacked .boss{background:#8c5f37}.stacked .trash{background:#c27723}.stacked .idle{background:#596570}
+.takeaway{margin-top:12px;padding:12px 14px;background:var(--accent-soft);border-radius:7px;color:var(--accent-ink);font-weight:600}
+.callout{padding:13px 15px;border-radius:8px;background:var(--blue-soft);margin:0 0 12px}.warnbox{padding:13px 15px;border-radius:8px;background:var(--warn-soft);margin:0 0 12px}
+.section-note{color:var(--muted);margin:0 0 14px;max-width:920px}
+.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;min-width:560px}
+th,td{padding:9px 11px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}th{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--faint);background:var(--panel-2);position:relative}
+th[data-tip]{text-decoration:underline dotted;text-underline-offset:3px;cursor:help}
+th[data-tip]:hover::after,th[data-tip]:focus::after{content:attr(data-tip);position:absolute;left:0;top:calc(100% + 6px);z-index:30;width:230px;white-space:normal;text-transform:none;letter-spacing:0;font:500 11px/1.45 "IBM Plex Sans",sans-serif;text-align:left;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:7px;box-shadow:var(--shadow);padding:9px 11px}
+th:first-child,td:first-child{text-align:left}td.name{font-weight:600}tbody tr:hover{background:var(--panel-2)}
+.you td{background:var(--accent-soft)}.you td.name:after{content:"YOU";font:700 9px "IBM Plex Mono",monospace;margin-left:7px;border:1px solid currentColor;border-radius:3px;padding:2px 4px;color:var(--accent-ink)}
+.delta.good{color:var(--good);font-weight:700}.delta.bad{color:var(--bad);font-weight:700}.delta.neutral{color:var(--faint)}
+td.wrap-cell{white-space:normal;text-align:left;min-width:200px}.ref td{color:var(--muted)}
+.mini-stat{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}.mini-stat:last-child{border:0}.mini-stat span{color:var(--muted)}.mini-stat strong{font:700 19px "Barlow Condensed",sans-serif}
+.action-list{margin:0;padding:0;list-style:none}.action-list li{display:grid;grid-template-columns:30px 1fr;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}.action-list li:last-child{border:0}.action-list b.num{font:700 21px/1 "Barlow Condensed",sans-serif;color:var(--accent)}.action-list small{color:var(--muted);display:block}
+.bucket-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.bucket{padding:13px;border-radius:7px;background:var(--panel-2);border-top:4px solid var(--c)}.bucket strong{display:block;font:700 24px/1 "Barlow Condensed",sans-serif}.bucket span{color:var(--muted);font-size:11px}
+.tag{font:600 10px "IBM Plex Mono",monospace;padding:3px 6px;border-radius:4px;background:var(--panel-3);color:var(--muted)}
+.formula{font:600 clamp(15px,2vw,21px)/1.4 "IBM Plex Mono",monospace;padding:16px;background:var(--panel-2);border-radius:7px;text-align:center;color:var(--accent-ink)}
+footer{max-width:1220px;margin:26px auto 0;color:var(--faint);font-size:11px;border-top:1px solid var(--line);padding-top:14px}
+.search{background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:8px 10px;min-width:200px}
+@media(max-width:900px){.app{display:block}.sidebar{display:none}.main{padding:14px 12px 56px}.mobile-nav{display:block;position:sticky;top:0;z-index:10;background:var(--bg);padding:8px 0 12px}.mobile-nav select{width:100%;border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:10px 12px;font-weight:700}.metrics{grid-template-columns:repeat(2,1fr)}.two-col,.split2{grid-template-columns:1fr}.head-meta{display:none}}
+@media(max-width:640px){.bucket-grid{grid-template-columns:1fr}table{min-width:0}.table-wrap{overflow:visible}.table-wrap table,.table-wrap thead,.table-wrap tbody,.table-wrap th,.table-wrap td,.table-wrap tr{display:block}.table-wrap thead{display:none}.table-wrap tbody{display:grid;gap:8px;padding:9px}.table-wrap tr{border:1px solid var(--line);border-radius:7px;background:var(--panel-2);padding:8px 10px}.table-wrap td{display:flex;justify-content:space-between;gap:14px;white-space:normal;border-bottom:1px dashed var(--line);padding:6px 2px;text-align:right}.table-wrap td:last-child{border:0}.table-wrap td.wrap-cell{text-align:right}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar" aria-label="Report sections">
+<div class="run-stamp"><strong>OCT 20 — NAXXRAMAS</strong><span>Pugs not drugs · Pagle US<br>15/15 · one reset · one wipe · 88:59<br>Log POV: Ragerat · Ragerat focus</span></div>
+<div class="nav-group">RUN</div>
+<nav class="nav"><button class="active" data-section="overview">Overview <span class="count">01</span></button><button data-section="timealloc">Time Allocation <span class="count">02</span></button><button data-section="bosses">Bosses — Δ Week <span class="count">03</span></button><button data-section="deaths">Deaths <span class="count">04</span></button></nav>
+<div class="nav-group">TRASH</div>
+<nav class="nav"><button data-section="trashpulls">Trash Pulls + Score <span class="count">05</span></button><button data-section="blender5">5 Second Blender <span class="count">06</span></button><button data-section="blender35">3.5 Second Blender <span class="count">07</span></button><button data-section="wwpacks">Whirlwind Packs <span class="count">08</span></button><button data-section="sapper">Sapper + the Construct Wipe <span class="count">09</span></button></nav>
+<div class="nav-group">WARRIORS</div>
+<nav class="nav"><button data-section="sunder">Sunder + Expose <span class="count">10</span></button><button data-section="engineering">Engineering <span class="count">11</span></button><button data-section="utility">Interrupts + Utility <span class="count">12</span></button><button data-section="rotation">Warrior Rotation <span class="count">13</span></button><button data-section="ivscore">IV Score <span class="count">14</span></button><button data-section="arrival">Arrival Card <span class="count">15</span></button></nav>
+<div class="nav-group">REFERENCE</div>
+<nav class="nav"><button data-section="jol">Judgement of Light <span class="count">16</span></button><button data-section="methods">Methods <span class="count">17</span></button></nav>
+<div class="sidebar-foot">Standalone Oct 20 report, same tab set as Sep 29, Oct 6 and Oct 13, one week per URL. Deltas live only on Overview + Bosses; every other tab is pure Oct 20.</div>
+</aside>
+<main class="main">
+<div class="mobile-nav"><select id="mobileSelect" aria-label="Report section">
+<option value="overview">01 · Overview</option><option value="timealloc">02 · Time Allocation</option><option value="bosses">03 · Bosses</option><option value="deaths">04 · Deaths</option><option value="trashpulls">05 · Trash Pulls</option><option value="blender5">06 · 5s Blender</option><option value="blender35">07 · 3.5s Blender</option><option value="wwpacks">08 · Whirlwind Packs</option><option value="sapper">09 · Sapper + Construct Wipe</option><option value="sunder">10 · Sunder + Expose</option><option value="engineering">11 · Engineering</option><option value="utility">12 · Utility</option><option value="rotation">13 · Rotation</option><option value="ivscore">14 · IV Score</option><option value="arrival">15 · Arrival</option><option value="jol">16 · Judgement of Light</option><option value="methods">17 · Methods</option>
+</select></div>
+
+<!-- OVERVIEW -->
+<section class="section active" id="overview">
+<header class="report-head"><div><h1>Oct 20 — two incidents, one long night</h1><p>88:59, 15/15, no boss wipes, but the clock tells the story: a Loatheb pull that had to be reset, and a Construct Wing trash wipe at 18:25 that cost the raid its world buffs one pull before Patchwerk. Everything after 18:26 is the unbuffed price: Patchwerk 2:06, a normal Sapphiron kill (no polarity carry was possible), and a 5:51 Kel'Thuzad. Ragerat's own night, up to his death inside the wipe, was the strongest buffed segment he has logged. Deltas live in exactly two places: this page's strip and the per-boss Δ columns on the Bosses tab; every other tab is Oct 20 alone.</p></div><div class="head-meta">2026.10.20<br>88:59 clear</div></header>
+<div class="grid metrics">
+<div class="metric"><div class="label">Clear time</div><div class="value">88:59</div><div class="note">Oct 13: 51:05 (+37:54) · PB 47:45 (Sep 22), +41:14</div></div>
+<div class="metric"><div class="label">Real deaths</div><div class="value bad">52</div><div class="note">34 of them in the Construct wipe, 27 in a single minute</div></div>
+<div class="metric"><div class="label">Ragerat IV Score</div><div class="value">9.23 · #2</div><div class="note">Pinaclex #1 (10.33) · 57 eff. sunders, only 9 wasted</div></div>
+<div class="metric"><div class="label">Ragerat damage</div><div class="value">2.62M</div><div class="note">#10 of 40 overall · buffed pace 1,289 on the locked basis</div></div>
+</div>
+<article class="panel"><div class="panel-head"><h3>Delta strip — Oct 20 vs Oct 13 vs Sep 29 vs PB</h3><span>PB = Sep 22, 47:45</span></div><div class="table-wrap"><table><thead><tr><th data-tip="Same locked definitions all weeks. Player rows are Ragerat (Oct 20) against the prior weeks' focus character where the brief carries them; run rows are like-for-like." tabindex="0">Measure</th><th>Oct 20</th><th>Oct 13</th><th>Sep 29 / PB note</th></tr></thead><tbody>
+<tr><td class="name">Total</td><td>88:59</td><td>51:05 <span class="delta bad">+37:54</span></td><td class="wrap-cell">Sep 29: 52:09 (+36:50). PB 47:45. The +37:54 is two incidents and their knock-on effects, not a slower raid (incidents below).</td></tr>
+<tr><td class="name">Boss (encounter windows)</td><td>27:32</td><td>23:32 <span class="delta bad">+4:00</span></td><td class="wrap-cell">Sep 29: 23:32 (+4:00). Almost all of it is the unbuffed tail: Patchwerk, Sapphiron and Kel'Thuzad alone are +230s (Bosses tab).</td></tr>
+<tr><td class="name">Trash</td><td>25:16</td><td>14:06 <span class="delta bad">+11:10</span></td><td class="wrap-cell">Sep 29: 12:13 (+13:03). The Construct wipe cluster is one merged 11:05 pull in this number.</td></tr>
+<tr><td class="name">Idle</td><td>36:11</td><td>13:27 <span class="delta bad">+22:44</span></td><td class="wrap-cell">Sep 29: 16:25 (+19:46). Death recovery alone is 17:50 of it; the Loatheb regroup is a single 12:41 gap.</td></tr>
+<tr><td class="name">Ragerat IV Score</td><td>9.23 · #2 of 23</td><td>—</td><td class="wrap-cell">Cleanest service line among the top scorers: 57 effective sunders from 66 casts, 226,100 sunder value, raid-best 86% efficiency (IV Score tab).</td></tr>
+<tr><td class="name">Ragerat Trash Score</td><td>9.17 · #5 of 18 DPS</td><td>—</td><td class="wrap-cell">Pull DPS 801, activity 0.896, engage 52/56. PMS 9.18, also #5.</td></tr>
+<tr><td class="name">Ragerat buffed pace</td><td>1,289</td><td>—</td><td class="wrap-cell">Locked 1,300 basis: 1,635,302 damage over 1,268.9s of combat, unboon to his death in the wipe. Gnome, no sword racial. Excluding the reset Loatheb pull's damage: 1,263.</td></tr>
+<tr><td class="name">Ragerat Holy Water</td><td>0 — 4th straight zero*</td><td>0</td><td class="wrap-cell">*Across the logged characters (three Ellaria runs, now Ragerat). Raid total was 59 casts; Nalga, Gophie and Ejax threw 12 each (Engineering tab).</td></tr>
+</tbody></table></div></article>
+<div class="grid split2">
+<article class="panel"><div class="panel-head"><h3>Incident 1 — the Loatheb reset</h3><span>Plague Wing · 17:49:59</span></div><div class="panel-body">
+<p class="section-note">The raid engaged Loatheb 48 seconds after Heigan died, put about <strong>747k damage into him over ~49 seconds</strong>, then lost Doljin (tanking) and Loganw and reset the fight. No ENCOUNTER_END was ever written for the attempt, so it sits outside boss time entirely.</p>
+<div class="mini-stat"><span>Recovery gap before the re-pull</span><strong>12:41</strong></div>
+<div class="mini-stat"><span>Pre-pull setup on top of that</span><strong>3:09</strong></div>
+<div class="mini-stat"><span>Kill pull (18:06:18)</span><strong>101.7s</strong></div>
+<div class="mini-stat"><span>Plague Wing total</span><strong>23:17</strong></div>
+<p class="section-note" style="margin:10px 0 0">Ragerat re-booned at 17:50:49 during the regroup and never lost buffs before the wipe. Spider Wing, for scale, took 8:43 all-in.</p>
+</div></article>
+<article class="panel"><div class="panel-head"><h3>Incident 2 — the Construct wipe</h3><span>Abomination Wing · 18:25</span></div><div class="panel-body">
+<p class="section-note">Construct Pull 5, a lone Sludge Belcher, killed Kazugz, Nalga and Iynx. Pull 6 (a Patchwork Golem) and the merged Pull 7 cluster then ran continuously for 11:05: <strong>34 deaths, 27 of them in the 18:26 minute</strong>.</p>
+<div class="mini-stat"><span>Cluster window</span><strong>18:25:46–18:36:52</strong></div>
+<div class="mini-stat"><span>Deaths in the cluster</span><strong>34</strong></div>
+<div class="mini-stat"><span>World buffs</span><strong>Lost raidwide</strong></div>
+<div class="mini-stat"><span>Downstream price</span><strong>PW 2:06 · Sapp normal · KT 5:51</strong></div>
+<p class="section-note" style="margin:10px 0 0">Ragerat died at 18:26:02 inside it, one of the 27. The full death dive is in the Sapper tab.</p>
+</div></article>
+</div>
+<div class="grid two-col">
+<article class="panel"><div class="panel-head"><h3>How the night ran</h3><span>log wall-clock, PDT</span></div><div class="panel-body">
+<div class="mini-stat"><span>17:35:59 — first combat</span><strong>88:59 window</strong></div>
+<div class="mini-stat"><span>17:38:23 — DMF unbooned (Sayge's Dark Fortune)</span><strong>Banked ✓</strong></div>
+<div class="mini-stat"><span>17:49:59 — Loatheb pull 1; reset after two deaths</span><strong>Reset</strong></div>
+<div class="mini-stat"><span>18:06:18 — Loatheb kill pull</span><strong>101.7s</strong></div>
+<div class="mini-stat"><span>18:25:46 — Construct wipe cluster starts</span><strong>34 deaths</strong></div>
+<div class="mini-stat"><span>18:26:02 — Ragerat dies (Patchwork Golem Cleave)</span><strong>Buffs gone</strong></div>
+<div class="mini-stat"><span>19:04:58 — Kel'Thuzad dies</span><strong>15/15</strong></div>
+<p class="section-note" style="margin-top:12px">Tanks by taunts: Perthil MT (51), Sven 49, Doljin 48, Bigvince 37; Tankina and Egg light. Doljin tanked this week. Absent: Junsa, Vincint, Imthebest, Bootythweat. Roster 40, 23 warriors. Ragerat: Fury 17/34/0, ilvl ~78, Gressil + Kingsfall, Slayer's Crest + Mark of the Champion (no Kiss of the Spider).</p>
+</div></article>
+<article class="panel"><div class="panel-head"><h3>Ragerat — next actions</h3><span>in order</span></div><div class="panel-body"><ol class="action-list">
+<li><b class="num">1</b><div><strong>Throw Holy Water</strong><small>Fourth straight zero across the logged characters. His engineering total (95,863) is already #2 raid-wide without it; Lumberyak's 74,323 of Holy Water shows what the bag slot is worth on undead packs.</small></div></li>
+<li><b class="num">2</b><div><strong>Nothing to fix on Gothik</strong><small>Event-team assignment: he kills the Gothik event mobs (Spectral Trainee was his #1 target) while the gate side cleaves the packs pulled through the gate. His 489 in-window DPS and 67.8% WCL activity are the assignment, not a performance flag.</small></div></li>
+<li><b class="num">3</b><div><strong>Loatheb Death Wish: 65s, not 70.5s</strong><small>Fired at +70.5s on the kill pull against the filed ~65s rule. Close, slightly late; polish on a 1,897-DPS buffed fight.</small></div></li>
+<li><b class="num">4</b><div><strong>Keep the sapper discipline</strong><small>The called bomb (Military 10) got his cast at +3.4s for 14 targets. Of the missed bombs, five were cooldown sequencing and two were small no-CD pulls (Plague 1, Plague 3, where his melee ranked #3 anyway).</small></div></li>
+</ol></div></article>
+</div>
+</section>
+
+<!-- TIME ALLOCATION -->
+<section class="section" id="timealloc">
+<header class="report-head"><div><h2>Time allocation</h2><p>Encounter-window definitions, same as Sep 29, Oct 6 and Oct 13. This week's split is incident-shaped: boss 27:32, trash 25:16, idle 36:11, with the single 12:41 Loatheb regroup worth more than every other gap combined twice over.</p></div><span class="pill">88:59 total</span></header>
+<div class="grid metrics"><div class="metric"><div class="label">Boss</div><div class="value">27:32</div><div class="note">30.9% of window</div></div><div class="metric"><div class="label">Trash</div><div class="value">25:16</div><div class="note">28.4% · 56 counted pulls</div></div><div class="metric"><div class="label">Idle</div><div class="value bad">36:11</div><div class="note">40.7% · 17:50 of it death recovery</div></div><div class="metric"><div class="label">Gaps ≥5s</div><div class="value">47</div><div class="note">Largest single gap: 12:41</div></div></div>
+<article class="panel"><div class="panel-head"><h3>The 88:59, split</h3></div><div class="panel-body">
+<p class="section-note">Boss 27:32 · trash 25:16 · idle 36:11. Compare Oct 13 (23:32 / 14:06 / 13:27): the boss windows are +4:00 and nearly all of that is the unbuffed tail; trash is +11:10 with an 11:05 wipe cluster inside it; idle is +22:44 and is mostly two recoveries.</p>
+<div class="stacked"><span class="boss" style="width:30.9%">27:32</span><span class="trash" style="width:28.4%">25:16</span><span class="idle" style="width:40.7%">36:11</span></div>
+<div class="takeaway">Idle is the night's story again, but unlike Oct 6 it is not diffuse: one reset (12:41 + 3:09) and one wipe's aftermath account for the bulk of it. Fix the two incidents and this roster's underlying pace is the Oct 13 pace.</div>
+</div></article>
+<div class="grid split2">
+<article class="panel"><div class="panel-head"><h3>Per-wing (timeline.json)</h3></div><div class="table-wrap"><table><thead><tr><th data-tip="Wing boundaries follow the encounter sequence in the log; Frostwyrm is Sapphiron + Kel'Thuzad with no trash." tabindex="0">Wing</th><th>Total</th><th>Boss</th><th>Trash</th><th>Idle</th></tr></thead><tbody>
+<tr><td class="name">Spider</td><td>8:43</td><td>1:47</td><td>5:14</td><td>1:42</td></tr>
+<tr><td class="name">Plague</td><td>23:17</td><td>2:58</td><td>2:24</td><td>17:55</td></tr>
+<tr><td class="name">Military</td><td>15:39</td><td>7:07</td><td>3:02</td><td>5:29</td></tr>
+<tr><td class="name">Abomination (Construct)</td><td>27:34</td><td>6:42</td><td>14:35</td><td>6:16</td></tr>
+<tr><td class="name">Frostwyrm</td><td>13:46</td><td>8:58</td><td>0:00</td><td>4:49</td></tr>
+</tbody></table></div><div class="panel-body"><p class="section-note" style="margin:0">Plague's 17:55 of idle is the Loatheb reset (12:41 recovery + 3:09 setup + the short gaps around them). Abomination's 14:35 of trash is the wipe cluster: one merged pull ran 11:05.</p></div></article>
+<article class="panel"><div class="panel-head"><h3>Idle by primary cause</h3></div><div class="panel-body">
+<div class="mini-stat"><span>Death recovery</span><strong>17:50</strong></div>
+<div class="mini-stat"><span>Pre-boss setup</span><strong>11:09</strong></div>
+<div class="mini-stat"><span>Between trash pulls</span><strong>4:54</strong></div>
+<div class="mini-stat"><span>Post-boss (loot/buff/travel)</span><strong>1:21</strong></div>
+<p class="section-note" style="margin-top:10px">Death recovery is 49% of all idle, and 12:41 of the 17:50 is the one Loatheb regroup. Pre-boss setup is inflated by the same night: the 3:09 re-setup in front of Loatheb and the 3:16 Thaddius → Sapphiron staging both sit there.</p>
+</div></article>
+</div>
+<article class="panel"><div class="panel-head"><h3>Top idle gaps</h3></div><div class="table-wrap"><table><thead><tr><th>Clock</th><th>Dur</th><th>Between</th><th>Primary</th></tr></thead><tbody>
+<tr><td>17:50:28–18:03:09</td><td>12:41</td><td class="wrap-cell">Loatheb reset → regroup, rebuff and re-clear (Doljin, Loganw dead)</td><td>Death recovery</td></tr>
+<tr><td>18:51:12–18:54:28</td><td>3:16</td><td class="wrap-cell">Thaddius → Sapphiron (wing-end staging, unbuffed raid)</td><td>Pre-boss setup</td></tr>
+<tr><td>18:03:09–18:06:18</td><td>3:09</td><td class="wrap-cell">Regroup → Loatheb kill pull (setup)</td><td>Pre-boss setup</td></tr>
+<tr><td>18:08:03–18:09:58</td><td>1:55</td><td class="wrap-cell">Trash → trash (Military Wing entry)</td><td>Between trash pulls</td></tr>
+<tr><td>18:57:34–18:59:07</td><td>1:33</td><td class="wrap-cell">Sapphiron → Kel'Thuzad (Ejax, Xmage, Velisse died on Sapphiron)</td><td>Death recovery</td></tr>
+<tr><td>18:39:09–18:40:36</td><td>1:27</td><td class="wrap-cell">Construct trash → Patchwerk (post-wipe staging)</td><td>Pre-boss setup</td></tr>
+<tr><td>18:47:50–18:48:49</td><td>0:59</td><td class="wrap-cell">Gluth → Thaddius</td><td>Pre-boss setup</td></tr>
+<tr><td>18:46:07–18:46:53</td><td>0:46</td><td class="wrap-cell">Grobbulus → Gluth</td><td>Pre-boss setup</td></tr>
+<tr><td>17:49:30–17:50:13</td><td>0:44</td><td class="wrap-cell">Trash → trash (Plague Wing, around the Loatheb attempt)</td><td>Between trash pulls</td></tr>
+<tr><td>18:42:43–18:43:21</td><td>0:38</td><td class="wrap-cell">Patchwerk → trash</td><td>Post-boss</td></tr>
+</tbody></table></div></article>
+</section>
+
+<!-- BOSSES -->
+<section class="section" id="bosses">
+<header class="report-head"><div><h2>Bosses — with deltas</h2><p>Encounter windows (seconds, shown as m:ss). Δ Week is Oct 20 minus Oct 13; the Sep 29 column carries only the fights the Sep 29 brief recorded on this basis, so blanks are honest. Read the back half of the table with the wipe in mind: from Patchwerk on, the raid had no world buffs.</p></div><span class="pill">Sum +239.9s vs Oct 13</span></header>
+<article class="panel"><div class="panel-head"><h3>Encounter windows</h3><span>Kill pulls only; the reset Loatheb attempt is in the Overview</span></div><div class="table-wrap"><table><thead><tr><th>Boss</th><th data-tip="ENCOUNTER_START to ENCOUNTER_END for the kill pull." tabindex="0">Oct 20</th><th>Oct 13</th><th>Δ Week</th><th>Sep 29</th><th>Δ vs Sep 29</th><th>Read</th></tr></thead><tbody>
+<tr><td class="name">Anub'Rekhan</td><td>0:38</td><td>0:35</td><td><span class="delta bad">+2.5s</span></td><td>—</td><td>—</td><td class="wrap-cell">Matched. Ragerat 2,270 in-window DPS, his best boss of the night.</td></tr>
+<tr><td class="name">Faerlina</td><td>0:34</td><td>0:38</td><td><span class="delta good">−4.3s</span></td><td>—</td><td>—</td><td class="wrap-cell">Ahead. Expose at +6.6s this week (Sunder tab).</td></tr>
+<tr><td class="name">Maexxna</td><td>0:35</td><td>0:34</td><td><span class="delta bad">+1.1s</span></td><td>—</td><td>—</td><td class="wrap-cell">Matched.</td></tr>
+<tr><td class="name">Noth</td><td>0:35</td><td>0:43</td><td><span class="delta good">−7.6s</span></td><td>—</td><td>—</td><td class="wrap-cell">Best Noth of the three weeks on this basis.</td></tr>
+<tr><td class="name">Heigan</td><td>0:41</td><td>0:42</td><td><span class="delta good">−0.9s</span></td><td>—</td><td>—</td><td class="wrap-cell">Matched; dead before any dance phase, as usual.</td></tr>
+<tr><td class="name">Loatheb</td><td>1:42</td><td>1:36</td><td><span class="delta bad">+6.0s</span></td><td>1:40</td><td><span class="delta bad">+1.4s</span></td><td class="wrap-cell">Kill pull only. The reset attempt (~49s, 747k damage, no ENCOUNTER_END) is the real Loatheb cost and lives in the Overview incidents.</td></tr>
+<tr><td class="name">Razuvious</td><td>0:46</td><td>0:40</td><td><span class="delta bad">+6.1s</span></td><td>—</td><td>—</td><td class="wrap-cell">Small regression.</td></tr>
+<tr><td class="name">Gothik</td><td>4:58</td><td>5:02</td><td><span class="delta good">−3.4s</span></td><td>—</td><td>—</td><td class="wrap-cell">Wave-gated; the window is the waves, not the kill.</td></tr>
+<tr><td class="name">Four Horsemen</td><td>1:24</td><td>1:57</td><td><span class="delta good">−33.1s</span></td><td>1:27</td><td><span class="delta good">−3.7s</span></td><td class="wrap-cell">Biggest genuine gain of the week, fully buffed. Zeliek gets no Expose, structural, see Sunder tab.</td></tr>
+<tr><td class="name">Patchwerk</td><td>2:06</td><td>1:45</td><td><span class="delta bad">+21.2s</span></td><td>1:35</td><td><span class="delta bad">+31.0s</span></td><td class="wrap-cell">Unbuffed raid, first boss after the wipe. The delta prices the buff loss, not the pull.</td></tr>
+<tr><td class="name">Grobbulus</td><td>1:17</td><td>1:01</td><td><span class="delta bad">+15.2s</span></td><td>—</td><td>—</td><td class="wrap-cell">Unbuffed raid (post-wipe).</td></tr>
+<tr><td class="name">Gluth</td><td>0:57</td><td>0:41</td><td><span class="delta bad">+15.9s</span></td><td>0:45</td><td><span class="delta bad">+11.3s</span></td><td class="wrap-cell">Unbuffed raid (post-wipe).</td></tr>
+<tr><td class="name">Thaddius</td><td>2:23</td><td>2:11</td><td><span class="delta bad">+12.0s</span></td><td>2:16</td><td><span class="delta bad">+6.5s</span></td><td class="wrap-cell">Unbuffed raid (post-wipe); polarity built during the fight itself, with no raid left to carry it anywhere.</td></tr>
+<tr><td class="name">Sapphiron</td><td>3:06</td><td>0:18</td><td><span class="delta neutral">+168.1s</span></td><td>0:21</td><td><span class="delta neutral">+165.4s</span></td><td class="wrap-cell">A normal kill, not a regression: the wipe took the world buffs, so no polarity carry was possible. Oct 13 and Sep 29 were Polarity Sapph kills (callout below).</td></tr>
+<tr><td class="name">Kel'Thuzad</td><td>5:51</td><td>5:10</td><td><span class="delta bad">+41.0s</span></td><td>5:32</td><td><span class="delta bad">+18.9s</span></td><td class="wrap-cell">Unbuffed raid, and 5 more deaths in his final minute. Window includes the add phase.</td></tr>
+<tr><td class="name">Sum</td><td>27:32</td><td>23:32</td><td><span class="delta bad">+239.9s</span></td><td>23:32</td><td><span class="delta bad">+240.2s</span></td><td class="wrap-cell">Strip out Sapphiron's strategy difference and the unbuffed tail, and the buffed front half of the night is level with Oct 13.</td></tr>
+</tbody></table></div></article>
+<div class="callout"><strong>Why Sapphiron reads 3:06 — a normal kill:</strong> Oct 13's 0:18 and Sep 29's 0:21 were Polarity Sapph kills, where the raid carries Thaddius's polarity bonus-damage buff straight into Sapphiron. That requires the raid's buffs to survive Construct Wing. This week they did not: the 18:25 wipe stripped them one wing earlier, so Sapphiron was fought straight, at 186.3s. The +168s "delta" is a strategy the night made impossible, not a performance swing in either direction. It is also why Judgement of Light had its showcase fight here (128,734 effective at 17.3% overheal, JoL tab).</div>
+<div class="callout"><strong>Ragerat's boss shape is the buff cliff, told in DPS:</strong> while buffed — Anub'Rekhan 2,270 · Faerlina 2,129 · Noth 2,170 · Loatheb 1,897 · Razuvious 1,606. After the wipe — Patchwerk 1,011 · Grobbulus 991 · Gluth 924 · Sapphiron 672 · Kel'Thuzad 482 (add phase included). Gothik's 489 is the event-team assignment (he kills the event mobs; the gate side cleaves the gate packs), and Thaddius's 1,565 is polarity-inflated. Nothing in the post-wipe column is a read on the player.</div>
+</section>
+
+<!-- DEATHS -->
+<section class="section" id="deaths">
+<header class="report-head"><div><h2>Deaths — 52</h2><p>Whole-log convention: 68 raw UNIT_DIED minus Kurassa's 16 feign artifacts (trailing-flag verified) = 52 real deaths. Unlike Oct 13's spread-thin 18, this week's deaths are two clusters: 34 in the Construct wipe and the rest scattered around them.</p></div><span class="pill">Ragerat 1 death</span></header>
+<div class="grid metrics"><div class="metric"><div class="label">Total (convention)</div><div class="value">52</div><div class="note">68 raw − 16 Kurassa feigns</div></div><div class="metric"><div class="label">Construct wipe cluster</div><div class="value bad">34</div><div class="note">27 of them in the 18:26 minute alone</div></div><div class="metric"><div class="label">Death-recovery idle</div><div class="value">17:50</div><div class="note">49% of all idle; 12:41 is the Loatheb regroup</div></div><div class="metric"><div class="label">Boss wipes</div><div class="value good">0</div><div class="note">One boss reset (Loatheb pull 1, 2 deaths), one trash wipe</div></div></div>
+<article class="panel"><div class="panel-head"><h3>Deaths by player (whole log, excl. feigns)</h3></div><div class="table-wrap"><table><thead><tr><th>Player</th><th>Deaths</th><th>Player</th><th>Deaths</th></tr></thead><tbody>
+<tr><td class="name">Annette</td><td>3</td><td class="name">Loganw</td><td>3</td></tr>
+<tr><td class="name">Jeian</td><td>3</td><td class="name">Healary</td><td>3</td></tr>
+<tr><td class="name">Nuu</td><td>2</td><td class="name">Kephas</td><td>2</td></tr>
+<tr><td class="name">Flaps</td><td>2</td><td class="name">Daysukeboost</td><td>2</td></tr>
+<tr><td class="name">Xmage</td><td>2</td><td class="name">Velisse</td><td>2</td></tr>
+<tr><td class="name">Vnx</td><td>2</td><td class="name">Waamb</td><td>2</td></tr>
+<tr><td class="name">Ejax</td><td>2</td><td class="name">Doljin</td><td>1</td></tr>
+<tr><td class="name">Kazugz</td><td>1</td><td class="name">Nalga</td><td>1</td></tr>
+<tr><td class="name">Iynx</td><td>1</td><td class="name">Ryuma</td><td>1</td></tr>
+<tr><td class="name">Sempai</td><td>1</td><td class="name">Ragerat</td><td>1</td></tr>
+<tr><td class="name">Bernabini</td><td>1</td><td class="name">Lumberyak</td><td>1</td></tr>
+<tr><td class="name">Dodyy</td><td>1</td><td class="name">Aldraie</td><td>1</td></tr>
+<tr><td class="name">Dinkie</td><td>1</td><td class="name">Tankina</td><td>1</td></tr>
+<tr><td class="name">Holyhaze</td><td>1</td><td class="name">Ashfort</td><td>1</td></tr>
+<tr><td class="name">Sgtboolaid</td><td>1</td><td class="name">Bigvince</td><td>1</td></tr>
+<tr><td class="name">Egg</td><td>1</td><td class="name">Scoopx</td><td>1</td></tr>
+<tr><td class="name">Bouvtothehlz</td><td>1</td><td class="name">Bonkbonkqu</td><td>1</td></tr>
+<tr><td class="name">(Kurassa)</td><td>1 real · 16 feigns</td><td></td><td></td></tr>
+</tbody></table></div><div class="panel-body"><p class="section-note" style="margin:0">Total: 4×3 + 9×2 + 22×1 = 52 (Kurassa's one real death included in the singles). Clusters: Construct wipe 34, Kel'Thuzad 5, Sapphiron 4 (Healary, Ejax, Xmage, Velisse), Loatheb reset 2 (Doljin, Loganw). Ragerat's single death is the wipe itself, featured in full in the Sapper tab; one of 27 deaths in that minute, not a positioning finding.</p></div></article>
+</section>
+
+<!-- TRASH PULLS -->
+<section class="section" id="trashpulls">
+<header class="report-head"><div><h2>Trash pulls + Trash Score</h2><p>56 counted pulls (6s inflow rule; mobs count if they died or took ≥25% HP; 16 stray clusters excluded; 1 bleed pull listed in the Whirlwind tab). The Construct sequence is the week's artifact: Pull 5 (a lone Sludge Belcher) killed three, and Pulls 6–7 merged into one continuous 11:05 cluster with 34 deaths. Read Construct 5–7 as one event, not three pulls.</p></div><span class="pill">56 pulls</span></header>
+<article class="panel"><div class="panel-head"><h3>Trash Score v1 — DPS warriors</h3><span>10 × (0.55 rel DPS + 0.25 activity + 0.20 engage)</span></div><div class="table-wrap"><table><thead><tr><th>#</th><th>Warrior</th><th data-tip="Trash Score v1: 10 × (0.55 × relative pull DPS + 0.25 × activity + 0.20 × engage rate), normalized across DPS warriors; tanks excluded." tabindex="0">Score</th><th data-tip="Mean damage per second across the counted pulls the warrior engaged." tabindex="0">Pull DPS</th><th data-tip="Share of engaged pull time spent actively damaging." tabindex="0">Activity</th><th data-tip="Counted pulls engaged, of 56." tabindex="0">Engage</th></tr></thead><tbody>
+<tr><td>1</td><td class="name">Pinaclex</td><td>9.68</td><td>868</td><td>0.899</td><td>54/56</td></tr>
+<tr><td>2</td><td class="name">Sgtboolaid</td><td>9.55</td><td>848</td><td>0.897</td><td>54/56</td></tr>
+<tr><td>3</td><td class="name">Jeian</td><td>9.54</td><td>863</td><td>0.900</td><td>51/56</td></tr>
+<tr><td>4</td><td class="name">Slamjunk</td><td>9.24</td><td>805</td><td>0.884</td><td>54/56</td></tr>
+<tr class="you"><td>5</td><td class="name">Ragerat</td><td>9.17</td><td>801</td><td>0.896</td><td>52/56</td></tr>
+<tr><td>6</td><td class="name">Vnx</td><td>9.15</td><td>797</td><td>0.884</td><td>53/56</td></tr>
+<tr><td>7</td><td class="name">Dinkie</td><td>9.07</td><td>786</td><td>0.876</td><td>53/56</td></tr>
+<tr><td>8</td><td class="name">Ejax</td><td>8.90</td><td>760</td><td>0.877</td><td>53/56</td></tr>
+<tr><td>9</td><td class="name">Ryuma</td><td>8.87</td><td>754</td><td>0.876</td><td>53/56</td></tr>
+<tr><td>10</td><td class="name">Ashfort</td><td>8.68</td><td>719</td><td>0.879</td><td>54/56</td></tr>
+<tr><td>11</td><td class="name">Dodyy</td><td>8.44</td><td>686</td><td>0.865</td><td>54/56</td></tr>
+<tr><td>12</td><td class="name">Iynx</td><td>8.31</td><td>812</td><td>0.519</td><td>52/56</td></tr>
+<tr><td>13</td><td class="name">Nalga</td><td>8.29</td><td>810</td><td>0.519</td><td>52/56</td></tr>
+<tr><td>14</td><td class="name">Sempai</td><td>8.20</td><td>661</td><td>0.847</td><td>53/56</td></tr>
+<tr><td>15</td><td class="name">Loganw</td><td>8.11</td><td>629</td><td>0.878</td><td>54/56</td></tr>
+<tr><td>16</td><td class="name">Gophie</td><td>7.77</td><td>753</td><td>0.486</td><td>50/56</td></tr>
+<tr><td>17</td><td class="name">Kazugz</td><td>7.77</td><td>730</td><td>0.486</td><td>54/56</td></tr>
+<tr><td>18</td><td class="name">Doljin</td><td>5.32</td><td>387</td><td>0.463</td><td>48/56</td></tr>
+</tbody></table></div><div class="panel-body"><p class="section-note" style="margin:0">Ragerat's shape is the balanced one: pull DPS 801 with activity 0.896 (second-best on the sheet) and engage 52/56. The four ~0.49–0.52 activity lines (Iynx, Nalga, Gophie, Kazugz) are the wipe's fingerprint: each of them spends most of the 11:05 Construct cluster dead or running back, which drags the whole-night activity average. Doljin's line is a role artifact: he tanked this week (48 taunts), including both Loatheb attempts.</p></div></article>
+<article class="panel"><div class="panel-head"><h3>Every counted pull</h3><span><input class="search" id="pullSearch" type="search" placeholder="Filter pulls…" aria-label="Filter pulls"></span></div><div class="table-wrap"><table id="pullTable"><thead><tr><th>Pull</th><th>Start</th><th data-tip="Mobs that died or took at least 25% of their HP during the pull." tabindex="0">Mobs</th><th data-tip="Sum of the counted mobs' maximum HP, read from the log's advanced unit block." tabindex="0">HP</th><th>Dur</th><th data-tip="Total raid damage in the pull window divided by pull duration." tabindex="0">Raid DPS</th><th data-tip="Idle gap before this pull started." tabindex="0">Gap</th><th>Composition</th></tr></thead><tbody>
+<tr><td class="name">Spider 1</td><td>17:40:07</td><td>6</td><td>424,440</td><td>0:13</td><td>41,279</td><td>34s</td><td class="wrap-cell">5× Carrion Spinner, 1× Crypt Reaver</td></tr>
+<tr><td class="name">Spider 2</td><td>17:40:20</td><td>10</td><td>157,200</td><td>0:05</td><td>39,562</td><td>0s</td><td class="wrap-cell">10× Infectious Skitterer</td></tr>
+<tr><td class="name">Spider 3</td><td>17:40:36</td><td>22</td><td>477,888</td><td>0:15</td><td>39,542</td><td>11s</td><td class="wrap-cell">20× Infectious Skitterer, 2× Necro Stalker</td></tr>
+<tr><td class="name">Spider 4</td><td>17:40:54</td><td>20</td><td>314,400</td><td>0:09</td><td>40,849</td><td>3s</td><td class="wrap-cell">20× Infectious Skitterer</td></tr>
+<tr><td class="name">Spider 5</td><td>17:42:04</td><td>2</td><td>163,488</td><td>0:05</td><td>40,873</td><td>5s</td><td class="wrap-cell">2× Necro Stalker</td></tr>
+<tr><td class="name">Spider 6</td><td>17:42:21</td><td>5</td><td>298,680</td><td>0:10</td><td>40,134</td><td>11s</td><td class="wrap-cell">4× Dread Creeper, 1× Tomb Horror</td></tr>
+<tr><td class="name">Spider 7</td><td>17:42:31</td><td>16</td><td>520,630</td><td>0:48</td><td>13,768</td><td>1s</td><td class="wrap-cell">10× Infectious Skitterer, 4× Dread Creeper, 1× Necropolis Acolyte, 1× Tomb Horror</td></tr>
+<tr><td class="name">Spider 8</td><td>17:42:57</td><td>5</td><td>487,320</td><td>0:13</td><td>45,971</td><td>0s</td><td class="wrap-cell">4× Plagued Ghoul, 1× Spirit of Naxxramas</td></tr>
+<tr><td class="name">Spider 9</td><td>17:43:19</td><td>1</td><td>64,750</td><td>0:03</td><td>26,115</td><td>0s</td><td class="wrap-cell">1× Necropolis Acolyte</td></tr>
+<tr><td class="name">Spider 10</td><td>17:43:41</td><td>2</td><td>129,500</td><td>0:08</td><td>22,342</td><td>19s</td><td class="wrap-cell">2× Necropolis Acolyte</td></tr>
+<tr><td class="name">Plague 1</td><td>17:44:54</td><td>4</td><td>352,128</td><td>0:11</td><td>38,993</td><td>12s</td><td class="wrap-cell">4× Patchwork Golem</td></tr>
+<tr><td class="name">Plague 2</td><td>17:45:11</td><td>6</td><td>829,995</td><td>0:37</td><td>27,829</td><td>6s</td><td class="wrap-cell">3× Infectious Ghoul, 2× Plague Slime, 1× Stoneskin Gargoyle</td></tr>
+<tr><td class="name">Plague 3</td><td>17:45:25</td><td>5</td><td>565,920</td><td>0:21</td><td>34,798</td><td>0s</td><td class="wrap-cell">3× Infectious Ghoul, 2× Plague Slime</td></tr>
+<tr><td class="name">Plague 4</td><td>17:45:52</td><td>3</td><td>792,225</td><td>0:16</td><td>63,928</td><td>4s</td><td class="wrap-cell">3× Stoneskin Gargoyle</td></tr>
+<tr><td class="name">Plague 5</td><td>17:46:10</td><td>2</td><td>528,150</td><td>0:10</td><td>65,751</td><td>3s</td><td class="wrap-cell">2× Stoneskin Gargoyle</td></tr>
+<tr><td class="name">Plague 6</td><td>17:46:41</td><td>2</td><td>528,150</td><td>0:10</td><td>66,901</td><td>21s</td><td class="wrap-cell">2× Stoneskin Gargoyle</td></tr>
+<tr><td class="name">Plague 7</td><td>17:47:40</td><td>49</td><td>805,848</td><td>0:48</td><td>22,144</td><td>4s</td><td class="wrap-cell">19× Frenzied Bat, 17× Plagued Bat, 10× Mutated Grub, 3× Plague Beast</td></tr>
+<tr><td class="name">Plague 8</td><td>17:49:20</td><td>1</td><td>3,052</td><td>0:10</td><td>279</td><td>8s</td><td class="wrap-cell">1× Rotting Maggot</td></tr>
+<tr><td class="name">Military 1</td><td>18:09:58</td><td>9</td><td>387,348</td><td>0:13</td><td>38,389</td><td>119s</td><td class="wrap-cell">4× Risen Deathknight, 2× Necro Knight, 2× Deathknight, 1× Shade of Naxxramas</td></tr>
+<tr><td class="name">Military 2</td><td>18:10:14</td><td>2</td><td>188,640</td><td>0:04</td><td>62,617</td><td>4s</td><td class="wrap-cell">2× Deathknight Captain</td></tr>
+<tr><td class="name">Military 3</td><td>18:10:24</td><td>8</td><td>421,296</td><td>0:17</td><td>31,735</td><td>6s</td><td class="wrap-cell">4× Skeletal Smith, 1× Dark Touched Warrior, 1× Deathknight, 1× Deathknight Captain, 1× Death Touched Warrior</td></tr>
+<tr><td class="name">Military 4</td><td>18:10:46</td><td>4</td><td>339,552</td><td>0:08</td><td>51,840</td><td>5s</td><td class="wrap-cell">2× Deathknight, 2× Deathknight Captain</td></tr>
+<tr><td class="name">Military 5</td><td>18:11:02</td><td>10</td><td>591,072</td><td>0:16</td><td>48,629</td><td>8s</td><td class="wrap-cell">4× Deathknight, 2× Deathknight Captain, 2× Death Touched Warrior, 1× Dark Touched Warrior, 1× Doom Touched Warrior</td></tr>
+<tr><td class="name">Military 6</td><td>18:11:21</td><td>3</td><td>245,232</td><td>0:07</td><td>45,618</td><td>3s</td><td class="wrap-cell">2× Deathknight, 1× Deathknight Captain</td></tr>
+<tr><td class="name">Military 7</td><td>18:11:31</td><td>7</td><td>465,312</td><td>0:14</td><td>43,414</td><td>2s</td><td class="wrap-cell">3× Deathknight, 2× Deathknight Captain, 1× Death Touched Warrior, 1× Doom Touched Warrior</td></tr>
+<tr><td class="name">Military 8</td><td>18:11:56</td><td>6</td><td>414,981</td><td>0:14</td><td>40,969</td><td>12s</td><td class="wrap-cell">3× Deathknight Cavalier, 3× Dark Touched Warrior</td></tr>
+<tr><td class="name">Military 9</td><td>18:12:09</td><td>8</td><td>377,262</td><td>0:14</td><td>35,073</td><td>0s</td><td class="wrap-cell">3× Dark Touched Warrior, 3× Risen Deathknight, 2× Deathknight Cavalier</td></tr>
+<tr><td class="name">Military 10 ★</td><td>18:12:32</td><td>15</td><td>792,261</td><td>0:11</td><td>75,821</td><td>9s</td><td class="wrap-cell">8× Skeletal Steed, 4× Risen Deathknight, 2× Deathknight Cavalier, 1× Death Lord</td></tr>
+<tr><td class="name">Military 11</td><td>18:13:55</td><td>1</td><td>231,028</td><td>0:01</td><td>231,028</td><td>0s</td><td class="wrap-cell">1× Deathknight Understudy</td></tr>
+<tr><td class="name">Military 12</td><td>18:14:11</td><td>2</td><td>176,064</td><td>0:08</td><td>31,069</td><td>16s</td><td class="wrap-cell">2× Unholy Staff</td></tr>
+<tr><td class="name">Military 13</td><td>18:14:20</td><td>2</td><td>226,368</td><td>0:10</td><td>31,436</td><td>1s</td><td class="wrap-cell">2× Unholy Axe</td></tr>
+<tr><td class="name">Military 14</td><td>18:14:37</td><td>4</td><td>389,856</td><td>0:14</td><td>35,009</td><td>8s</td><td class="wrap-cell">2× Unholy Swords, 1× Unholy Axe, 1× Unholy Staff</td></tr>
+<tr><td class="name">Military 15</td><td>18:14:56</td><td>5</td><td>318,180</td><td>0:18</td><td>23,745</td><td>4s</td><td class="wrap-cell">2× Necro Knight, 1× Unholy Swords, 1× Unholy Staff, 1× Shade of Naxxramas</td></tr>
+<tr><td class="name">Military 16</td><td>18:15:17</td><td>2</td><td>226,350</td><td>0:05</td><td>55,081</td><td>4s</td><td class="wrap-cell">2× Deathknight Cavalier</td></tr>
+<tr><td class="name">Military 17</td><td>18:15:30</td><td>4</td><td>267,876</td><td>0:07</td><td>48,726</td><td>7s</td><td class="wrap-cell">2× Necro Knight, 2× Deathknight Captain</td></tr>
+<tr><td class="name">Military 18</td><td>18:21:38</td><td>2</td><td>129,500</td><td>0:06</td><td>28,020</td><td>35s</td><td class="wrap-cell">2× Necropolis Acolyte</td></tr>
+<tr><td class="name">Construct 1</td><td>18:23:59</td><td>2</td><td>213,792</td><td>0:09</td><td>33,732</td><td>21s</td><td class="wrap-cell">2× Bile Retcher</td></tr>
+<tr><td class="name">Construct 2</td><td>18:24:14</td><td>2</td><td>90,636</td><td>0:04</td><td>28,525</td><td>7s</td><td class="wrap-cell">1× Sludge Belcher, 1× Bile Sludge</td></tr>
+<tr><td class="name">Construct 3</td><td>18:24:29</td><td>3</td><td>282,960</td><td>0:09</td><td>41,330</td><td>10s</td><td class="wrap-cell">2× Patchwork Golem, 1× Bile Retcher</td></tr>
+<tr><td class="name">Construct 4</td><td>18:24:49</td><td>3</td><td>457,800</td><td>0:13</td><td>43,456</td><td>11s</td><td class="wrap-cell">3× Sewage Slime</td></tr>
+<tr><td class="name">Construct 5</td><td>18:25:18</td><td>1</td><td>80,925</td><td>0:06</td><td>20,263</td><td>16s</td><td class="wrap-cell">1× Sludge Belcher</td></tr>
+<tr><td class="name">Construct 6</td><td>18:25:35</td><td>1</td><td>88,032</td><td>0:20</td><td>6,381</td><td>12s</td><td class="wrap-cell">1× Patchwork Golem</td></tr>
+<tr><td class="name">Construct 7 ★</td><td>18:25:46</td><td>34</td><td>1,049,355</td><td>11:05</td><td>2,342</td><td>0s</td><td class="wrap-cell">20× Embalming Slime, 5× Surgical Assistant, 4× Mad Scientist, 3× Patchwork Golem, 1× Living Monstrosity, 1× Sludge Belcher</td></tr>
+<tr><td class="name">Construct 8</td><td>18:34:23</td><td>3</td><td>457,800</td><td>0:16</td><td>36,724</td><td>0s</td><td class="wrap-cell">3× Sewage Slime</td></tr>
+<tr><td class="name">Construct 9</td><td>18:34:46</td><td>2</td><td>176,064</td><td>0:14</td><td>17,539</td><td>0s</td><td class="wrap-cell">2× Patchwork Golem</td></tr>
+<tr><td class="name">Construct 10</td><td>18:36:31</td><td>1</td><td>9,711</td><td>0:03</td><td>4,303</td><td>0s</td><td class="wrap-cell">1× Bile Sludge</td></tr>
+<tr><td class="name">Construct 11</td><td>18:36:57</td><td>10</td><td>460,174</td><td>0:16</td><td>35,767</td><td>5s</td><td class="wrap-cell">5× Surgical Assistant, 4× Mad Scientist, 1× Living Monstrosity</td></tr>
+<tr><td class="name">Construct 12</td><td>18:37:17</td><td>6</td><td>442,764</td><td>0:17</td><td>34,367</td><td>5s</td><td class="wrap-cell">4× Patchwork Golem, 1× Sludge Belcher, 1× Bile Sludge</td></tr>
+<tr><td class="name">Construct 13</td><td>18:37:41</td><td>1</td><td>80,925</td><td>0:04</td><td>28,558</td><td>6s</td><td class="wrap-cell">1× Sludge Belcher</td></tr>
+<tr><td class="name">Construct 14</td><td>18:37:49</td><td>1</td><td>80,925</td><td>0:03</td><td>39,563</td><td>4s</td><td class="wrap-cell">1× Sludge Belcher</td></tr>
+<tr><td class="name">Construct 15</td><td>18:37:55</td><td>10</td><td>460,174</td><td>0:34</td><td>16,976</td><td>4s</td><td class="wrap-cell">5× Surgical Assistant, 4× Mad Scientist, 1× Living Monstrosity</td></tr>
+<tr><td class="name">Construct 16</td><td>18:38:17</td><td>12</td><td>550,810</td><td>0:20</td><td>33,549</td><td>0s</td><td class="wrap-cell">5× Surgical Assistant, 4× Mad Scientist, 1× Living Monstrosity, 1× Sludge Belcher, 1× Bile Sludge</td></tr>
+<tr><td class="name">Construct 17</td><td>18:38:45</td><td>11</td><td>567,070</td><td>0:24</td><td>30,297</td><td>8s</td><td class="wrap-cell">5× Surgical Assistant, 4× Mad Scientist, 1× Living Monstrosity, 1× Bile Retcher</td></tr>
+<tr><td class="name">Construct 18</td><td>18:43:21</td><td>2</td><td>299,790</td><td>0:16</td><td>26,783</td><td>38s</td><td class="wrap-cell">2× Stitched Spewer</td></tr>
+<tr><td class="name">Construct 19</td><td>18:43:35</td><td>2</td><td>299,790</td><td>0:13</td><td>29,971</td><td>0s</td><td class="wrap-cell">2× Stitched Spewer</td></tr>
+<tr><td class="name">Construct 20</td><td>18:44:05</td><td>3</td><td>449,685</td><td>0:21</td><td>29,405</td><td>17s</td><td class="wrap-cell">3× Stitched Spewer</td></tr>
+</tbody></table></div></article>
+<p class="section-note">Full per-pull rows with per-player damage are in pulls.json. Best pull: Military 10 (the called bomb pull, Sapper tab). Construct 7's 2,342 raid DPS is the wipe: 34 deaths inside one window will do that. Construct 5–7 are one event — a belcher, a golem, then everything at once.</p>
+</section>
+
+<!-- BLENDER 5 -->
+<section class="section" id="blender5">
+<header class="report-head"><div><h2>5 Second Blender</h2><p>348 warrior-engaged trash mobs. The break-even rule from Sep 29 still holds (a GCD ≈ 1k BT; ~+3% phys per stack): mobs dying in &lt;5s don't repay a Sunder; 10s+ mobs do. The raid-wide inversion persists, and Ragerat sits on the other side of it from the prior weeks' focus character: his sunders are the raid's most efficient when cast, but he opens fewer worthy mobs with one.</p></div><span class="pill">348 mobs</span></header>
+<div class="grid" style="grid-template-columns:repeat(3,1fr)">
+<div class="bucket" style="--c:var(--blue)"><strong>149</strong><span>&lt;5s mobs (45 &lt;3s + 30 at 3–3.5s + 74 at 3.5–5s) — blender zone</span></div>
+<div class="bucket" style="--c:var(--warn)"><strong>89</strong><span>5–10s mobs — sunder pays if it lands early</span></div>
+<div class="bucket" style="--c:var(--good)"><strong>109</strong><span>10s+ mobs — always sunder</span></div>
+</div>
+<article class="panel" style="margin-top:12px"><div class="panel-head"><h3>Sunder-first % by target TTD (DPS warriors)</h3></div><div class="table-wrap"><table><thead><tr><th data-tip="Target time-to-die band, measured from first damage to death." tabindex="0">TTD band</th><th data-tip="Share of engagements in this band where the warrior's first targeted action on the mob was Sunder Armor." tabindex="0">Sunder-first</th><th>Read</th></tr></thead><tbody>
+<tr><td class="name">&lt;3s</td><td>29.4%</td><td class="wrap-cell">Should be near-zero. Isn't.</td></tr>
+<tr><td class="name">3–3.5s</td><td>43.6%</td><td class="wrap-cell">Blender — wasted GCDs.</td></tr>
+<tr><td class="name">3.5–5s</td><td>48.0%</td><td class="wrap-cell">Contested band — the highest rate of any band, again.</td></tr>
+<tr><td class="name">5–10s</td><td>38.7%</td><td class="wrap-cell">Should be rising. Flat.</td></tr>
+<tr><td class="name">10s+</td><td>22.4%</td><td class="wrap-cell">Lowest band again — the raid-wide inversion persists.</td></tr>
+</tbody></table></div></article>
+<article class="panel"><div class="panel-head"><h3>Wasted sunder-firsts on &lt;5s mobs + fair ranking</h3></div><div class="panel-body">
+<p class="section-note"><strong>Wasted (&lt;5s):</strong> Pinaclex 37 · Loganw 27 · Vnx 25 · Ryuma 23 · Sgtboolaid 22 · Ejax 20 · Nalga 18 · Gophie 18 · Iynx 18 · Sempai 17 · Jeian 17 · <strong>Ragerat 16</strong> · Dodyy 16 · Kazugz 16 · Dinkie 15 · Ashfort 14 · Doljin 12 · Slamjunk 6. Ragerat is mid-pack on waste volume; the separation is in the other column.</p>
+<p class="section-note" style="margin:0"><strong>Fair ranking — sunder-first on worthy (10s+) mobs only:</strong> Vnx 41.0% (16/39) · Kazugz 39.0% (16/41) · Pinaclex 31.6% (12/38) · Dinkie 30.4% (14/46) · Nalga 30.0% (12/40) · Doljin 28.6% (10/35) · Jeian 24.2% (8/33) · Ryuma 22.6% (7/31) · Gophie 21.4% (6/28) · Loganw 21.1% (8/38) · <strong>Ragerat 17.6% (6/34)</strong> · Ashfort 17.1% (6/35) · Sempai 15.4% (6/39) · Ejax 14.6% (6/41) · Dodyy 11.8% (4/34) · Iynx 10.0% (3/30) · Slamjunk 9.1% (3/33) · Sgtboolaid 8.3% (3/36). Ragerat's profile is selectivity of a different kind: when he does cast Sunder it almost never lands at the cap (9 wasted of 66 all night, raid-best efficiency), but on long-lived trash he reaches for damage first more often than the top of this list.</p>
+</div></article>
+</section>
+
+<!-- BLENDER 3.5 -->
+<section class="section" id="blender35">
+<header class="report-head"><div><h2>3.5 Second Blender</h2><p>The stricter cutoff. At &lt;3.5s the waste case is airtight — no plausible armor math repays the GCD. Oct 20: 75 of 348 mobs (22%) die under 3.5s.</p></div><span class="pill">75 mobs &lt;3.5s</span></header>
+<div class="grid metrics"><div class="metric"><div class="label">Mobs &lt;3.5s</div><div class="value">75</div><div class="note">45 &lt;3s + 30 at 3–3.5s</div></div><div class="metric"><div class="label">DPS sunder-first &lt;3s</div><div class="value">29.4%</div><div class="note">Below the all-band average, barely</div></div><div class="metric"><div class="label">DPS sunder-first 3–3.5s</div><div class="value">43.6%</div><div class="note">Nearly double the 10s+ band (22.4%)</div></div><div class="metric"><div class="label">Ragerat wasted &lt;3.5s</div><div class="value">10</div><div class="note">2nd only to Pinaclex (14)</div></div></div>
+<article class="panel"><div class="panel-head"><h3>Wasted sunder-first GCDs on &lt;3.5s mobs</h3></div><div class="panel-body"><p class="section-note" style="margin:0">Pinaclex 14 · <strong>Ragerat 10</strong> · Gophie 9 · Sgtboolaid 9 · Loganw 9 · Vnx 8 · Ryuma 8 · Ejax 7 · Iynx 7 · Nalga 6 · Ashfort 6 · Jeian 6 · Dinkie 5 · Dodyy 5 · Sempai 4 · Kazugz 4 · Doljin 4 · Slamjunk 2. Same sensitivity read as prior weeks: warriors back off slightly on the very fastest mobs, the discipline collapses in the 3.5–5s contested band (48.0%), and it never ramps up for slow mobs raid-wide. Ragerat's waste here is the common fast-mob habit; his distinction is elsewhere — a raid-best 86% of his sunders land below the cap (Sunder tab). The fix is unchanged: a named list (Slimes, Mad Scientists, Surgical Assistants, Gargoyles, Necro Stalkers) gets the GCD; everything else gets Bloodthirst.</p></div></article>
+</section>
+
+<!-- WW PACKS -->
+<section class="section" id="wwpacks">
+<header class="report-head"><div><h2>Whirlwind packs</h2><p>The hypothesis, tested the same way as prior weeks: could the DPS warriors have skipped Sunder and killed the pack on Whirlwind alone just as fast? 50 packs ≥3 mobs from 645 real trash mobs. Oct 20 verdict: one pack qualifies, and only 4 sunder casts landed on pure-Whirlwind packs all night — the blender discipline held even in a chaotic run.</p></div><span class="pill">1 pure-WW · 0 borderline</span></header>
+<article class="panel"><div class="panel-head"><h3>Whirlwind price by Sunder stacks (Oct 20)</h3><span>3,839 hits tracked</span></div><div class="table-wrap"><table><thead><tr><th data-tip="Sunder Armor stacks on the target at the moment the Whirlwind hit landed." tabindex="0">Stacks</th><th>Hits+misses</th><th data-tip="Mean Whirlwind damage per application, counting dodges, parries and misses as 0." tabindex="0">Per application</th><th data-tip="Mean damage counting landed hits only." tabindex="0">Per landed hit</th></tr></thead><tbody>
+<tr><td class="name">0</td><td>1,624</td><td>628</td><td>678</td></tr><tr><td class="name">1</td><td>563</td><td>647</td><td>696</td></tr><tr><td class="name">2</td><td>271</td><td>762</td><td>807</td></tr><tr><td class="name">3</td><td>237</td><td>824</td><td>888</td></tr><tr><td class="name">4</td><td>158</td><td>804</td><td>852</td></tr><tr><td class="name">5</td><td>986</td><td>916</td><td>971</td></tr>
+</tbody></table></div><div class="panel-body"><p class="section-note" style="margin:0">Model price: 628 per application at 0 stacks. The curve rises with stacks as the armor math says it should; it remains observational (target mix differs by stack count), not a controlled experiment.</p></div></article>
+<div class="formula">WW-only TTK = pack HP ÷ (DPS wars × min(4, mobs) × 628 ÷ 10s)</div>
+<article class="panel" style="margin-top:12px"><div class="panel-head"><h3>Verdicts — 50 packs</h3></div><div class="panel-body">
+<div class="mini-stat"><span>Pure-WW (Sunder optional)</span><strong>1</strong></div>
+<div class="mini-stat"><span>Borderline (1.00–1.25×)</span><strong>0</strong></div>
+<div class="mini-stat"><span>Sunder-needy</span><strong>25</strong></div>
+<div class="mini-stat"><span>Chain / boss-adds / low-engagement (no verdict)</span><strong>24</strong></div>
+<p class="section-note" style="margin-top:12px">The 1 pure-WW pack is a 25-mob skitterer pack (15× Infectious Skitterer, 6× Carrion Spinner, 3× Dread Creeper, Venom Stalker; 811,152 HP; WW-only 170.0s vs 235.3s actual, ratio 0.72; 4 sunders cast). Its "actual" time runs long because it bleeds across the following pull, so the honest headline stands: <strong>no real, tight trash pack qualifies as pure-WW.</strong> The Construct wipe cluster (34 mobs, 665.5s) sits in the no-verdict bucket, as it should: kill-time math does not describe a wipe.</p>
+<p class="section-note" style="margin:0"><strong>Most sunder-needy:</strong> Military 10 steed pack (ratio 14.55×, 13 sunders) · 3× Stoneskin Gargoyle (14.2×, 36 sunders) · 3× Sewage Slime (10.15×, 24) · Deathknight pair + Captain (9.67×, 19) · 2× Patchwork Golem + Bile Retcher (9.19×, 26) · Deathknight/Captain pack (8.63×, 18) · Necro Knight + Shade (8.52×, 7) · 3× Sewage Slime (8.07×, 30). Sunder value still concentrates exactly where it should: gargoyles, deathknights, and the golem packs.</p>
+</div></article>
+</section>
+
+<!-- SAPPER + CONSTRUCT WIPE -->
+<section class="section" id="sapper">
+<header class="report-head"><div><h2>Sapper + the Construct Wipe</h2><p>Two stories. First, the discipline: Ragerat cast sapper on the called bomb, Military Pull 10, at +3.4s for 14 targets, and every other miss on a real bomb was cooldown sequencing. Second, the cost: the Construct cluster that wiped the raid at 18:25 and took his world buffs with it, featured in full below.</p></div><span class="pill">Bomb hit ✓ · 9 casts</span></header>
+<article class="panel"><div class="panel-head"><h3>Bomb pulls by raid sapper damage</h3></div><div class="table-wrap"><table><thead><tr><th>Pull</th><th data-tip="Total Goblin Sapper Charge damage by the whole raid inside the pull window." tabindex="0">Raid sapper</th><th>Ragerat</th><th>Read</th></tr></thead><tbody>
+<tr><td class="name">Military 10 ★</td><td>222,857</td><td>1 cast · +3.4s · 14 tgts · 9,779 · pull dmg #21/39</td><td class="wrap-cell">The called bomb, and he was on it. The biggest sapper pull of the night by an order of magnitude.</td></tr>
+<tr><td class="name">Plague 7</td><td>14,601</td><td>0 casts · 33,073 · #9/35</td><td class="wrap-cell">Missed on cooldown.</td></tr>
+<tr><td class="name">Spider 4</td><td>14,257</td><td>0 casts · 12,892 · #8/33</td><td class="wrap-cell">Missed on cooldown.</td></tr>
+<tr><td class="name">Construct 7</td><td>13,542</td><td>0 casts · 7,279 · #22/26</td><td class="wrap-cell">Missed on cooldown — this is the wipe cluster; he died 16 seconds into it.</td></tr>
+<tr><td class="name">Military 1</td><td>11,710</td><td>0 casts · 17,774 · #6/30</td><td class="wrap-cell">Missed on cooldown.</td></tr>
+<tr><td class="name">Construct 11</td><td>10,558</td><td>0 casts · 13,408 · #17/30</td><td class="wrap-cell">Missed on cooldown; post-wipe recovery pull.</td></tr>
+<tr><td class="name">Plague 1</td><td>8,239</td><td>0 casts · 6,957 · #20/30</td><td class="wrap-cell">No-CD miss on a small bomb.</td></tr>
+<tr><td class="name">Plague 3</td><td>5,828</td><td>0 casts · 46,278 · #3/31</td><td class="wrap-cell">No-CD miss; tiny bomb, his melee damage carried the pull anyway.</td></tr>
+</tbody></table></div></article>
+<div class="grid split2">
+<article class="panel"><div class="panel-head"><h3>The discipline read</h3></div><div class="panel-body"><ol class="action-list">
+<li><b class="num">1</b><div><strong>The called bomb got the cast ✓</strong><small>Military 10 is the pull the cooldown exists for: 222,857 raid sapper damage, his charge in at +3.4s on 14 targets. No small-pull cast burned the cooldown beforehand.</small></div></li>
+<li><b class="num">2</b><div><strong>Misses are sequencing, not judgment</strong><small>5 of 7 missed bombs were on cooldown (Plague 7, Spider 4, Construct 7, Military 1, Construct 11). The 2 no-CD misses are small bombs (8.2k and 5.8k raid), one of them a pull his melee topped anyway.</small></div></li>
+<li><b class="num">3</b><div><strong>Volume is real</strong><small>56,610 sapper damage on the night, #3 among warriors, on 9 casts total: the charges are landing on packs, not on leftovers.</small></div></li>
+</ol></div></article>
+<article class="panel"><div class="panel-head"><h3>Ragerat sapper usage</h3></div><div class="panel-body">
+<div class="mini-stat"><span>Casts (whole log)</span><strong>9</strong></div>
+<div class="mini-stat"><span>Casts in counted pulls</span><strong>1 — the bomb</strong></div>
+<div class="mini-stat"><span>Bomb cast: Military 10, +3.4s</span><strong>14 tgts · 9,779</strong></div>
+<div class="mini-stat"><span>Sapper damage (all)</span><strong>56,610</strong></div>
+<div class="mini-stat"><span>Dynamite damage</span><strong>14,951</strong></div>
+<div class="mini-stat"><span>Missed bombs on CD / no-CD</span><strong>5 / 2</strong></div>
+</div></article>
+</div>
+<article class="panel"><div class="panel-head"><h3>Feature — the Construct Wipe (Construct Pulls 5–7, 18:25:18–18:36:52)</h3><span>Ragerat's only death · the night's hinge</span></div><div class="panel-body">
+<p class="section-note">It started small: Construct Pull 5, a lone Sludge Belcher, killed Kazugz, Nalga and Iynx. Pull 6 (a single Patchwork Golem) and the merged Pull 7 cluster, 5× Surgical Assistant, 4× Mad Scientist, 3× Patchwork Golem, a Living Monstrosity, a Sludge Belcher and 20× Embalming Slime, then ran continuously for 11:05 with <strong>34 deaths, 27 of them in the 18:26 minute</strong>. Ragerat died at <strong>18:26:02</strong>, inside the worst minute of it.</p>
+</div><div class="table-wrap"><table><thead><tr><th>Damage taken, last 30s</th><th>Amount</th><th>Source</th><th>Read</th></tr></thead><tbody>
+<tr><td class="name">Cleave</td><td>5,950</td><td class="wrap-cell">Patchwork Golem</td><td class="wrap-cell">Two hits; the second, at 18:26:02, is the 2,920 killing blow.</td></tr>
+<tr><td class="name">Disease Cloud</td><td>1,658</td><td class="wrap-cell">Patchwork Golem</td><td class="wrap-cell">Aura ticks every ~3s through the whole window.</td></tr>
+<tr><td class="name">War Stomp</td><td>1,205</td><td class="wrap-cell">Patchwork Golem</td><td class="wrap-cell">One stomp at 18:25:59, three seconds before the end.</td></tr>
+<tr><td class="name">Total</td><td>8,813</td><td class="wrap-cell">30-second window, all from one golem</td><td class="wrap-cell">A single mob's full kit in half a minute, in a minute where 26 other people also died.</td></tr>
+</tbody></table></div><div class="panel-body">
+<p class="section-note"><strong>Healing in the window:</strong> Flash of Light 971 from Holyhaze at −12s · Flash Heal 1,412 from Bouvtothehlz at −10s · Judgement of Light procs (his own melee). Nothing landed after −10s; the raid's healers were dying in the same minute.</p>
+<p class="section-note" style="margin:0"><strong>The cost:</strong> world buffs, raidwide, immediately before Patchwerk. Sayge's Dark Fortune (unbooned 17:38:23, re-booned during the Loatheb recovery) was removed at his death, and the last five bosses ran unbuffed for everyone: Patchwerk 2:06, Sapphiron a normal 3:06 (no polarity carry possible), Kel'Thuzad 5:51 with 5 deaths in his final minute, and an Abomination Wing total of 27:34. For the review: this is a pull-composition accident, not a positioning finding — 27 deaths in one minute is the raid's story, not any one player's.</p>
+</div></article>
+</section>
+
+<!-- SUNDER + EXPOSE -->
+<section class="section" id="sunder">
+<header class="report-head"><div><h2>Sunder + Expose</h2><p>2,041 sunder casts raid-wide. Effective = cast while target was under 5 stacks. Ragerat's line is the cleanest on the roster: 57 effective from 66 casts, 86% efficiency, just 9 casts at the cap, the fewest wasted of anyone. Expose duty moved to Scoopx this week.</p></div><span class="pill">2,041 casts</span></header>
+<article class="panel"><div class="panel-head"><h3>Effective sunders — all warriors</h3><span>Read counts with role; tanks open every boss and long pull</span></div><div class="table-wrap"><table><thead><tr><th>Warrior</th><th data-tip="Sunder Armor casts that landed while the target had fewer than 5 stacks." tabindex="0">Effective</th><th>Total</th><th data-tip="Effective casts divided by total casts. Casts at 5 stacks refresh the duration but add no armor reduction." tabindex="0">Efficiency</th><th>At 5 stacks</th><th>Role</th></tr></thead><tbody>
+<tr><td class="name">Bigvince</td><td>112</td><td>199</td><td>56%</td><td>87</td><td>OT</td></tr>
+<tr><td class="name">Sven</td><td>90</td><td>131</td><td>69%</td><td>41</td><td>OT</td></tr>
+<tr><td class="name">Pinaclex</td><td>81</td><td>126</td><td>64%</td><td>45</td><td>DPS</td></tr>
+<tr><td class="name">Perthil</td><td>71</td><td>140</td><td>51%</td><td>69</td><td>MT</td></tr>
+<tr><td class="name">Doljin</td><td>66</td><td>100</td><td>66%</td><td>34</td><td>Tank</td></tr>
+<tr><td class="name">Dinkie</td><td>64</td><td>76</td><td>84%</td><td>12</td><td>DPS</td></tr>
+<tr><td class="name">Jeian</td><td>64</td><td>80</td><td>80%</td><td>16</td><td>DPS</td></tr>
+<tr><td class="name">Vnx</td><td>61</td><td>93</td><td>66%</td><td>32</td><td>DPS</td></tr>
+<tr><td class="name">Egg</td><td>60</td><td>96</td><td>63%</td><td>36</td><td>OT (light)</td></tr>
+<tr><td class="name">Ejax</td><td>59</td><td>75</td><td>79%</td><td>16</td><td>DPS</td></tr>
+<tr><td class="name">Nalga</td><td>59</td><td>69</td><td>86%</td><td>10</td><td>DPS</td></tr>
+<tr><td class="name">Tankina</td><td>58</td><td>90</td><td>64%</td><td>32</td><td>OT (light)</td></tr>
+<tr class="you"><td class="name">Ragerat</td><td>57</td><td>66</td><td>86%</td><td>9</td><td>DPS</td></tr>
+<tr><td class="name">Loganw</td><td>57</td><td>79</td><td>72%</td><td>22</td><td>DPS</td></tr>
+<tr><td class="name">Ryuma</td><td>56</td><td>74</td><td>76%</td><td>18</td><td>DPS</td></tr>
+<tr><td class="name">Dodyy</td><td>55</td><td>75</td><td>73%</td><td>20</td><td>DPS</td></tr>
+<tr><td class="name">Sgtboolaid</td><td>55</td><td>71</td><td>77%</td><td>16</td><td>DPS</td></tr>
+<tr><td class="name">Gophie</td><td>49</td><td>73</td><td>67%</td><td>24</td><td>DPS</td></tr>
+<tr><td class="name">Ashfort</td><td>46</td><td>66</td><td>70%</td><td>20</td><td>DPS</td></tr>
+<tr><td class="name">Kazugz</td><td>46</td><td>74</td><td>62%</td><td>28</td><td>DPS</td></tr>
+<tr><td class="name">Iynx</td><td>45</td><td>66</td><td>68%</td><td>21</td><td>DPS</td></tr>
+<tr><td class="name">Slamjunk</td><td>45</td><td>56</td><td>80%</td><td>11</td><td>DPS</td></tr>
+<tr><td class="name">Sempai</td><td>40</td><td>66</td><td>61%</td><td>26</td><td>DPS</td></tr>
+</tbody></table></div></article>
+<div class="grid split2">
+<article class="panel"><div class="panel-head"><h3>Expose handoff — Scoopx (rogue)</h3></div><div class="panel-body">
+<p class="section-note">Expose duty moved to Scoopx this week; Flaps applied it only on Anub'Rekhan. First Expose Armor after ENCOUNTER_START: Anub +10.4s (Flaps), +10.9 · Faerlina +6.6 · Maexxna +10.6 · Noth +17.2 · Heigan +10.2 · Loatheb +22.3 · Razuvious +13.4 · Gothik +277.6 (boss phase) · Patchwerk +10.0 · Grobbulus +9.9 · Gluth +13.9 · Thaddius +15.6 (Stalagg), +64.6 (boss) · Sapphiron +6.1 · KT +241.0 (boss-active phase).</p>
+<p class="section-note"><strong>Refreshes where the fight outlived one application:</strong> Loatheb +81.3s and Sapphiron +74.0s both got a second Expose inside the fight; Kel'Thuzad took three (+241.0, +300.2, +346.6). Landing offsets are healthy all night: nothing later than +17.2s on a targetable boss except the phase-gated ones (Gothik, KT).</p>
+<p class="section-note" style="margin:0"><strong>Four Horsemen: 3 of 4 — and that's the ceiling.</strong> Thane +10.9 · Mograine +24.8 · Blaumeux +67.5 · <strong>Sir Zeliek: no Expose — expected, not a miss.</strong> The raid brings exactly one rogue with the Improved Expose Armor talent, and he is never assigned to Zeliek's side of the fight, so no Exposed Zeliek is possible with this roster. Same shape as every prior week: 3 of 4 is the maximum.</p>
+</div></article>
+<article class="panel"><div class="panel-head"><h3>Sunder value (IV model)</h3></div><div class="panel-body">
+<div class="mini-stat"><span>Bigvince (OT) — raid high</span><strong>506,100</strong></div>
+<div class="mini-stat"><span>Sven (OT)</span><strong>417,200</strong></div>
+<div class="mini-stat"><span>Perthil (MT)</span><strong>346,500</strong></div>
+<div class="mini-stat"><span>Doljin (Tank)</span><strong>331,100</strong></div>
+<div class="mini-stat"><span>Pinaclex — best DPS warrior</span><strong>279,300</strong></div>
+<div class="mini-stat"><span>Ragerat</span><strong>226,100</strong></div>
+<p class="section-note" style="margin-top:10px">Value concentrates on tanks because they open every boss and long pull. Ragerat's 226,100 comes from the fewest casts of anyone near the top of this list: 57 effective at 86% efficiency, where the tank lines run 51–69% with two to three times the casts at the cap.</p>
+</div></article>
+</div>
+</section>
+
+<!-- ENGINEERING -->
+<section class="section" id="engineering">
+<header class="report-head"><div><h2>Engineering</h2><p>Raw log amounts, overkill included, parsed from Ragerat's own log (full raid in range all night). Ragerat posts the #2 engineering total on the roster with the strongest sapper line of any warrior — and the same single hole, now four runs old.</p></div><span class="pill">Ragerat 95,863 · HW 0</span></header>
+<article class="panel"><div class="panel-head"><h3>Engineering damage — top 12</h3></div><div class="table-wrap"><table><thead><tr><th>#</th><th>Player</th><th>Total</th><th data-tip="Goblin Sapper Charge damage." tabindex="0">Sapper</th><th data-tip="Dense Dynamite damage." tabindex="0">Dynamite</th><th data-tip="Stratholme Holy Water damage. Undead targets only, which in Naxxramas is nearly everything." tabindex="0">Holy Water</th><th data-tip="Dragonbreath Chili damage." tabindex="0">Chili</th></tr></thead><tbody>
+<tr><td>1</td><td class="name">Lumberyak (mage)</td><td>108,966</td><td>26,180</td><td>8,463</td><td>74,323</td><td>—</td></tr>
+<tr class="you"><td>2</td><td class="name">Ragerat</td><td>95,863</td><td>56,610</td><td>14,951</td><td>0</td><td>24,302</td></tr>
+<tr><td>3</td><td class="name">Nalga</td><td>94,525</td><td>51,523</td><td>2,327</td><td>18,940</td><td>21,735</td></tr>
+<tr><td>4</td><td class="name">Ejax</td><td>90,956</td><td>51,913</td><td>3,826</td><td>21,528</td><td>13,689</td></tr>
+<tr><td>5</td><td class="name">Jeian</td><td>85,061</td><td>51,432</td><td>20,823</td><td>—</td><td>12,806</td></tr>
+<tr><td>6</td><td class="name">Ashfort</td><td>79,405</td><td>51,340</td><td>13,132</td><td>—</td><td>14,933</td></tr>
+<tr><td>7</td><td class="name">Gophie</td><td>77,853</td><td>34,313</td><td>15,642</td><td>13,882</td><td>14,016</td></tr>
+<tr><td>8</td><td class="name">Sgtboolaid</td><td>72,833</td><td>52,061</td><td>12,889</td><td>—</td><td>7,883</td></tr>
+<tr><td>9</td><td class="name">Pinaclex</td><td>68,779</td><td>46,014</td><td>14,798</td><td>—</td><td>7,967</td></tr>
+<tr><td>10</td><td class="name">Dodyy</td><td>67,819</td><td>43,856</td><td>10,732</td><td>4,453</td><td>8,778</td></tr>
+<tr><td>11</td><td class="name">Waamb</td><td>62,480</td><td>32,232</td><td>12,143</td><td>18,105</td><td>—</td></tr>
+<tr><td>12</td><td class="name">Doljin</td><td>61,669</td><td>42,804</td><td>13,993</td><td>4,872</td><td>—</td></tr>
+</tbody></table></div></article>
+<div class="callout"><strong>The Ragerat gap:</strong> sapper 56,610 is the best warrior line on the sheet and his chili (24,302) leads all warriors too. What is left is one line: <strong>Holy Water 0, the fourth straight zero across the logged characters</strong> (raid total 59 casts; Nalga, Gophie and Ejax threw 12 each; Lumberyak's 74,323 shows the ceiling). Even a mid-tier Holy Water night is worth more than the 13k between him and the raid's #1 engineering total.</div>
+</section>
+
+<!-- UTILITY -->
+<section class="section" id="utility">
+<header class="report-head"><div><h2>Interrupts + utility</h2><p>Successful interrupts only. Ragerat leads the raid with 6, four of them Kel'Thuzad Frostbolts: the interrupts that protect the kill, on the night the kill needed protecting most.</p></div><span class="pill">Ragerat 6 interrupts</span></header>
+<div class="grid split2">
+<article class="panel"><div class="panel-head"><h3>Interrupts</h3></div><div class="table-wrap"><table><thead><tr><th>Player</th><th data-tip="Successful interrupts only (SPELL_INTERRUPT events), all targets." tabindex="0">Total</th><th>Detail</th></tr></thead><tbody>
+<tr class="you"><td class="name">Ragerat</td><td>6</td><td class="wrap-cell">4× Kel'Thuzad Frostbolt (Pummel) · Sludge Belcher Disease Buffet · Stitched Spewer Slime Bolt</td></tr>
+<tr><td class="name">Sempai</td><td>4</td><td class="wrap-cell">Warrior interrupts (Pummel)</td></tr>
+<tr><td class="name">Daysukeboost</td><td>3</td><td class="wrap-cell">3× Rider Shadow Bolt Volley (Counterspell)</td></tr>
+<tr><td class="name">Flaps</td><td>2</td><td class="wrap-cell">Rogue interrupts (Kick)</td></tr>
+<tr><td class="name">Ejax</td><td>2</td><td class="wrap-cell">Warrior interrupts (Pummel)</td></tr>
+<tr><td class="name">Dinkie</td><td>1</td><td class="wrap-cell">Warrior interrupt (Pummel)</td></tr>
+<tr><td class="name">Sgtboolaid</td><td>1</td><td class="wrap-cell">Warrior interrupt (Pummel)</td></tr>
+<tr><td class="name">Scoopx</td><td>1</td><td class="wrap-cell">Rogue interrupt (Kick)</td></tr>
+<tr><td class="name">Ashfort</td><td>1</td><td class="wrap-cell">Warrior interrupt (Pummel)</td></tr>
+<tr><td class="name">Bigvince</td><td>1</td><td class="wrap-cell">Warrior interrupt (Pummel)</td></tr>
+<tr><td class="name">Dodyy</td><td>1</td><td class="wrap-cell">Warrior interrupt (Pummel)</td></tr>
+</tbody></table></div></article>
+<article class="panel"><div class="panel-head"><h3>Utility — taunts / demo / disarm / dummies</h3></div><div class="panel-body">
+<div class="mini-stat"><span>Taunts — Perthil (MT)</span><strong>51</strong></div>
+<div class="mini-stat"><span>Taunts — Sven / Doljin / Bigvince</span><strong>49 / 48 / 37</strong></div>
+<div class="mini-stat"><span>Demo Shout — Perthil</span><strong>107</strong></div>
+<div class="mini-stat"><span>Demo — Doljin / Bigvince</span><strong>51 ea</strong></div>
+<div class="mini-stat"><span>Disarm — Ragerat / Sven</span><strong>5 ea</strong></div>
+<div class="mini-stat"><span>Ragerat — demo / MTD</span><strong>6 / 4.0 pts</strong></div>
+<p class="section-note" style="margin-top:10px">Tank roles are read off taunts this week: the usual MT was absent, so Perthil took MT duty (51 taunts, 107 demos), with Doljin, a DPS warrior most weeks, tanking the Loatheb attempts among his 48. Target dummies: Jeian tops the sheet at 5 casts; Ragerat, Holyhaze and Vnx at 4. Challenging Shout: Sven 4, Doljin / Bigvince / Jeian 3. Ragerat's utility line (raid-high 6 interrupts, 5 disarms, 6 demos, 4.0 MTD) is a low-volume, high-placement card, the same shape as his sunder line.</p>
+</div></article>
+</div>
+</section>
+
+<!-- ROTATION -->
+<section class="section" id="rotation">
+<header class="report-head"><div><h2>Warrior rotation</h2><p>Targeted openers only (the corrected method — incidental Whirlwind cleave never counts as an opener). Three views: per-target, pull-start, and post-opener. Ragerat sits mid-pack in all three (31.7% · 34.0% · 30.3%): he is not an opener-first warrior, and his IV Score is built on what his sunders do after they land, not on how often he throws the first one. The cooldown note of the week is Loatheb: his Death Wish fired at +70.5s against the filed ~65s rule.</p></div><span class="pill">Ragerat 31.7% per-target</span></header>
+<div class="grid split2">
+<article class="panel"><div class="panel-head"><h3>Sunder-first per-target (trash)</h3><span>DPS warriors</span></div><div class="table-wrap"><table><thead><tr><th>#</th><th>Warrior</th><th data-tip="Share of trash targets whose first targeted action from this warrior was Sunder Armor." tabindex="0">Sunder-first</th></tr></thead><tbody>
+<tr><td>1</td><td class="name">Pinaclex</td><td>53.8%</td></tr><tr><td>2</td><td class="name">Vnx</td><td>47.6%</td></tr><tr><td>3</td><td class="name">Ryuma</td><td>42.1%</td></tr><tr><td>4</td><td class="name">Sgtboolaid</td><td>39.2%</td></tr><tr><td>5</td><td class="name">Doljin</td><td>38.8%</td></tr><tr><td>6</td><td class="name">Loganw</td><td>38.1%</td></tr><tr><td>7</td><td class="name">Kazugz</td><td>36.6%</td></tr><tr><td>8</td><td class="name">Nalga</td><td>35.8%</td></tr><tr><td>9</td><td class="name">Gophie</td><td>35.0%</td></tr><tr><td>10</td><td class="name">Jeian</td><td>34.1%</td></tr><tr><td>11</td><td class="name">Dodyy</td><td>33.9%</td></tr><tr><td>12</td><td class="name">Sempai</td><td>32.6%</td></tr><tr><td>13</td><td class="name">Ejax</td><td>32.5%</td></tr><tr><td>14</td><td class="name">Dinkie</td><td>31.9%</td></tr><tr class="you"><td>15</td><td class="name">Ragerat</td><td>31.7% (40/126)</td></tr><tr><td>16</td><td class="name">Ashfort</td><td>31.7%</td></tr><tr><td>17</td><td class="name">Iynx</td><td>28.5%</td></tr><tr><td>18</td><td class="name">Slamjunk</td><td>14.0%</td></tr>
+</tbody></table></div></article>
+<article class="panel"><div class="panel-head"><h3>Sunder-first at pull start</h3><span>DPS warriors</span></div><div class="table-wrap"><table><thead><tr><th>#</th><th>Warrior</th><th data-tip="Share of pull-start engagements (the warrior's first target of a counted pull) opened with Sunder Armor." tabindex="0">Sunder-first</th></tr></thead><tbody>
+<tr><td>1</td><td class="name">Vnx</td><td>69.2%</td></tr><tr><td>2</td><td class="name">Sgtboolaid</td><td>58.8%</td></tr><tr><td>3</td><td class="name">Pinaclex</td><td>58.2%</td></tr><tr><td>4</td><td class="name">Nalga</td><td>53.7%</td></tr><tr><td>5</td><td class="name">Ejax</td><td>50.9%</td></tr><tr><td>6</td><td class="name">Iynx</td><td>50.9%</td></tr><tr><td>7</td><td class="name">Sempai</td><td>49.1%</td></tr><tr><td>8</td><td class="name">Dodyy</td><td>46.2%</td></tr><tr><td>9</td><td class="name">Dinkie</td><td>45.5%</td></tr><tr><td>10</td><td class="name">Loganw</td><td>45.3%</td></tr><tr><td>11</td><td class="name">Ashfort</td><td>44.2%</td></tr><tr><td>12</td><td class="name">Gophie</td><td>44.2%</td></tr><tr><td>13</td><td class="name">Doljin</td><td>40.0%</td></tr><tr><td>14</td><td class="name">Kazugz</td><td>35.8%</td></tr><tr><td>15</td><td class="name">Ryuma</td><td>34.5%</td></tr><tr class="you"><td>16</td><td class="name">Ragerat</td><td>34.0% (18/53)</td></tr><tr><td>17</td><td class="name">Jeian</td><td>24.0%</td></tr><tr><td>18</td><td class="name">Slamjunk</td><td>1.9%</td></tr>
+</tbody></table></div></article>
+</div>
+<article class="panel"><div class="panel-head"><h3>Post-opener sunder-first (pull-opener GCD excluded)</h3><span>the habit underneath the opener</span></div><div class="panel-body"><p class="section-note" style="margin:0">Pinaclex 47.3% (43/91) — #1 · Ryuma 42.5% · Jeian 41.7% · Doljin 37.0% · Kazugz 35.0% · Vnx 33.3% · Loganw 31.3% · <strong>Ragerat 30.3% (23/76)</strong> · Gophie 26.9% · Sgtboolaid 25.3% · Dodyy 23.9% · Dinkie 22.9% · Nalga 22.9% · Slamjunk 22.9% · Ashfort 22.2% · Sempai 20.8% · Ejax 19.7% · Iynx 12.5%. Three views of the same player: Ragerat opens with damage and sunders selectively, which reads as a weakness here and as the raid's best sunder efficiency (86%, 9 wasted) in the Sunder tab. Both are true; the IV model rewards the second.</p></div></article>
+<article class="panel"><div class="panel-head"><h3>Cooldown note — Loatheb Death Wish at +70.5s</h3></div><div class="panel-body"><p class="section-note" style="margin:0">The filed rule is Death Wish at ~65s on Loatheb. Oct 20, on the kill pull: <strong>+70.5s</strong>, five seconds late, on a 101.7s kill — close enough that the execute phase still sat mostly inside it. His Loatheb ran 1,897 in-window DPS while buffed, so file this as polish: one timing nudge, no other adjustment. (The reset attempt's cooldown use is not scored; there was no kill to time against.)</p></div></article>
+</section>
+
+<!-- IV SCORE -->
+<section class="section" id="ivscore">
+<header class="report-head"><div><h2>IV Score</h2><p>Same 3.6M yardstick as prior weeks. No TSA −100k penalty applied — Oct 20 TSA recipients are unknown, so every score here is pre-penalty. Ragerat's #2 is a service-carried score: the raid's cleanest sunder line plus the night's best soft-value total (485,726 from interrupts, disarms, demos and dummies), holding up a damage total the wipe cut short.</p></div><span class="pill">Ragerat 9.23 · #2 of 23</span></header>
+<div class="formula">Score = 10 × (damage + sunder value + soft value) ÷ 3,600,000</div>
+<article class="panel" style="margin-top:12px"><div class="panel-head"><h3>Full ranking — all 23 warriors</h3></div><div class="table-wrap"><table><thead><tr><th>#</th><th>Warrior</th><th>Score</th><th data-tip="Total damage to creatures across the whole log, trash and bosses." tabindex="0">Damage</th><th data-tip="Sunder Armor casts that landed while the target had fewer than 5 stacks." tabindex="0">Eff. sunders</th><th data-tip="Modelled raid damage bought by this warrior's effective sunders, by target time-to-die band." tabindex="0">Sunder value</th><th data-tip="Effective sunders split by target time-to-die: 10s+ / 5–10s / 3–5s / under 3s." tabindex="0">Bands (10s+ / 5–10 / 3–5 / &lt;3s)</th><th>Role</th></tr></thead><tbody>
+<tr><td>1</td><td class="name">Pinaclex</td><td>10.33</td><td>3,317,886</td><td>81</td><td>279,300</td><td>21 / 29 / 22 / 9</td><td>DPS</td></tr>
+<tr class="you"><td>2</td><td class="name">Ragerat</td><td>9.23</td><td>2,615,035</td><td>57</td><td>226,100</td><td>20 / 19 / 14 / 4</td><td>DPS</td></tr>
+<tr><td>3</td><td class="name">Jeian</td><td>9.16</td><td>2,770,605</td><td>64</td><td>248,500</td><td>20 / 25 / 15 / 4</td><td>DPS</td></tr>
+<tr><td>4</td><td class="name">Gophie</td><td>9.02</td><td>2,847,810</td><td>49</td><td>185,500</td><td>15 / 17 / 15 / 1</td><td>DPS</td></tr>
+<tr><td>5</td><td class="name">Dinkie</td><td>8.94</td><td>2,804,999</td><td>64</td><td>268,100</td><td>25 / 19 / 19 / 0</td><td>DPS</td></tr>
+<tr><td>6</td><td class="name">Nalga</td><td>8.58</td><td>2,657,318</td><td>59</td><td>245,700</td><td>22 / 21 / 13 / 3</td><td>DPS</td></tr>
+<tr><td>7</td><td class="name">Vnx</td><td>8.50</td><td>2,630,996</td><td>61</td><td>245,700</td><td>22 / 19 / 18 / 2</td><td>DPS</td></tr>
+<tr><td>8</td><td class="name">Sgtboolaid</td><td>8.47</td><td>2,674,252</td><td>55</td><td>179,200</td><td>9 / 26 / 18 / 2</td><td>DPS</td></tr>
+<tr><td>9</td><td class="name">Ejax</td><td>8.47</td><td>2,546,398</td><td>59</td><td>257,600</td><td>25 / 18 / 14 / 2</td><td>DPS</td></tr>
+<tr><td>10</td><td class="name">Iynx</td><td>8.31</td><td>2,702,144</td><td>45</td><td>168,700</td><td>14 / 15 / 13 / 3</td><td>DPS</td></tr>
+<tr><td>11</td><td class="name">Slamjunk</td><td>8.22</td><td>2,695,775</td><td>45</td><td>182,000</td><td>14 / 22 / 5 / 3</td><td>DPS</td></tr>
+<tr><td>12</td><td class="name">Ryuma</td><td>7.98</td><td>2,574,909</td><td>56</td><td>181,300</td><td>9 / 27 / 17 / 3</td><td>DPS</td></tr>
+<tr><td>13</td><td class="name">Dodyy</td><td>7.93</td><td>2,472,523</td><td>55</td><td>207,200</td><td>15 / 24 / 13 / 3</td><td>DPS</td></tr>
+<tr><td>14</td><td class="name">Ashfort</td><td>7.92</td><td>2,451,386</td><td>46</td><td>182,700</td><td>15 / 19 / 8 / 4</td><td>DPS</td></tr>
+<tr><td>15</td><td class="name">Sempai</td><td>7.82</td><td>2,398,608</td><td>40</td><td>162,400</td><td>14 / 14 / 11 / 1</td><td>DPS</td></tr>
+<tr><td>16</td><td class="name">Egg</td><td>7.80</td><td>2,392,509</td><td>60</td><td>249,200</td><td>23 / 18 / 18 / 1</td><td>OT — best OT</td></tr>
+<tr><td>17</td><td class="name">Kazugz</td><td>7.63</td><td>2,424,528</td><td>46</td><td>219,800</td><td>24 / 12 / 7 / 3</td><td>DPS</td></tr>
+<tr><td>18</td><td class="name">Tankina</td><td>7.42</td><td>2,262,739</td><td>58</td><td>260,400</td><td>25 / 22 / 6 / 4</td><td>OT</td></tr>
+<tr><td>19</td><td class="name">Loganw</td><td>6.74</td><td>2,105,110</td><td>57</td><td>193,900</td><td>14 / 19 / 21 / 3</td><td>DPS</td></tr>
+<tr><td>20</td><td class="name">Doljin</td><td>6.41</td><td>1,758,134</td><td>66</td><td>331,100</td><td>38 / 15 / 9 / 3</td><td>Tank</td></tr>
+<tr><td>21</td><td class="name">Sven</td><td>6.40</td><td>1,712,455</td><td>90</td><td>417,200</td><td>42 / 30 / 13 / 3</td><td>OT</td></tr>
+<tr><td>22</td><td class="name">Bigvince</td><td>6.24</td><td>1,559,399</td><td>112</td><td>506,100</td><td>49 / 41 / 14 / 8</td><td>OT</td></tr>
+<tr><td>23</td><td class="name">Perthil</td><td>5.61</td><td>1,554,252</td><td>71</td><td>346,500</td><td>32 / 33 / 5 / 1</td><td>MT</td></tr>
+</tbody></table></div><div class="panel-body"><p class="section-note" style="margin:0">Tank-duty scores (Perthil, Sven, Bigvince, Doljin, Tankina, Egg) read with role, not against DPS. Pinaclex's #1 was built in the post-wipe wings: through Four Horsemen he was #6 (see the censored cut below). Bands reconcile to 1,389 of 1,396 effective sunders raid-wide (a 7-sunder gap in the source JSON, shown as-is).</p></div></article>
+<article class="panel"><div class="panel-head"><h3>The censored cut — no Gothik, stopped at his death</h3><span>the buffed night, isolated</span></div><div class="panel-body">
+<p class="section-note">Cut Gothik out entirely (his event-team assignment fight) and stop the log at 18:26:02, just before Ragerat's death, and the picture sharpens: what remains is 8 bosses (Anub'Rekhan through Four Horsemen), 43 counted pulls and 16 real deaths.</p>
+<div class="mini-stat"><span>IV Score — Ragerat</span><strong>5.23 · #1 of 23</strong></div>
+<div class="mini-stat"><span>Damage</span><strong>1,489,426 · #3 of 40</strong></div>
+<div class="mini-stat"><span>Encounter-only damage</span><strong>738,572 · #6</strong></div>
+<div class="mini-stat"><span>PMS / Trash Score</span><strong>8.92 (#7) / 8.91 (#7)</strong></div>
+<div class="mini-stat"><span>Buffed pace on this cut</span><strong>1,534</strong></div>
+<p class="section-note" style="margin:10px 0 0">Pinaclex in the same window: IV #6 (4.66), with 57 effective sunders but 32 casts wasted at the cap. His full-run lead was built after this window closed. Absolute IV values on a partial dataset are not comparable to full-run scores (same 3.6M yardstick); the ranks are the read.</p>
+</div></article>
+</section>
+
+<!-- ARRIVAL -->
+<section class="section" id="arrival">
+<header class="report-head"><div><h2>Arrival card</h2><p>Mean first-damage offset across counted pulls, all 23 warriors. Ragerat is 4th overall and 3rd among DPS warriors at 1.75s, first in on 4 pulls — quietly one of the best lines on his card. The five 11–13s means at the bottom are one pull doing the damage; read the callout before judging them.</p></div><span class="pill">Ragerat 1.75s · #3 DPS</span></header>
+<article class="panel"><div class="panel-head"><h3>Mean offset — lower is earlier</h3></div><div class="table-wrap"><table id="arrivalTable"><thead><tr><th>#</th><th>Warrior</th><th data-tip="Mean seconds from pull start to this warrior's first damage, across the pulls they engaged." tabindex="0">Mean offset</th><th data-tip="Pulls where this warrior landed the raid's first damage." tabindex="0">First-in</th><th>Role</th></tr></thead><tbody>
+<tr><td>1</td><td class="name">Egg</td><td>1.53s</td><td>2</td><td>OT (light)</td></tr>
+<tr><td>2</td><td class="name">Pinaclex</td><td>1.70s</td><td>2</td><td>DPS — best DPS</td></tr>
+<tr><td>3</td><td class="name">Jeian</td><td>1.71s</td><td>1</td><td>DPS</td></tr>
+<tr class="you"><td>4</td><td class="name">Ragerat</td><td>1.75s</td><td>4/52</td><td>DPS</td></tr>
+<tr><td>5</td><td class="name">Dinkie</td><td>1.76s</td><td>2</td><td>DPS</td></tr>
+<tr><td>6</td><td class="name">Sgtboolaid</td><td>1.89s</td><td>1</td><td>DPS</td></tr>
+<tr><td>7</td><td class="name">Sven</td><td>1.94s</td><td>1</td><td>OT</td></tr>
+<tr><td>8</td><td class="name">Vnx</td><td>1.95s</td><td>2</td><td>DPS</td></tr>
+<tr><td>9</td><td class="name">Ryuma</td><td>1.97s</td><td>2</td><td>DPS</td></tr>
+<tr><td>10</td><td class="name">Slamjunk</td><td>2.03s</td><td>1</td><td>DPS</td></tr>
+<tr><td>11</td><td class="name">Ejax</td><td>2.03s</td><td>1</td><td>DPS</td></tr>
+<tr><td>12</td><td class="name">Sempai</td><td>2.08s</td><td>3</td><td>DPS</td></tr>
+<tr><td>13</td><td class="name">Dodyy</td><td>2.11s</td><td>1</td><td>DPS</td></tr>
+<tr><td>14</td><td class="name">Loganw</td><td>2.13s</td><td>2</td><td>DPS</td></tr>
+<tr><td>15</td><td class="name">Bigvince</td><td>2.18s</td><td>3</td><td>OT</td></tr>
+<tr><td>16</td><td class="name">Ashfort</td><td>2.26s</td><td>0</td><td>DPS</td></tr>
+<tr><td>17</td><td class="name">Perthil</td><td>2.67s</td><td>2</td><td>MT</td></tr>
+<tr><td>18</td><td class="name">Tankina</td><td>2.95s</td><td>2</td><td>OT (light)</td></tr>
+<tr><td>19</td><td class="name">Nalga</td><td>11.54s</td><td>4</td><td>DPS — see callout</td></tr>
+<tr><td>20</td><td class="name">Kazugz</td><td>11.91s</td><td>0</td><td>DPS — see callout</td></tr>
+<tr><td>21</td><td class="name">Iynx</td><td>11.97s</td><td>4</td><td>DPS — see callout</td></tr>
+<tr><td>22</td><td class="name">Gophie</td><td>12.43s</td><td>3</td><td>DPS — see callout</td></tr>
+<tr><td>23</td><td class="name">Doljin</td><td>13.15s</td><td>4</td><td>Tank — see callout</td></tr>
+</tbody></table></div></article>
+<div class="callout"><strong>Why five means sit at 11–13s:</strong> one pull. In the merged Construct Pull 7 cluster (665.5s), Nalga, Kazugz, Iynx, Gophie and Doljin each first land damage ~540s into the window (three of them had just died on the belcher pull that opened the sequence), and a single ~540s offset spread over ~50 pulls adds ~11s to a mean. Exclude that one cluster and all five sit in the same 1.5–2.5s band as the rest of the roster. Their rows are shown as computed; the cluster, not the players, owns the number.</div>
+</section>
+
+<!-- JUDGEMENT OF LIGHT -->
+<section class="section" id="jol">
+<header class="report-head"><div><h2>Judgement of Light</h2><p>Summary view — the full JoL breakdown lives in its own data files (jol_oct20.json, jol_trash_oct20.json). The headline runs against the night's grain: total effective healing went up, because the unbuffed tail made fights long, and long fights are where JoL pays. Coverage is where the slippage is.</p></div><span class="pill">JoL Score 5.07</span></header>
+<div class="grid metrics">
+<div class="metric"><div class="label">JoL Score</div><div class="value">5.07</div><div class="note">Oct 13: 6.17 · boss cov 75.5% · trash eff 55.3%</div></div>
+<div class="metric"><div class="label">Trash JoL Score</div><div class="value">3.77</div><div class="note">Oct 13: 4.96 · trash coverage on 10s+ pulls 20.0%</div></div>
+<div class="metric"><div class="label">Total effective</div><div class="value">589,502</div><div class="note">16,971 procs · 57.0% overheal</div></div>
+<div class="metric"><div class="label">Trash effective</div><div class="value">133,972</div><div class="note">Oct 13: 104,275 · the wipe cluster alone paid 16,177</div></div>
+</div>
+<div class="grid split2">
+<article class="panel"><div class="panel-head"><h3>The judges</h3></div><div class="panel-body">
+<div class="mini-stat"><span>Holyhaze — opener (88 applications, 57 targets)</span><strong>706.9s boss uptime</strong></div>
+<div class="mini-stat"><span>Nuu — maintainer (41 applications)</span><strong>Kel'Thuzad +232s</strong></div>
+<p class="section-note" style="margin-top:10px">Same two-judge structure as prior weeks: Holyhaze opens, Nuu maintains. This week's soft spot is late: Kel'Thuzad was not judged until +232s of a 351.3s fight, and Four Horsemen got only two of its riders (below).</p>
+</div></article>
+<article class="panel"><div class="panel-head"><h3>Best trash pulls</h3></div><div class="panel-body">
+<div class="mini-stat"><span>Construct 7 — the wipe cluster</span><strong>16,177 eff · 19.5% OH</strong></div>
+<div class="mini-stat"><span>Plague 6 — gargoyle pack</span><strong>14,312 eff · 99.9% cov · 24.8% OH</strong></div>
+<div class="mini-stat"><span>Plague 4 — gargoyle pair</span><strong>14,063 eff · 99.9% cov · 44.4% OH</strong></div>
+<div class="mini-stat"><span>Construct 8</span><strong>7,128 eff · 80.9% cov · 3.3% OH</strong></div>
+<div class="mini-stat"><span>Plague 5</span><strong>6,573 eff · 84.0% cov · 14.6% OH</strong></div>
+<p class="section-note" style="margin-top:10px">The gargoyle pattern repeats: tanky pairs, both paladins judging early, the whole melee stack taking real damage, near-full coverage. The wipe cluster paying 16.2k at 19.5% overheal is JoL doing its job in the worst pull of the night; its coverage reads low only because the "pull" is an 11-minute merged window.</p>
+</div></article>
+</div>
+<article class="panel"><div class="panel-head"><h3>Bosses</h3><span>Uptime = JoL aura on the boss (4HM: judged riders only, no single boss target)</span></div><div class="table-wrap"><table><thead><tr><th>Boss</th><th>Dur</th><th data-tip="Share of the encounter window with Judgement of Light active on the boss." tabindex="0">Uptime</th><th data-tip="Healing from JoL procs that landed as real healing, not overheal." tabindex="0">Effective</th><th>Overheal</th><th>Judge</th></tr></thead><tbody>
+<tr><td class="name">Anub'Rekhan</td><td>0:38</td><td>94.4%</td><td>15,975</td><td>71.7%</td><td>Holyhaze</td></tr>
+<tr><td class="name">Faerlina</td><td>0:34</td><td>94.8%</td><td>26,768</td><td>43.7%</td><td>Holyhaze</td></tr>
+<tr><td class="name">Maexxna</td><td>0:35</td><td>93.2%</td><td>13,974</td><td>70.8%</td><td>Holyhaze</td></tr>
+<tr><td class="name">Noth</td><td>0:35</td><td>95.2%</td><td>24,038</td><td>59.5%</td><td>Holyhaze</td></tr>
+<tr><td class="name">Heigan</td><td>0:41</td><td>90.8%</td><td>13,926</td><td>77.7%</td><td>Holyhaze</td></tr>
+<tr><td class="name">Loatheb</td><td>1:42</td><td>97.4%</td><td>76,794</td><td>53.1%</td><td>Holyhaze / Nuu</td></tr>
+<tr><td class="name">Razuvious</td><td>0:46</td><td>87.1%</td><td>13,410</td><td>81.1%</td><td>Holyhaze</td></tr>
+<tr><td class="name">Gothik</td><td>4:58</td><td>8.7%</td><td>8,028</td><td>67.2%</td><td>Holyhaze</td></tr>
+<tr><td class="name">Four Horsemen</td><td>1:24</td><td>—</td><td>21,458</td><td>49.3%</td><td>Blaumeux + Zeliek only</td></tr>
+<tr><td class="name">Patchwerk</td><td>2:06</td><td>0.0%</td><td>0</td><td>—</td><td>None (correct)</td></tr>
+<tr><td class="name">Grobbulus</td><td>1:17</td><td>64.8%</td><td>23,955</td><td>67.8%</td><td>Holyhaze</td></tr>
+<tr><td class="name">Gluth</td><td>0:57</td><td>71.5%</td><td>18,045</td><td>67.7%</td><td>Holyhaze</td></tr>
+<tr><td class="name">Thaddius</td><td>2:23</td><td>53.3%</td><td>47,505</td><td>62.9%</td><td>Holyhaze / Nuu</td></tr>
+<tr><td class="name">Sapphiron</td><td>3:06</td><td>94.5%</td><td>128,734</td><td>17.3%</td><td>Holyhaze</td></tr>
+<tr><td class="name">Kel'Thuzad</td><td>5:51</td><td>28.8%</td><td>32,734</td><td>73.4%</td><td>Nuu / Holyhaze</td></tr>
+</tbody></table></div><div class="panel-body">
+<p class="section-note"><strong>Sapphiron is the showcase again, in the opposite shape:</strong> 128,734 effective at 17.3% overheal, the best efficiency on the table, because a 186.3s normal kill gives JoL time to work. Loatheb's 76,794 still lands through the healing lockout, as always. <strong>Four Horsemen slipped:</strong> only Lady Blaumeux and Sir Zeliek were judged; Thane and Mograine got none (Oct 13 had Thane judged). <strong>Kel'Thuzad</strong> waited until +232s for its first judgement. <strong>Gothik 8.7%</strong> is the boss-phase number only (he is unhittable for most of the window) and is excluded from the coverage score, as before.</p>
+<p class="section-note" style="margin:0"><strong>Patchwerk 0% — correct and intentional, never a miss.</strong> Hateful Strike targets the highest-HP non-tank, so melee DPS deliberately keep their HP low; JoL procs would heal them into Hateful range. It sits in the same "correctly not judged" bucket as Gothik's unhittable phase and is excluded from the coverage denominator.</p>
+</div></article>
+</section>
+
+<!-- METHODS -->
+<section class="section" id="methods">
+<header class="report-head"><div><h2>Methods</h2><p>One week per report. This page covers Oct 20 only; the Sep 29, Oct 6 and Oct 13 reports carry their own methods. Definitions are identical across weeks so the delta columns mean something.</p></div></header>
+<div class="grid split2">
+<article class="panel"><div class="panel-head"><h3>Sources</h3></div><div class="panel-body">
+<div class="mini-stat"><span>Raw log</span><strong>Ragerat POV · WoWCombatLog-102026_173420</strong></div>
+<div class="mini-stat"><span>Run window</span><strong>17:35:59–19:04:58 PDT (−7)</strong></div>
+<div class="mini-stat"><span>Data files</span><strong>pulls · timeline · ivscore_oct20 · sapper_pulls_oct20 · extras_oct20 · jol_oct20 · jol_trash_oct20</strong></div>
+<div class="mini-stat"><span>Data brief</span><strong>2026-10-20-REPORT-DATA-BRIEF</strong></div>
+<p class="section-note" style="margin-top:10px">Sep 29 and Oct 13 numbers quoted in deltas come from those weeks' briefs and reports, and were not recomputed. PB = Sep 22 run (47:45). This week's log is Ragerat's own, so his numbers are first-person complete; there are no POV range caveats on his rows. Gear and spec are from the week's Warcraft Logs report; the WCL report also contains the AQ40 run afterward, so its player and death totals are not this report's.</p>
+</div></article>
+<article class="panel"><div class="panel-head"><h3>Definitions + caveats</h3></div><div class="panel-body">
+<p class="section-note"><strong>Deaths:</strong> UNIT_DIED minus feign-flagged (Kurassa's UNIT_DIED lines carry the trailing feign flag; 68 raw − 16 = 52). <strong>Effective sunder:</strong> cast while target &lt;5 stacks, from SPELL_CAST_SUCCESS. <strong>Pulls:</strong> 6s inflow segmentation; mobs count if they died or took ≥25% HP; Construct 6–7 merge into one continuous cluster window. <strong>IV Score:</strong> 3.6M yardstick, no TSA penalty (recipients unknown). <strong>Tank roles</strong> are inferred from taunt counts this week (the usual MT was absent). <strong>Engineering:</strong> raw amounts incl. overkill, parsed from the raw log. <strong>Boss windows:</strong> ENCOUNTER_START→END; the failed Loatheb attempt produced no ENCOUNTER_END and is excluded from boss time, though its damage is inside the raid totals. <strong>Sapphiron 186.3s is a normal kill</strong> after raidwide buff loss; Oct 13 and Sep 29 were Polarity kills (Bosses tab). <strong>JoL Score v1.1:</strong> Gothik and Patchwerk excluded from boss coverage (unhittable phase; intentional skip).</p>
+<p class="section-note" style="margin:0"><strong>Design note — why deltas live in two places only:</strong> a running multi-week hub buries each week's story under navigation. One report per week, published at its own URL, keeps every tab readable as that week's record; the Overview delta strip and the Bosses Δ columns carry the week-over-week and PB context where a reader actually asks "compared to what?" — and nowhere else.</p>
+</div></article>
+</div>
+<footer>Oct 20, 2026 · Pugs not drugs (Pagle US) · Analysis from the raw combat log (Ragerat POV). Companion reports: Sep 29 · Oct 6 · Oct 13 (their own URLs) · PB Sep 22, 47:45. Character names only.</footer>
+</section>
+
+</main>
+</div>
+<script>
+(function(){
+  var btns=document.querySelectorAll('.nav button'), secs=document.querySelectorAll('.section'), sel=document.getElementById('mobileSelect');
+  function show(id){secs.forEach(function(s){s.classList.toggle('active',s.id===id)});btns.forEach(function(b){b.classList.toggle('active',b.getAttribute('data-section')===id)});if(sel)sel.value=id;window.scrollTo({top:0,behavior:'smooth'});}
+  btns.forEach(function(b){b.addEventListener('click',function(){show(b.getAttribute('data-section'));});});
+  if(sel)sel.addEventListener('change',function(){show(sel.value);});
+  var ps=document.getElementById('pullSearch');
+  if(ps){ps.addEventListener('input',function(){var q=ps.value.toLowerCase();document.querySelectorAll('#pullTable tbody tr').forEach(function(r){r.style.display=r.textContent.toLowerCase().indexOf(q)>-1?'':'none';});});}
+})();
+</script>
+</body>
+</html>
